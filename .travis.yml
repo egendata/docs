@@ -15,6 +15,7 @@ jobs:
         keep_history: true
         on:
           branch: master
+          
 stages:
   - name: deploy
     if: branch = master AND type != pull_request
