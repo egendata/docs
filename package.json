@@ -1,0 +1,25 @@
+{
+  "name": "egendata-documentation",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "src/",
+    "doczrc.js",
+    "package.json"
+  ],
+  "scripts": {
+    "docz:dev": "docz dev",
+    "docz:build": "DOCZ_BASE=/docs docz build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "docz": "1.2.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "dependencies": {
+    "docz-theme-default": "^1.2.0"
+  }
+}

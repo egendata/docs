@@ -1,0 +1,13 @@
+{
+  "vendors.js": "/docs/static/js/vendors.5cd1a5f9.js",
+  "vendors.js.map": "/docs/static/js/vendors.8f6b73fd924b562a8bed.js.map",
+  "app.js": "/docs/static/js/app.8f6b73fd924b562a8bed.js",
+  "app.js.map": "/docs/static/js/app.8f6b73fd924b562a8bed.js.map",
+  "src-client.js": "/docs/static/js/src-client.2b94b8b4.js",
+  "src-client.js.map": "/docs/static/js/src-client.8f6b73fd924b562a8bed.js.map",
+  "src-index.js": "/docs/static/js/src-index.e7956f8a.js",
+  "src-index.js.map": "/docs/static/js/src-index.8f6b73fd924b562a8bed.js.map",
+  "src-operator.js": "/docs/static/js/src-operator.67064f6e.js",
+  "src-operator.js.map": "/docs/static/js/src-operator.8f6b73fd924b562a8bed.js.map",
+  "index.html": "/docs/index.html"
+}
