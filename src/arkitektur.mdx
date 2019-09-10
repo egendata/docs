@@ -1,24 +1,26 @@
 ---
-name: Övergripande arkitektur
+name: Arkitekturen
 route: /general-architecture
-menu: Architecture
+menu: Hur fungerar
 ---
 
-# Övergripande arkitektur
+# Så fungerar Egendatas infrastruktur
 
 ![Diagram över Egendatas arkitektur](architecture.png)
 
-## Komponenter
+# Komponenter
 
-### Tjänst
+### [Tjänst](services)
 En sajt eller applikation som använder sig av Egendata för att hantera persondata. Klientbibliotektet Client är till för att göra det enkelt för tjänster att implementera Egendata.
 
-### App 
+För mer detaljer om hur en tjänst fungerar och hur du sätter upp en, se [tjänster](services).
+
+### [App](app)
 En mobilapplikation med vilken användaren kontrollerar rättigheterna till sin data. Tekniskt sett är det Appen som representerar användaren gentemot resten av infrastrukturen.
 
 När användaren skapar ett konto genereras användarens kryptografiska nycklar i Appen; den privata delen av nyckeln lämnar sedan aldrig Appen och används för att bevisa att det är användaren som står bakom de kommandon användaren skickar till andra delar av infrastrukturen (exempelvis ändring i rättigheter).
 
-### Operator
+### [Operator](operator)
 Operatorn agerar knytpunkt i Egendata-nätverket; den slussar meddelanden mellan användare (App) och tjänster samt krypterad data mellan tjänster och lagringsutrymme (PDS). 
 
 Operatorn måste vara tillgänglig för att nätverket ska gå att använda. En viktig detalj är att operatorn inte har någon möjlighet att läsa eller ändra i data eller rättigheter. Dessa är krypterade och/eller signerade så att en operator som missköter sig inte kan komma över någon persondata.
@@ -26,23 +28,11 @@ Operatorn måste vara tillgänglig för att nätverket ska gå att använda. En 
 ### PDS (Personal Data Store)
 En lagringsyta där användarens krypterade persondata lagras och läses av Operator. Kan vara vilken typ av lagring som helst som Operator stödjer. Användaren har möjlighet att välja var hens data lagras genom att välja PDS i Appen.
 
-## Flöde
 
-När en användare vill använda en tjänst sker det genom ett antal steg. Flera av dessa är osynliga för användaren och, om Tjänsten använder använder befintliga kodbibliotek, ingenting som Tjänstens systemutvecklare ser då de sker i bakgrunden. Flödet för anslutning till en tjänst, medgivande för dataläsning/-skrivning och uppdateringar beskrivs här översiktligt och på djupet (för den som är intresserad).
-
-### För användaren
-
-1. Användaren går in på en Tjänst och erbjuds registrera sig/logga in med Egendata. Detta sker genom att antingen scanna en QR-kod med Egendata-appen eller, om hen använder mobilen, klicka på en länk.
-
-2. Egendata-appen frågar användaren om hen vill logga in om registrering redan har skett, eller skapa en relation med Tjänsten om detta är första besöket. Användaren får, i det senare fallet, även möjligheten att godkänna Tjänstens begäran om att läsa/skriva data.
-
-3. När användaren har svarat, än hen inloggad på Tjänsten och kan börja använda den.
-
-### Så här går det till i bakgrunden
-
-1. Tjänsten presenterar en länk, vilken också kodas som en QR-kod. Länken beskriver tjänsten med id för tjänsten och ett sessionsid för att kunna koppla svaret till rätt användarsession. All information är signerad med tjänstens signeringsnyckel.
-
-2. Egendata-appen kontaktar tjänsten och begär signeringsnyckeln. Den verifierar sedan informationen.
-
-3. Egendata-appen kontrollerar om användaren och tjänsten redan har en relation eller om en sådan måste skapas.
-
+# Exempel på användningsflöde
+Användaren:
+* Installerar Egendata-Appen på sin telefon, skapar ett konto och väljer var dess data ska lagras (vilken PDS).
+* Besöker en tjänst som använder Egendata, klickar på "Logga in" och blir presenterad med en QR-kod
+* Skannar QR-koden med Appen och får då frågan om hen vill registrera sig
+* Användaren blir presenterad med beskrivning av den data tjänsten vill läsa eller skriva och varför
+* Om användaren godkänner detta då händer det grejer
