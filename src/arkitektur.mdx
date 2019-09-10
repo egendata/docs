@@ -6,21 +6,25 @@ menu: Architecture
 
 # Övergripande arkitektur
 
-## Infrastruktur
+![Diagram över Egendatas arkitektur](architecture.png)
 
-Egendata består i dagsläget av fyra delar:
+## Komponenter
 
-* **Egendata-appen:** En mobilapplikation där användaren styr tillgång till data och där användarens nycklar lagras.
+### Tjänst
+En sajt eller applikation som använder sig av Egendata för att hantera persondata. Klientbibliotektet Client är till för att göra det enkelt för tjänster att implementera Egendata.
 
-* **PDS (Personal Data Store):** En lagringsyta för data. All information är krypterad på ett sådant sätt att PDS:en inte ska behöva vara säker för att användardatat ska anses skyddat.
+### App 
+En mobilapplikation med vilken användaren kontrollerar rättigheterna till sin data. Tekniskt sett är det Appen som representerar användaren gentemot resten av infrastrukturen.
 
-* **Tjänst:** En sajt eller applikation som använder sig av Egendata för att läsa/skriva information.
+När användaren skapar ett konto genereras användarens kryptografiska nycklar i Appen; den privata delen av nyckeln lämnar sedan aldrig Appen och används för att bevisa att det är användaren som står bakom de kommandon användaren skickar till andra delar av infrastrukturen (exempelvis ändring i rättigheter).
 
-* **Operator:** Servrar som kopplar samman Tjänster med PDS:er för att möjliggöra läsning, skrivning och andra uppdateringar.
+### Operator
+Operatorn agerar knytpunkt i Egendata-nätverket; den slussar meddelanden mellan användare (App) och tjänster samt krypterad data mellan tjänster och lagringsutrymme (PDS). 
 
-Vi ser redan nu att ytterligare delar kan behöva komma på plats. Ett exempel är:
+Operatorn måste vara tillgänglig för att nätverket ska gå att använda. En viktig detalj är att operatorn inte har någon möjlighet att läsa eller ändra i data eller rättigheter. Dessa är krypterade och/eller signerade så att en operator som missköter sig inte kan komma över någon persondata.
 
-* **Serviceregister:** Här registreras Tjänster så att användare enklare kan hitta dem. Vi misstänker även att denna del behövs för att möjliggöra fler än en Operator.
+### PDS (Personal Data Store)
+En lagringsyta där användarens krypterade persondata lagras och läses av Operator. Kan vara vilken typ av lagring som helst som Operator stödjer. Användaren har möjlighet att välja var hens data lagras genom att välja PDS i Appen.
 
 ## Flöde
 
