@@ -17,7 +17,7 @@
   "devDependencies": {
     "docz": "1.3.1",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.10.1"
   },
   "dependencies": {
     "docz-theme-default": "^1.2.0"
