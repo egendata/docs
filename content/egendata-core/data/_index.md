@@ -6,7 +6,7 @@ Placeholder
 
 ## Data structures & storage
 
-- The user’s data is stored in a json “blob” format. 
+- The user’s data is stored in json format.
 - No data structure has been defined for the user’s data. It instead keeps the tags of the form it was generated in as the field names. This means that the service dictates the structure of the data that is generated and consumed by it, as well as stored in the PDS.
 - The only data stored in the operator is the database records of (registered) users, services, their connections and consents given. This database schema is set up by the scripts in the “migrations” folder of the operator. One of those scripts generates a table called “pgmigrations” that holds the information about when and how (successfully or not) the other tables were generated.
 - The account data is stored in the operator in a postgres database.
@@ -24,6 +24,7 @@ The following messages are required to establish a service as registered:
 - `PERMISSION_BASE` contains information about the reason the service will request permission to the different areas of the user’s profile.
 
 ### Registering a user
+
 When a user is registering the following information is being generated and sent to the operator:
 
 - `ACCOUNT_REGISTRATION` the user’s device generates a unique id and sends it, as part of the message, to the operator, who prefixes it to the account.
@@ -72,7 +73,15 @@ Since all of the data are handled with one message, if even one of the areas is 
 
 ## Egendata message/schema definitions
 
+### Common
+
+_Some values are present in all messages. These are reused as `JWT_DEFAULTS`:
+
+Property | Purpose
+--- | ---
+
 ### SERVICE_REGISTRATION
+
 _This is the message sent to the operator by a service, when the later registers itself._
 
 Property | Purpose
