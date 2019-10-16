@@ -1,16 +1,18 @@
 jobs:
   include:
     - stage: build
-      language: node_js
-      node_js:
-        - "10"
+    
+      install:
+        - curl -LO https://github.com/gohugoio/hugo/releases/download/v0.58.3/hugo_0.58.3_Linux-64bit.deb
+        - sudo dpkg -i hugo_0.58.3_Linux-64bit.deb
+
       script:
-        - npm install
-        - npm run docz:build
+        - hugo
+        
       deploy:
         provider: pages
         target-branch: gh-pages 
-        local_dir: docs
+        local_dir: public
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
         keep_history: true
