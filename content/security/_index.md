@@ -2,8 +2,6 @@
 title: Security
 ---
 
-# Encryption and signing
-
 The Egendata solution uses standard algorithms for all encryption and signatures.
 
 ## Algorithms

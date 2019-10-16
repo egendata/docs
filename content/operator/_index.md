@@ -2,6 +2,4 @@
 title: Operator
 ---
 
-# Operator
-
 Placeholder

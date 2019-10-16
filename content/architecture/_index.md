@@ -2,8 +2,6 @@
 title: Architecture
 ---
 
-# Så fungerar Egendatas infrastruktur
-
 ![Diagram över Egendatas arkitektur](architecture.png)
 
 # Komponenter
