@@ -12,20 +12,20 @@
     <title>Security :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/theme.css?1571217709" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1571217709" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/theme.css?1571218727" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1571218727" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1571217709" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1571218727" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1571217709"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1571218727"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -70,14 +70,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/docs/js/lunr.min.js?1571217709"></script>
-<script type="text/javascript" src="/docs/js/auto-complete.js?1571217709"></script>
+<script type="text/javascript" src="/docs/js/lunr.min.js?1571218727"></script>
+<script type="text/javascript" src="/docs/js/auto-complete.js?1571218727"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/egendata.github.io\/docs";
     
 </script>
-<script type="text/javascript" src="/docs/js/search.js?1571217709"></script>
+<script type="text/javascript" src="/docs/js/search.js?1571218727"></script>
 
     
   </div>
@@ -336,7 +336,8 @@
 <li><a href="#without-an-established-connection">Without an established connection</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#reading-data-from-pds">Reading data from PDS</a>
+<li><a href="#reading-data-from-pds">Reading data from PDS</a></li>
+<li><a href="#writing-data-to-a-pds">Writing data to a PDS</a>
 <ul>
 <li><a href="#configuration-properties-for-client-library">Configuration properties for Client library</a></li>
 </ul></li>
@@ -381,10 +382,33 @@
 
 <h2 id="algorithms">Algorithms</h2>
 
-<p>The Egendata solution uses the following encryption algorithms from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a>
- + <a href="https://tools.ietf.org/html/rfc3602">AES-128-CBC</a>, for symmetric encryption
- + <a href="https://tools.ietf.org/html/rfc2437#section-7.1">RSAES-OAEP</a>, for asymmetric encryption (2048 bit key)
- + <a href="https://tools.ietf.org/html/rfc3447#section-8.1">RSASSA-PSS (PS256)</a>, for signing (2048 bit key)</p>
+<p>The Egendata solution uses the following encryption algorithms from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
+
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc3602">AES-128-CBC</a></td>
+<td>For symmetric encryption</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc2437#section-7.1">RSAES-OAEP</a></td>
+<td>For asymmetric encryption (2048 bit key)</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc3447#section-8.1">RSASSA-PSS (PS256)</a></td>
+<td>For signing (2048 bit key)</td>
+</tr>
+</tbody>
+</table>
 
 <h2 id="data-storage-and-transmission">Data storage and transmission</h2>
 
@@ -392,11 +416,38 @@
 
 <p>The Egendata solution uses the <a href="https://github.com/panva/jose">Panva</a> implementation of <a href="JOSE">JavaScript Object Signing and Encryption</a> as the serialization format for storage and transmission of signed/encrypted data.</p>
 
-<p>The JOSE framework is based upon the following RFCs:
- + <a href="https://tools.ietf.org/html/rfc7517">JWK</a> - JSON Web Key RFC7517, format for encryption keys.
- + <a href="https://tools.ietf.org/html/rfc7516">JWE</a> - JSON Web Encryption RFC7516, format för encrypted data. In Egendata solution only the &ldquo;General JWE JSON Serialization Syntax&rdquo; is used due to that being the only one supporting multiple recipients. The content is encrypted with &ldquo;A128CBC-HS256&rdquo;(link?) and the recipient keys with &ldquo;RSA-OAP&rdquo;.
- + <a href="https://tools.ietf.org/html/rfc7515">JWS</a> - JSON Web Signature RFC7515, format for signed data. All data is signed before being encrypted. This allows the validation of the data source.
- + <a href="https://tools.ietf.org/html/rfc7519">JWT</a> - JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution.</p>
+<p>The JOSE framework is based upon the following RFCs:</p>
+
+<table>
+<thead>
+<tr>
+<th>RFC</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7517">JWK</a></td>
+<td>JSON Web Key RFC7517, format for encryption keys.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7516">JWE</a></td>
+<td>JSON Web Encryption RFC7516, format för encrypted data. In Egendata solution only the &ldquo;General JWE JSON Serialization Syntax&rdquo; is used due to that being the only one supporting multiple recipients. The content is encrypted with &ldquo;A128CBC-HS256&rdquo;(link?) and the recipient keys with &ldquo;RSA-OAP&rdquo;.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7515">JWS</a></td>
+<td>JSON Web Signature RFC7515, format for signed data. All data is signed before being encrypted. This allows the validation of the data source.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7519">JWT</a></td>
+<td>JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution.</td>
+</tr>
+</tbody>
+</table>
 
 <p>Data saved in a user&rsquo;s PDS is always represented as JWE.</p>
 
@@ -1453,27 +1504,38 @@ There are no current plans to migrate to ECDSA for signing.</p>
 <h1 id="data-structures-storage">Data structures &amp; storage</h1>
 
 <ul>
-<li>The user’s data is stored in a json “blob” format.</li>
-<li>No data structure has been defined for the user’s data. It instead keeps the tags of the form it was generated in as the field names. This means that the service dictates the structure of the data that is generated and consumed by it, as well as stored in the PDS.</li>
-<li>The only data stored in the operator is the database records of (registered) users, services, their connections and consents given. This database schema is set up by the scripts in the “migrations” folder of the operator. One of those scripts generates a table called “pgmigrations” that holds the information about when and how (successfully or not) the other tables were generated.</li>
-<li>The account data is stored in the operator in a postgres database.</li>
-<li>Information stored (keys and cached permissions) on the user’s phone is stored in the sync local storage of the device.</li>
-<li>In the current implementation of Egendata, when the user selects to store their data in memory, the data is stored in the internal memory of the operator. This includes and is limited to the data generated by the user in the different services.</li>
+<li><p>The user’s data is stored in a json “blob” format.</p></li>
+
+<li><p>No data structure has been defined for the user’s data. It instead keeps the tags of the form it was generated in as the field names. This means that the service dictates the structure of the data that is generated and consumed by it, as well as stored in the PDS.</p></li>
+
+<li><p>The only data stored in the operator is the database records of (registered) users, services, their connections and consents given. This database schema is set up by the scripts in the “migrations” folder of the operator. One of those scripts generates a table called “pgmigrations” that holds the information about when and how (successfully or not) the other tables were generated.</p></li>
+
+<li><p>The account data is stored in the operator in a postgres database.</p></li>
+
+<li><p>Information stored (keys and cached permissions) on the user’s phone is stored in the sync local storage of the device.</p></li>
+
+<li><p>In the current implementation of Egendata, when the user selects to store their data in memory, the data is stored in the internal memory of the operator. This includes and is limited to the data generated by the user in the different services.</p></li>
 </ul>
 
 <h1 id="step-by-step-for-data-generation">Step-by-step for data generation</h1>
 
 <h2 id="registering-of-a-service">Registering of a service</h2>
 
-<p>The following messages are required to establish a service as registered:
-+ SERVICE_REGISTRATION sends a message containing the information describing the service.
-+ LAWFUL_BASIS contains information about the reason the service requires to read the data from the user.
-+ PERMISSION_BASE contains information about the reason the service will request permission to the different areas of the user’s profile.</p>
+<p>The following messages are required to establish a service as registered:</p>
+
+<ul>
+<li>SERVICE_REGISTRATION sends a message containing the information describing the service.</li>
+<li>LAWFUL_BASIS contains information about the reason the service requires to read the data from the user.</li>
+<li>PERMISSION_BASE contains information about the reason the service will request permission to the different areas of the user’s profile.</li>
+</ul>
 
 <h2 id="registering-a-user">Registering a user</h2>
 
-<p>When a user is registering the following information is being generated and sent to the operator:
-+ ACCOUNT_REGISTRATION the user’s device generates a unique id and sends it, as part of the message, to the operator, who prefixes it to the account.</p>
+<p>When a user is registering the following information is being generated and sent to the operator:</p>
+
+<ul>
+<li>ACCOUNT_REGISTRATION the user’s device generates a unique id and sends it, as part of the message, to the operator, who prefixes it to the account.</li>
+</ul>
 
 <h2 id="logging-in-to-a-service-with-egendata">Logging in to a service with Egendata</h2>
 
@@ -1481,34 +1543,44 @@ There are no current plans to migrate to ECDSA for signing.</p>
 
 <h3 id="with-an-established-connection">With an established connection</h3>
 
-<p>In this case, the user’s device recognises that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:
-1. A LOGIN_RESPONSE containing a serialized JWS LOGIN as payload is sent to the operator. This LOGIN_RESPONSE contains the user’s ID as the subject(iss?), and the service as a string in the body(within the LOGIN).
-1. The operator extracts the LOGIN from the LOGIN_RESPONSE a wraps it in a new  LOGIN_EVENT message and forwards the message to the service. This happens so the service doesn’t get access to the user’s ID.</p>
+<p>In this case, the user’s device recognises that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:</p>
+
+<ol>
+<li>A LOGIN_RESPONSE containing a serialized JWS LOGIN as payload is sent to the operator. This LOGIN_RESPONSE contains the user’s ID as the subject(iss?), and the service as a string in the body(within the LOGIN).</li>
+<li>The operator extracts the LOGIN from the LOGIN_RESPONSE a wraps it in a new  LOGIN_EVENT message and forwards the message to the service. This happens so the service doesn’t get access to the user’s ID.</li>
+</ol>
 
 <h3 id="without-an-established-connection">Without an established connection</h3>
 
-<p>If this user’s device does not recognise the service then the following messages are triggered:
-1. A CONNECTION_INIT is sent from the user’s device directly to the service’s <code>/events</code> endpoint.
-1. The service responds with a CONNECTION_REQUEST to the user’s device.
-1. The CONNECTION_REQUEST might optionally contain a PERMISSION_REQUEST_ARRAY detailing all the areas it is requesting access from the user’s profile.
-1. If the PERMISSION_REQUEST_ARRAY is missing, at the moment, there is no way to send this in a later stage in the communication. There is no error handling for this eventuality and it will result in the system not working, because it will find a null string where it is expecting a not null string.
-1. Each PERMISSION_REQUEST in the PERMISSION_REQUEST_ARRAY contains a LAWFUL_BASIS. In the current implementation this is defaulted to consent unless specified otherwise.
-1. For read permissions the read key is sent alongside the permission, in the form of a kid.
-1. The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.
-1. The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.
-1. After receiving the CONNECTION_REQUEST the device generates a CONNECTION wrapped in a CONNECTION_RESPONSE that is sent to the operator.
-1. The operator upon receiving the CONNECTION_RESPONSE extracts from it the CONNECTION and rewrapes it in a CONNECTION_EVENT that is sent to the service.</p>
+<p>If this user’s device does not recognise the service then the following messages are triggered:</p>
+
+<ol>
+<li>A CONNECTION_INIT is sent from the user’s device directly to the service’s <code>/events</code> endpoint.</li>
+<li>The service responds with a CONNECTION_REQUEST to the user’s device.</li>
+<li>The CONNECTION_REQUEST might optionally contain a PERMISSION_REQUEST_ARRAY detailing all the areas it is requesting access from the user’s profile.</li>
+<li>If the PERMISSION_REQUEST_ARRAY is missing, at the moment, there is no way to send this in a later stage in the communication. There is no error handling for this eventuality and it will result in the system not working, because it will find a null string where it is expecting a not null string.</li>
+<li>Each PERMISSION_REQUEST in the PERMISSION_REQUEST_ARRAY contains a LAWFUL_BASIS. In the current implementation this is defaulted to consent unless specified otherwise.</li>
+<li>For read permissions the read key is sent alongside the permission, in the form of a kid.</li>
+<li>The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.</li>
+<li>The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.</li>
+<li>After receiving the CONNECTION_REQUEST the device generates a CONNECTION wrapped in a CONNECTION_RESPONSE that is sent to the operator.</li>
+<li>The operator upon receiving the CONNECTION_RESPONSE extracts from it the CONNECTION and rewrapes it in a CONNECTION_EVENT that is sent to the service.</li>
+</ol>
 
 <h1 id="reading-data-from-pds">Reading data from PDS</h1>
 
-<p>For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a &lt;&gt;. This means that a service could request data from other services by including another service’s domain in the &lt;&gt; message.
-+ The domain defined in the request in the services ID, which is the URI of the service.
-+ The areas that are defined in the request are the different areas of the CV.
-+ The response to the request is sent with a &lt;&gt; message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
-+ These responses are sent encrypted and then decrypted by the client library.</p>
+<p>For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a &lt;&gt;. This means that a service could request data from other services by including another service’s domain in the &lt;&gt; message.</p>
 
-<p>#Writing data to a PDS
-For this process the domain, are and data that needs to be written are sent with a &lt;&gt; message.
+<ul>
+<li>The domain defined in the request in the services ID, which is the URI of the service.</li>
+<li>The areas that are defined in the request are the different areas of the CV.</li>
+<li>The response to the request is sent with a &lt;&gt; message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.</li>
+<li>These responses are sent encrypted and then decrypted by the client library.</li>
+</ul>
+
+<h1 id="writing-data-to-a-pds">Writing data to a PDS</h1>
+
+<p>For this process the domain, are and data that needs to be written are sent with a &lt;&gt; message.
 The data are encrypted before being sent to the operator, and then written to the PDS.
 If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
 Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.</p>
@@ -1806,19 +1878,19 @@ const AUTHENTICATION_ID_PREFIX = 'authentication|&gt;'
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1571217709"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1571217709"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571217709"></script>
-    <script src="/docs/js/jquery.sticky.js?1571217709"></script>
-    <script src="/docs/js/featherlight.min.js?1571217709"></script>
-    <script src="/docs/js/highlight.pack.js?1571217709"></script>
+    <script src="/docs/js/clipboard.min.js?1571218727"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1571218727"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571218727"></script>
+    <script src="/docs/js/jquery.sticky.js?1571218727"></script>
+    <script src="/docs/js/featherlight.min.js?1571218727"></script>
+    <script src="/docs/js/highlight.pack.js?1571218727"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1571217709"></script>
-    <script src="/docs/js/learn.js?1571217709"></script>
-    <script src="/docs/js/hugo-learn.js?1571217709"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1571218727"></script>
+    <script src="/docs/js/learn.js?1571218727"></script>
+    <script src="/docs/js/hugo-learn.js?1571218727"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1571217709" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1571217709"></script>
+    <link href="/docs/mermaid/mermaid.css?1571218727" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1571218727"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
