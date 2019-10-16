@@ -2,6 +2,13 @@
 title: Client
 ---
 
+For [Service](#) providers The Client library alleviates the integration complexity with the Egendata [Operator](/operator).
+
+For reference, the following example sites utilize the Client library:
+
+- [Example CV](https://github.com/egendata/example-cv)
+- [MySkills API](https://github.com/JobtechSwe/myskills-api)
+
 ## Usage
 
 ```js
