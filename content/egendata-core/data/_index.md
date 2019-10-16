@@ -103,11 +103,11 @@ Property | Purpose
 
 ### AUTHENTICATION_REQUEST
 
-_Message sent by the service to teh user's device to authenticate them._
+_Message sent by the service to the user's device to authenticate them._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` |_Adds the information needed about the source of the message._
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sid` | _The (browser) session id that this message was sent during._
 `eventsURI` | _The URI that the service expects the responses to the messages to be received._
@@ -120,7 +120,7 @@ _Initiates a connection between the user and the service. Is triggered when ther
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` |_Adds the information needed about the source of the message._
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sid` | _The (browser) session id that this message was sent during._
 
@@ -200,7 +200,7 @@ Property | Purpose
 --- | ---
 `...PERMISSION_BASE` |  _Adds basic information about the permission requested._
 `type` | _Defines the type of permission that is requested as READ._ 
-`purpose` | _The reason teh permission is requested._ // Why is the purpose needed in the READ_PERMISSION_REQUEST if it is here???
+`purpose` | _The reason the permission is requested._ // Why is the purpose needed in the READ_PERMISSION_REQUEST if it is here???
 `kid` | _PURPOSE-GOES-HERE_
 
 ---
@@ -255,7 +255,7 @@ Property | Purpose
 
 ### CONNECTION_REQUEST
 
-_Response to a `CONNECTION_INIT` message. Sent to the user's device by teh service._
+_Response to a `CONNECTION_INIT` message. Sent to the user's device by the service._
 
 Property | Purpose
 --- | ---
@@ -330,7 +330,7 @@ Property | Purpose
 --- | ---
 `...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _The `LOGIN`message sent as a serialized JWS type._
+`payload` | _The `LOGIN` message sent as a serialized JWS type._
 
 ---
 
@@ -342,7 +342,7 @@ Property | Purpose
 --- | ---
 `...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _The `LOGIN`message sent as a serialized JWS type._
+`payload` | _The `LOGIN` message sent as a serialized JWS type._
 
 ---
 
