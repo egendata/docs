@@ -12,20 +12,20 @@
     <title>Cryptography :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/theme.css?1571220765" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1571220765" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/theme.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1571221083" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1571220765" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1571221083" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1571220765"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1571221083"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -74,14 +74,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/docs/js/lunr.min.js?1571220765"></script>
-<script type="text/javascript" src="/docs/js/auto-complete.js?1571220765"></script>
+<script type="text/javascript" src="/docs/js/lunr.min.js?1571221083"></script>
+<script type="text/javascript" src="/docs/js/auto-complete.js?1571221083"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/egendata.github.io\/docs";
     
 </script>
-<script type="text/javascript" src="/docs/js/search.js?1571220765"></script>
+<script type="text/javascript" src="/docs/js/search.js?1571221083"></script>
 
     
   </div>
@@ -279,15 +279,7 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents">
-<ul>
-<li><a href="#kryptering-och-signering">Kryptering och signering</a>
-<ul>
-<li><a href="#algoritmer">Algoritmer</a></li>
-<li><a href="#javascript-object-signing-and-encryption-jose">JavaScript Object Signing and Encryption - JOSE</a></li>
-</ul></li>
-</ul>
-</nav>
+
     </div>
 </div>
 
@@ -312,39 +304,7 @@
 
 
 
-	
-
-<h1 id="kryptering-och-signering">Kryptering och signering</h1>
-
-<p>En grundläggande regel inom kryptering är: Never roll your own. Kryptering är svårt och det är lätt att begå misstag. Av det skälet har vi valt att använda oss av verifierade algoritmer och öppna standarder.</p>
-
-<h2 id="algoritmer">Algoritmer</h2>
-
-<p>Det finns en rad olika krypteringsalgoritmer. Några av dessa ingår i den nya standarden för browsers – SubtleCrypto-gränssnittet mot Web Crypto API. Av dessa använder sig Egendata av:</p>
-
-<ul>
-<li><p><strong>AES-128-CBC</strong> för symmetrisk kryptering</p></li>
-
-<li><p><strong>RSAES-OAEP med 2048 bitars nyckel</strong> för asymmetrisk kryptering</p></li>
-
-<li><p><strong>RSASSA-PSS (PS256) med 2048 bitars nyckel</strong> för signering</p></li>
-</ul>
-
-<p>Vi ser för närvarande över möjligheten att ändra till <code>AES-256-CBC</code> för symmetrisk kryptering. Det finns för närvarande inga planer på att byta till <code>ECDSA</code> för signering.</p>
-
-<h2 id="javascript-object-signing-and-encryption-jose">JavaScript Object Signing and Encryption - JOSE</h2>
-
-<p>Som format för överföring och lagring av signerad och krypterad information används ramverket JOSE vilket i sin tur består av ett antal RFC:er:</p>
-
-<ul>
-<li><p><strong>JWK - JSON Web Key</strong> <a href="https://tools.ietf.org/html/rfc7517">RFC7517</a> Format för krypteringsnycklar.</p></li>
-
-<li><p><strong>JWE - JSON Web Encryption</strong> <a href="https://tools.ietf.org/html/rfc7516">RFC7516</a> Format för krypterad data. I Egendata används enbart <code>General JWE JSON Serialization Syntax</code> då endast denna stöder flera mottagare. Innehållet krypteras med <code>A128CBC-HS256</code> och mottagarnas nycklar med <code>RSA-OAP</code></p></li>
-
-<li><p><strong>JWS - JSON Web Signature</strong> <a href="https://tools.ietf.org/html/rfc7515">RFC7515</a> Format för signerad information. All data signeras innan den krypteras. Detta möjliggör validering av att datan kommer från den Tjänst som påstås.</p></li>
-
-<li><p><strong>JWT - JSON Web Token</strong> <a href="https://tools.ietf.org/html/rfc7519">RFC7519</a> Format för överföring av <code>claims</code> mellan plattformens olika delar. Alla anrop mellan Tjänst, Operator och Egendata-appen skickas i form av JWT:er signerade med partens huvudsigneringsnyckel. Eventuellt kommer rotation av nycklar införas för detta. Varje meddelande valideras av mottagande part genom att nyckeln hämtas från sändande tjänst i ett separat anrop. Undantaget är Egendata-appen som inte kan agera server utan därför bilägger nyckeln i anropet.</p></li>
-</ul>
+	<p>Placeholder</p>
 
 
 
@@ -505,19 +465,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1571220765"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1571220765"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571220765"></script>
-    <script src="/docs/js/jquery.sticky.js?1571220765"></script>
-    <script src="/docs/js/featherlight.min.js?1571220765"></script>
-    <script src="/docs/js/highlight.pack.js?1571220765"></script>
+    <script src="/docs/js/clipboard.min.js?1571221083"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1571221083"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571221083"></script>
+    <script src="/docs/js/jquery.sticky.js?1571221083"></script>
+    <script src="/docs/js/featherlight.min.js?1571221083"></script>
+    <script src="/docs/js/highlight.pack.js?1571221083"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1571220765"></script>
-    <script src="/docs/js/learn.js?1571220765"></script>
-    <script src="/docs/js/hugo-learn.js?1571220765"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1571221083"></script>
+    <script src="/docs/js/learn.js?1571221083"></script>
+    <script src="/docs/js/hugo-learn.js?1571221083"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1571220765" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1571220765"></script>
+    <link href="/docs/mermaid/mermaid.css?1571221083" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1571221083"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
