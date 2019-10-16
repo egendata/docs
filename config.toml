@@ -4,5 +4,9 @@ title = "My New Hugo Site"
 theme = "hugo-theme-learn-master"
 
 [params]
+  # Change default color scheme with a variant one. Can be "red", "blue", "green".
   themeVariant = "mine"
+  # Set this to true to disable copy-to-clipboard button for inline code.
   disableInlineCopyToClipBoard = "true"
+  # Disable search function. It will hide search bar.
+  disableSearch = "true"
