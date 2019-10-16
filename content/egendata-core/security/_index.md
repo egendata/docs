@@ -15,6 +15,9 @@ Thus communication with the [Operator](/operator) is considered trusted and secu
 
 {{% notice warning %}}
 Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.
+
+It is, however, possible for the Operator to assert that an account uses one and only one key for signing
+its communication. This is currently not enforced.
 {{% /notice %}}
 
 ## Encryption
@@ -34,9 +37,13 @@ Algorithm | Description
 --- | ---
 [RSASSA-PSS (PS256)](https://tools.ietf.org/html/rfc3447#section-8.1) | For signing (2048 bit key)
 
+{{% notice warning %}}
+All encryption and signing in the phone app is done through `msrcrypto` which implements a shim of `SubtleCrypto` in pure JavaScript. Since this implementation is extremely slow, it will have to be replaced by a native implementation of the JOSE standard wrapped as a `react-native` package. The current candidate for iOS implementation [JOSESwift](https://github.com/airsidemobile/JOSESwift) does not support `RSA PSS` - only `RSA PKCS#1`. If this functionality cannot be added to `JOSESwift` – signing will have to be done through `RS256` instead of `PS256`
+{{% /notice %}}
+
 ### The signee
 
-#### Publishment of public key(s)
+#### Exposing public signing key(s)
 
 The [Signee Service](#the-signee) publishes the required public key(s) for other parties to use when verifying the authenticity of the signee's signature. The public key(s) are published on the [Signee service's](#the-signee) domain at endpoint `/jwks`(although can be customized). 
 
@@ -52,8 +59,6 @@ Through secure TLS connection the verifier can with high confidence trust that i
 
 All messages exchanged between [Services](/services), [Operator](/operator) & Applications are signed with the sender party's own signing key and transmitted as [JWT](https://tools.ietf.org/html/rfc7519) to the receiving party.
 
-s the serialization format for both storage and transmission of keys and signed/encrypted data.
-
 ### Panva JOSE framework
 
 The Egendata solution utilizes the [Panva JOSE framework (GitHub)](https://github.com/panva/jose) in order to be compliant with the following RFCs:
@@ -63,7 +68,7 @@ RFC | Description
 [JWK](https://tools.ietf.org/html/rfc7517) | JSON Web Key RFC7517, format for encryption keys.
 [JWE](https://tools.ietf.org/html/rfc7516) | JSON Web Encryption RFC7516, format för encrypted data. In Egendata solution only the "General JWE JSON Serialization Syntax" is used due to that being the only one supporting multiple recipients. The content is encrypted with "A128CBC-HS256"(link?) and the recipient keys with "RSA-OAP".
 [JWS](https://tools.ietf.org/html/rfc7515) | JSON Web Signature RFC7515, format for signed data. All data is signed before being encrypted. This allows the validation of the data source.
-[JWT](https://tools.ietf.org/html/rfc7519) | JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution. 
+[JWT](https://tools.ietf.org/html/rfc7519) | JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution.
 
 ## Future considerations
 
