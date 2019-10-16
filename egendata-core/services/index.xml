@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Services on My New Hugo Site</title>
-    <link>//egendata.github.io/docs/services/</link>
+    <link>//egendata.github.io/docs/egendata-core/services/</link>
     <description>Recent content in Services on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="//egendata.github.io/docs/services/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="//egendata.github.io/docs/egendata-core/services/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

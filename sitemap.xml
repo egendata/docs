@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>//egendata.github.io/docs/client/</loc>
+    <loc>//egendata.github.io/docs/egendata-core/client/</loc>
   </url>
   
   <url>
@@ -19,7 +19,11 @@
   </url>
   
   <url>
-    <loc>//egendata.github.io/docs/data/</loc>
+    <loc>//egendata.github.io/docs/egendata-core/data/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/egendata-core/</loc>
   </url>
   
   <url>
@@ -31,11 +35,11 @@
   </url>
   
   <url>
-    <loc>//egendata.github.io/docs/security/</loc>
+    <loc>//egendata.github.io/docs/egendata-core/security/</loc>
   </url>
   
   <url>
-    <loc>//egendata.github.io/docs/services/</loc>
+    <loc>//egendata.github.io/docs/egendata-core/services/</loc>
   </url>
   
   <url>

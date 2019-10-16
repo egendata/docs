@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/docs/images/favicon.png" type="image/png">
 
-    <title>Architecture :: My New Hugo Site</title>
+    <title>Security :: My New Hugo Site</title>
 
     
     <link href="/docs/css/nucleus.css?1571226912" rel="stylesheet">
@@ -39,7 +39,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/architecture/">
+  <body class="" data-url="/docs/egendata-core/security/">
     <nav id="sidebar" class="">
 
 
@@ -98,8 +98,8 @@
   
     
     <li data-nav-id="/docs/architecture/" title="Architecture" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/docs/architecture/">
@@ -142,7 +142,7 @@
   
     
     <li data-nav-id="/docs/egendata-core/" title="Egendata Core" class="dd-item 
-        
+        parent
         
         
         ">
@@ -217,8 +217,8 @@
   
     
     <li data-nav-id="/docs/egendata-core/security/" title="Security" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/egendata-core/security/">
@@ -332,7 +332,13 @@
             
           
           
-            <a href='/docs/'>Introduction</a> > Architecture
+            
+            
+          
+          
+            <a href='/docs/'>Introduction</a> > <a href='/docs/egendata-core/'>Egendata Core</a> > Security
+          
+         
           
          
           
@@ -345,17 +351,25 @@
     <div class="wrapper">
 <nav id="TableOfContents">
 <ul>
-<li><a href="#komponenter">Komponenter</a>
-<ul>
 <li>
 <ul>
-<li><a href="#tjänst-services"><a href="services">Tjänst</a></a></li>
-<li><a href="#app-app"><a href="app">App</a></a></li>
-<li><a href="#operator-operator"><a href="operator">Operator</a></a></li>
-<li><a href="#pds-personal-data-store">PDS (Personal Data Store)</a></li>
+<li><a href="#trust-establishment">Trust establishment</a></li>
+<li><a href="#encryption">Encryption</a></li>
+<li><a href="#signatures">Signatures</a>
+<ul>
+<li><a href="#the-signee">The signee</a>
+<ul>
+<li><a href="#publishment-of-public-key-s">Publishment of public key(s)</a></li>
 </ul></li>
+<li><a href="#the-verifier">The verifier</a></li>
 </ul></li>
-<li><a href="#användningsflöde-registrering">Användningsflöde registrering</a></li>
+<li><a href="#transactions">Transactions</a>
+<ul>
+<li><a href="#panva-jose-framework">Panva JOSE framework</a></li>
+</ul></li>
+<li><a href="#future-plans-suggestions">Future plans / Suggestions</a></li>
+<li><a href="#other">Other</a></li>
+</ul></li>
 </ul>
 </nav>
     </div>
@@ -373,7 +387,7 @@
           
             <h1>
               
-              Architecture
+              Security
             </h1>
           
 
@@ -384,40 +398,138 @@
 
 	
 
-<p><img src="architecture.png" alt="Diagram över Egendatas arkitektur" /></p>
+<p>The Egendata solution uses standard algorithms for all encryption and signatures.</p>
 
-<h1 id="komponenter">Komponenter</h1>
+<h2 id="trust-establishment">Trust establishment</h2>
 
-<h3 id="tjänst-services"><a href="services">Tjänst</a></h3>
+<p>The <a href="/operator">Operator</a> acts as the single point of contact for all <a href="/services">Services</a> and Applications integrated with the Egendata solution.
+It is highly recommended that all communication channels with the <a href="/operator">Operator</a> are established using the <a href="https://tools.ietf.org/html/rfc5246">TLS protocol</a> (although not enforced).</p>
 
-<p>En sajt eller applikation som använder sig av Egendata för att hantera persondata. Klientbibliotektet Client är till för att göra det enkelt för tjänster att implementera Egendata.</p>
+<p>All <a href="/services">Services</a> or devices that establish connectivity with the <a href="/operator">Operator</a> verifies the validity of the <a href="/operator">Operator&rsquo;s</a> TLS certificate and ensures that it&rsquo;s issued directly/indirectly by a trusted <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>.</p>
 
-<p>För mer detaljer om hur en tjänst fungerar och hur du sätter upp en, se <a href="services">tjänster</a>.</p>
+<h2 id="encryption">Encryption</h2>
 
-<h3 id="app-app"><a href="app">App</a></h3>
+<p>The Egendata solution uses the following encryption algorithm(s) from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
 
-<p>En mobilapplikation med vilken användaren kontrollerar rättigheterna till sin data. Tekniskt sett är det Appen som representerar användaren gentemot resten av infrastrukturen.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Description</th>
+</tr>
+</thead>
 
-<p>När användaren skapar ett konto genereras användarens kryptografiska nycklar i Appen; den privata delen av nyckeln lämnar sedan aldrig Appen och används för att bevisa att det är användaren som står bakom de kommandon användaren skickar till andra delar av infrastrukturen (exempelvis ändring i rättigheter).</p>
+<tbody>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc3602">AES-128-CBC</a></td>
+<td>For symmetric encryption</td>
+</tr>
 
-<h3 id="operator-operator"><a href="operator">Operator</a></h3>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc2437#section-7.1">RSAES-OAEP</a></td>
+<td>For asymmetric encryption (2048 bit key)</td>
+</tr>
+</tbody>
+</table>
 
-<p>Operatorn agerar knytpunkt i Egendata-nätverket; den slussar meddelanden mellan användare (App) och tjänster samt krypterad data mellan tjänster och lagringsutrymme (PDS).</p>
+<h2 id="signatures">Signatures</h2>
 
-<p>Operatorn måste vara tillgänglig för att nätverket ska gå att använda. En viktig detalj är att operatorn inte har någon möjlighet att läsa eller ändra i data eller rättigheter. Dessa är krypterade och/eller signerade så att en operator som missköter sig inte kan komma över någon persondata.</p>
+<p>The Egendata solution uses the following signature algorithm(s) from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
 
-<h3 id="pds-personal-data-store">PDS (Personal Data Store)</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Description</th>
+</tr>
+</thead>
 
-<p>En lagringsyta där användarens krypterade persondata lagras och läses av Operator. Kan vara vilken typ av lagring som helst som Operator stödjer. Användaren har möjlighet att välja var hens data lagras genom att välja PDS i Appen.</p>
+<tbody>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc3447#section-8.1">RSASSA-PSS (PS256)</a></td>
+<td>For signing (2048 bit key)</td>
+</tr>
+</tbody>
+</table>
 
-<h1 id="användningsflöde-registrering">Användningsflöde registrering</h1>
+<h3 id="the-signee">The signee</h3>
 
-<p>Användaren:
-* Installerar Egendata-Appen på sin telefon, skapar ett konto och väljer var dess data ska lagras (vilken PDS).
-* Besöker en tjänst som använder Egendata, klickar på &ldquo;Logga in&rdquo; och blir presenterad med en QR-kod
-* Skannar QR-koden med Appen och får då frågan om hen vill registrera sig
-* Användaren blir presenterad med beskrivning av den data tjänsten vill läsa eller skriva och varför
-* När användaren godkänner detta loggas hen in i tjänsten</p>
+<p>The Egendata signature validation is grounded in the fact that the signee service has a TLS certificate issued from a trusted <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>.</p>
+
+<h4 id="publishment-of-public-key-s">Publishment of public key(s)</h4>
+
+<p>The <a href="/services">Service</a> publishes its own public key(s) to the world on API endpoint <code>/jwks</code>(although can be customized).
+The public key(s) are represented as <a href="https://tools.ietf.org/html/rfc7517">JWKS</a> format.</p>
+
+<h3 id="the-verifier">The verifier</h3>
+
+<p>The recipient of an incoming Egendata <a href="/data/#egendata-message-schema-definitions">Message</a>, perform a query to the supposed <a href="#the-signee">Signee Service</a> in order to obtain the <a href="#the-signee">Signee&rsquo;s</a> public key. Through secure TLS connection it trusts that it&rsquo;s in contact with the correct signee service and therefore also trusts the received public key(s).</p>
+
+<p>The <a href="#publishment-of-public-key-s">signee&rsquo;s public key(s)</a> are then used to perform signature verification of the payload <a href="https://tools.ietf.org/html/rfc7516">JWE</a> to ensure that suggested service is in fact the issuer and signee the received payload.</p>
+
+<h2 id="transactions">Transactions</h2>
+
+<p>All messages transmitted between (Service)[/services], (Operator)[/operator] and App is sent in the form of <a href="https://tools.ietf.org/html/rfc7519">JWT</a> and signed with the sender party&rsquo;s own signing key. All Egendata messaging schemas(<a href="https://tools.ietf.org/html/rfc7519">JWT</a>) contains the property <code>type</code> to make it easier for the recipient to easily identify the purpose of the incoming message.</p>
+
+<p>The Egendata solution uses the <a href="#panva-jose-framework">Panva JOSE framework</a> implementation of JavaScript Object Signing and Encryption as the serialization format for both storage and transmission of keys and signed/encrypted data.</p>
+
+<h3 id="panva-jose-framework">Panva JOSE framework</h3>
+
+<p>The <a href="https://github.com/panva/jose">Panva JOSE framework</a> is based upon the following RFCs:</p>
+
+<table>
+<thead>
+<tr>
+<th>RFC</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7517">JWK</a></td>
+<td>JSON Web Key RFC7517, format for encryption keys.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7516">JWE</a></td>
+<td>JSON Web Encryption RFC7516, format för encrypted data. In Egendata solution only the &ldquo;General JWE JSON Serialization Syntax&rdquo; is used due to that being the only one supporting multiple recipients. The content is encrypted with &ldquo;A128CBC-HS256&rdquo;(link?) and the recipient keys with &ldquo;RSA-OAP&rdquo;.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7515">JWS</a></td>
+<td>JSON Web Signature RFC7515, format for signed data. All data is signed before being encrypted. This allows the validation of the data source.</td>
+</tr>
+
+<tr>
+<td><a href="https://tools.ietf.org/html/rfc7519">JWT</a></td>
+<td>JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="future-plans-suggestions">Future plans / Suggestions</h2>
+
+<p>We see possibilities to use the ASE-256-CBC for symmetric encryption.
+There are no current plans to migrate to ECDSA for signing.</p>
+
+<p>Eventually signing key rotation is expected to be implemented, so that each message can be validated against the public key announced by sending party. The exception is the App, which is not acting as a Webserver, and therefore can&rsquo;t publically announce its own public key, instead the public key is included in the message.</p>
+
+<p>!!! Is there ANY cases where the App initiates a message directly to the Service? That message could potentially be tampered with. Yes, as far as we identified we can see that the CONNECTION_INIT message is transmitted directly to the Service if the App(device) doesn’t have an (cached) existing record of connection with the Service.</p>
+
+<p>!!! Currently TLS is not enforced by the Egendata solution but it should probably be.</p>
+
+<p>!!! The data producer signature verification is intended to be implemented in the Client library, however it&rsquo;s not yet implemented, see: <a href="https://github.com/egendata/client/blob/master/lib/data.js#L74">GitHub Client</a>.</p>
+
+<p>There are potential optimizations to be done in the Panva JOSE library regarding the contruction and decryption the JWT&rsquo;s JWE content, e.g. the extraction of the correct key from the recipient list and to reuse of the same encryption key(but always with unique IV).</p>
+
+<h2 id="other">Other</h2>
+
+<p>! The Example project uses &ldquo;Client&rdquo; (and indirectly &ldquo;Messaging&rdquo;) library
+! The Operator uses &ldquo;Messaging&rdquo; library
+! The App uses &ldquo;Messaging&rdquo; library
+! Describe the purpose of the &ldquo;Messaging&rdquo; library.
+! Describe the purpose of the &ldquo;Client&rdquo; library, and update the current Readme.</p>
 
 
 
@@ -458,56 +570,8 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -541,6 +605,25 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
                 
                 
 
@@ -556,6 +639,42 @@
             
             
                 
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -596,10 +715,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/docs/" title="Introduction"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/docs/egendata-core/data/" title="Data"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/docs/cryptography/" title="Cryptography" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/docs/egendata-core/services/" title="Services" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
