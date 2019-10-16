@@ -9,7 +9,13 @@ The Egendata solution uses standard algorithms for all encryption and signatures
 The [Operator](/operator) acts as the single point of contact for all [Services](/services) and Applications integrated with the Egendata solution.
 It is highly recommended that all communication channels with the [Operator](/operator) are established using the [TLS protocol](https://tools.ietf.org/html/rfc5246) (although not enforced).
 
-All [Services](/services) or devices that establish connectivity with the [Operator](/operator) verifies the validity of the [Operator's](/operator) TLS certificate and ensures that it's issued directly/indirectly by a trusted [Certificate Authority](https://en.wikipedia.org/wiki/Certificate_authority).
+All [Services](/services) or devices that establish connectivity with the [Operator](/operator) verifies the validity of the [Operator's](/operator) TLS certificate to ensure that it's issued directly/indirectly by a trusted [Certificate Authority](https://en.wikipedia.org/wiki/Certificate_authority).
+
+Thus communication with the [Operator](/operator) is considered trusted and secure.
+
+{{% notice warning %}}
+Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.
+{{% /notice %}}
 
 ## Encryption
 
@@ -30,28 +36,27 @@ Algorithm | Description
 
 ### The signee
 
-The Egendata signature validation is grounded in the fact that the signee service has a TLS certificate issued from a trusted [Certificate Authority](https://en.wikipedia.org/wiki/Certificate_authority).
-
 #### Publishment of public key(s)
 
-The [Service](/services) publishes its own public key(s) to the world on API endpoint `/jwks`(although can be customized).
+The [Signee Service](#the-signee) publishes the required public key(s) for other parties to use when verifying the authenticity of the signee's signature. The public key(s) are published on the [Signee service's](#the-signee) domain at endpoint `/jwks`(although can be customized). 
+
 The public key(s) are represented as [JWKS](https://tools.ietf.org/html/rfc7517) format.
 
 ### The verifier
 
-The recipient of an incoming Egendata [Message](/data/#egendata-message-schema-definitions), perform a query to the supposed [Signee Service](#the-signee) in order to obtain the [Signee's](#the-signee) public key. Through secure TLS connection it trusts that it's in contact with the correct signee service and therefore also trusts the received public key(s).
+The recipient of an incoming Egendata [Message](/data/#egendata-message-schema-definitions), performs a query to the supposed [Signee Service's](#the-signee) `/jwks` endpoint in order to obtain the public key(s) required for verification of the signature and thereby ensuring that the suggested service is in fact the issuer and signee of the received [JWE](https://tools.ietf.org/html/rfc7516) payload.
 
-The [signee's public key(s)](#publishment-of-public-key-s) are then used to perform signature verification of the payload [JWE](https://tools.ietf.org/html/rfc7516) to ensure that suggested service is in fact the issuer and signee the received payload.
+Through secure TLS connection the verifier can with high confidence trust that it is in contact with the correct signee service.
 
 ## Transactions
 
-All messages transmitted between (Service)[/services], (Operator)[/operator] and App is sent in the form of [JWT](https://tools.ietf.org/html/rfc7519) and signed with the sender party's own signing key. All Egendata messaging schemas([JWT](https://tools.ietf.org/html/rfc7519)) contains the property `type` to make it easier for the recipient to easily identify the purpose of the incoming message.
+All messages exchanged between [Services](/services), [Operator](/operator) & Applications are signed with the sender party's own signing key and transmitted as [JWT](https://tools.ietf.org/html/rfc7519) to the receiving party.
 
-The Egendata solution uses the [Panva JOSE framework](#panva-jose-framework) implementation of JavaScript Object Signing and Encryption as the serialization format for both storage and transmission of keys and signed/encrypted data.
+s the serialization format for both storage and transmission of keys and signed/encrypted data.
 
 ### Panva JOSE framework
 
-The [Panva JOSE framework](https://github.com/panva/jose) is based upon the following RFCs:
+The Egendata solution utilizes the [Panva JOSE framework (GitHub)](https://github.com/panva/jose) in order to be compliant with the following RFCs:
 
 RFC | Description
 --- | ---
@@ -60,10 +65,10 @@ RFC | Description
 [JWS](https://tools.ietf.org/html/rfc7515) | JSON Web Signature RFC7515, format for signed data. All data is signed before being encrypted. This allows the validation of the data source.
 [JWT](https://tools.ietf.org/html/rfc7519) | JSON Web Token RFC7519, format for transmission of claims between all parts of the Egendata solution. 
 
-## Future plans / Suggestions
+## Future considerations
 
-We see possibilities to use the ASE-256-CBC for symmetric encryption.
-There are no current plans to migrate to ECDSA for signing.
+There are possibilities to use the `ASE-256-CBC` for symmetric encryption.
+There are no current plans to migrate to `ECDSA` for signing.
 
 Eventually signing key rotation is expected to be implemented, so that each message can be validated against the public key announced by sending party. The exception is the App, which is not acting as a Webserver, and therefore can't publically announce its own public key, instead the public key is included in the message.
 
