@@ -3,39 +3,39 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/architecture/</loc>
+    <loc>//egendata.github.io/docs/architecture/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>//egendata.github.io/docs/categories/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/client/</loc>
+    <loc>//egendata.github.io/docs/client/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/cryptography/</loc>
+    <loc>//egendata.github.io/docs/cryptography/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>//egendata.github.io/docs/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/operator/</loc>
+    <loc>//egendata.github.io/docs/operator/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/security/</loc>
+    <loc>//egendata.github.io/docs/security/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/services/</loc>
+    <loc>//egendata.github.io/docs/services/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>//egendata.github.io/docs/tags/</loc>
   </url>
   
 </urlset>
