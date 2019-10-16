@@ -12,20 +12,20 @@
     <title>Security :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/theme.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/theme.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1571225825" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1571223556" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1571225825" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1571223556"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1571225825"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -74,14 +74,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/docs/js/lunr.min.js?1571223556"></script>
-<script type="text/javascript" src="/docs/js/auto-complete.js?1571223556"></script>
+<script type="text/javascript" src="/docs/js/lunr.min.js?1571225825"></script>
+<script type="text/javascript" src="/docs/js/auto-complete.js?1571225825"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/egendata.github.io\/docs";
     
 </script>
-<script type="text/javascript" src="/docs/js/search.js?1571223556"></script>
+<script type="text/javascript" src="/docs/js/search.js?1571225825"></script>
 
     
   </div>
@@ -306,22 +306,18 @@
 <li>
 <ul>
 <li><a href="#trust-establishment">Trust establishment</a></li>
-<li><a href="#signature-verification">Signature verification</a>
+<li><a href="#encryption">Encryption</a></li>
+<li><a href="#signatures">Signatures</a>
 <ul>
-<li><a href="#signee-service">Signee service</a></li>
+<li><a href="#the-signee">The signee</a>
+<ul>
+<li><a href="#publishment-of-public-key-s">Publishment of public key(s)</a></li>
 </ul></li>
-<li><a href="#encryption-and-signature-algorithms">Encryption and signature algorithms</a></li>
-<li><a href="#data-storage-and-transmission">Data storage and transmission</a></li>
-<li><a href="#steps-performed-upon-writing-to-pds">Steps performed upon writing to PDS.</a>
-<ul>
-<li><a href="#at-the-service">At the service</a></li>
-<li><a href="#at-the-operator">At the operator</a></li>
+<li><a href="#the-verifier">The verifier</a></li>
 </ul></li>
-<li><a href="#steps-performed-upon-reading-from-pds">Steps performed upon reading from PDS</a>
+<li><a href="#transactions">Transactions</a>
 <ul>
-<li><a href="#at-the-service-1">At the service</a></li>
-<li><a href="#at-the-operator-1">At the operator</a></li>
-<li><a href="#at-the-service-2">At the service</a></li>
+<li><a href="#panva-jose-framework">Panva JOSE framework</a></li>
 </ul></li>
 <li><a href="#future-plans-suggestions">Future plans / Suggestions</a></li>
 <li><a href="#other">Other</a></li>
@@ -363,19 +359,9 @@ It is highly recommended that all communication channels with the <a href="/oper
 
 <p>All <a href="/services">Services</a> or devices that establish connectivity with the <a href="/operator">Operator</a> verifies the validity of the <a href="/operator">Operator&rsquo;s</a> TLS certificate and ensures that it&rsquo;s issued directly/indirectly by a trusted <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>.</p>
 
-<h2 id="signature-verification">Signature verification</h2>
+<h2 id="encryption">Encryption</h2>
 
-<h3 id="signee-service">Signee service</h3>
-
-<p>The Egendata signature validation is grounded in the fact that the signee service has a TLS certificate issued from a trusted <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>.</p>
-
-<p>The recipient of an incoming Egendata <a href="/data/#egendata-message-schema-definitions">Message</a>, queries the supposed <a href="#signee-service">Signee Service</a> to obtain the signee’s public key. Through secure TLS connection it trusts that it&rsquo;s in contact with the correct signee service and therefore also trusts the received public key. The signee&rsquo;s public key is then used for validation of the signature to ensure that said proposed service is the issuer and signee the received data.</p>
-
-<p>This kind of signature verification also occurs when services consume data produced by other services.</p>
-
-<h2 id="encryption-and-signature-algorithms">Encryption and signature algorithms</h2>
-
-<p>The Egendata solution uses the following encryption algorithms from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
+<p>The Egendata solution uses the following encryption algorithm(s) from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
 
 <table>
 <thead>
@@ -395,7 +381,22 @@ It is highly recommended that all communication channels with the <a href="/oper
 <td><a href="https://tools.ietf.org/html/rfc2437#section-7.1">RSAES-OAEP</a></td>
 <td>For asymmetric encryption (2048 bit key)</td>
 </tr>
+</tbody>
+</table>
 
+<h2 id="signatures">Signatures</h2>
+
+<p>The Egendata solution uses the following signature algorithm(s) from the <a href="https://www.w3.org/TR/WebCryptoAPI/#subtlecrypto-interface">SubtleCrypto interface</a></p>
+
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
 <tr>
 <td><a href="https://tools.ietf.org/html/rfc3447#section-8.1">RSASSA-PSS (PS256)</a></td>
 <td>For signing (2048 bit key)</td>
@@ -403,13 +404,30 @@ It is highly recommended that all communication channels with the <a href="/oper
 </tbody>
 </table>
 
-<h2 id="data-storage-and-transmission">Data storage and transmission</h2>
+<h3 id="the-signee">The signee</h3>
 
-<p>All messages transmitted between Service, Operator and App is sent in the form of JWT and signed with the sender party&rsquo;s own signing key. All Egendata messaging schemas(JWT) contains the property <code>type</code> to make it easier for the recipient to easily identify the purpose of the incoming message.</p>
+<p>The Egendata signature validation is grounded in the fact that the signee service has a TLS certificate issued from a trusted <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>.</p>
 
-<p>The Egendata solution uses the <a href="https://github.com/panva/jose">Panva</a> implementation of <a href="JOSE">JavaScript Object Signing and Encryption</a> as the serialization format for storage and transmission of signed/encrypted data.</p>
+<h4 id="publishment-of-public-key-s">Publishment of public key(s)</h4>
 
-<p>The JOSE framework is based upon the following RFCs:</p>
+<p>The <a href="/services">Service</a> publishes its own public key(s) to the world on API endpoint <code>/jwks</code>(although can be customized).
+The public key(s) are represented as <a href="https://tools.ietf.org/html/rfc7517">JWKS</a> format.</p>
+
+<h3 id="the-verifier">The verifier</h3>
+
+<p>The recipient of an incoming Egendata <a href="/data/#egendata-message-schema-definitions">Message</a>, perform a query to the supposed <a href="#the-signee">Signee Service</a> in order to obtain the <a href="#the-signee">Signee&rsquo;s</a> public key. Through secure TLS connection it trusts that it&rsquo;s in contact with the correct signee service and therefore also trusts the received public key(s).</p>
+
+<p>The <a href="#publishment-of-public-key-s">signee&rsquo;s public key(s)</a> are then used to perform signature verification of the payload <a href="https://tools.ietf.org/html/rfc7516">JWE</a> to ensure that suggested service is in fact the issuer and signee the received payload.</p>
+
+<h2 id="transactions">Transactions</h2>
+
+<p>All messages transmitted between (Service)[/services], (Operator)[/operator] and App is sent in the form of <a href="https://tools.ietf.org/html/rfc7519">JWT</a> and signed with the sender party&rsquo;s own signing key. All Egendata messaging schemas(<a href="https://tools.ietf.org/html/rfc7519">JWT</a>) contains the property <code>type</code> to make it easier for the recipient to easily identify the purpose of the incoming message.</p>
+
+<p>The Egendata solution uses the <a href="#panva-jose-framework">Panva JOSE framework</a> implementation of JavaScript Object Signing and Encryption as the serialization format for both storage and transmission of keys and signed/encrypted data.</p>
+
+<h3 id="panva-jose-framework">Panva JOSE framework</h3>
+
+<p>The <a href="https://github.com/panva/jose">Panva JOSE framework</a> is based upon the following RFCs:</p>
 
 <table>
 <thead>
@@ -441,64 +459,6 @@ It is highly recommended that all communication channels with the <a href="/oper
 </tr>
 </tbody>
 </table>
-
-<p>Data saved in a user&rsquo;s PDS is always represented as JWE.</p>
-
-<h2 id="steps-performed-upon-writing-to-pds">Steps performed upon writing to PDS.</h2>
-
-<h3 id="at-the-service">At the service</h3>
-
-<ol>
-<li>When a service wants to write to a user’s PDS, a JWT message of type &ldquo;DATA_WRITE&rdquo; is constructed with the following inputs are required: &ldquo;domain&rdquo;, &ldquo;area&rdquo; and optionally &ldquo;data&rdquo;(JWE). A &ldquo;DATA_WRITE&rdquo; without any data is essentially the same as clearing the data located at the “content path” of the user’s PDS.</li>
-<li>First a signing key(JWK) is constructed based upon the &ldquo;domain&rdquo; and &ldquo;area&rdquo; (This is not fully implemented and instead the service&rsquo;s own private key(from the client configuration) is used).</li>
-<li>The &ldquo;data&rdquo; is signed with the service&rsquo;s private key and represented as an JWS object.</li>
-<li>A JWE is then constructed based upon the JWS and each read permissioned recipient.</li>
-<li>Finally the JWE is packed into a JWT and transmitted over to the Operator.</li>
-</ol>
-
-<h3 id="at-the-operator">At the operator</h3>
-
-<ol>
-<li>The Operator receives the incoming message(JWT) and validates the integrity of the message(JWT signature verification).</li>
-<li>After that, the Operator performs queries to its own database based upon the JWT properties &ldquo;sub&rdquo;, &ldquo;iss&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo; of each &ldquo;content path&rdquo; entry. (See the Egendata messaging schemas&hellip;)</li>
-<li>If valid write permissions are found by the queries, the query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
-<li>The destination PDS directory path is defined based upon &ldquo;connectionId&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo;.
-<code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
-<li>The JWE(encrypted at the service) of the received JWT, is extracted and written to the users PDS and a successful status code 201 is returned to the service, alternatively 403 upon error.</li>
-</ol>
-
-<h2 id="steps-performed-upon-reading-from-pds">Steps performed upon reading from PDS</h2>
-
-<h3 id="at-the-service-1">At the service</h3>
-
-<ol>
-<li>The Service constructs a JWT message (&ldquo;DATA_READ_REQUEST&rdquo;) with desired &ldquo;content paths&rdquo; and a connectionId(sub).</li>
-<li>The message(JWT) is transmitted to the Operator.</li>
-</ol>
-
-<h3 id="at-the-operator-1">At the operator</h3>
-
-<ol>
-<li>The Operator receives the incoming message(JWT) and performs a lookup in its database to verify that the requesting Service has sufficient read permissions for a user’s PDS.</li>
-<li>If valid sufficient read permissions are found, the database query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
-<li>The Operator constructs the &ldquo;content path&rdquo; strings that locate the data within the user&rsquo;s PDS. <code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
-<li>The data(JWE) is read from the user&rsquo;s PDS, packed into a new JWT message of type &ldquo;DATA_READ_RESPONSE&rdquo; and finally transmitted back to the requesting Service.</li>
-</ol>
-
-<h3 id="at-the-service-2">At the service</h3>
-
-<ol>
-<li>The service receives the incoming message(JWT) and iterates through all listed &ldquo;content paths&rdquo;
-
-<ol>
-<li>The Service inspects the JWE and locates its own &ldquo;Recipient&rdquo; key.</li>
-<li>The Service obtains the required decryption key for the encrypted data, through decrypting its own &ldquo;Recipient&rdquo; entry with it&rsquo;s own private key.</li>
-<li>The JWE is then decrypted with the decryption key.</li>
-</ol></li>
-<li>All &ldquo;content paths&rdquo; are returned with decrypted data, alternatively error if something went wrong in the previous step.</li>
-</ol>
-
-<p>:warning: Ask/Check if the Service&rsquo;s received message contains all intended Recipients or just a single one.</p>
 
 <h2 id="future-plans-suggestions">Future plans / Suggestions</h2>
 
@@ -698,19 +658,19 @@ There are no current plans to migrate to ECDSA for signing.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1571223556"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1571223556"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571223556"></script>
-    <script src="/docs/js/jquery.sticky.js?1571223556"></script>
-    <script src="/docs/js/featherlight.min.js?1571223556"></script>
-    <script src="/docs/js/highlight.pack.js?1571223556"></script>
+    <script src="/docs/js/clipboard.min.js?1571225825"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1571225825"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571225825"></script>
+    <script src="/docs/js/jquery.sticky.js?1571225825"></script>
+    <script src="/docs/js/featherlight.min.js?1571225825"></script>
+    <script src="/docs/js/highlight.pack.js?1571225825"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1571223556"></script>
-    <script src="/docs/js/learn.js?1571223556"></script>
-    <script src="/docs/js/hugo-learn.js?1571223556"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1571225825"></script>
+    <script src="/docs/js/learn.js?1571225825"></script>
+    <script src="/docs/js/hugo-learn.js?1571225825"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1571223556" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1571223556"></script>
+    <link href="/docs/mermaid/mermaid.css?1571225825" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1571225825"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

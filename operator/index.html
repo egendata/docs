@@ -12,20 +12,20 @@
     <title>Operator :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/theme.css?1571223556" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/theme.css?1571225825" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1571225825" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1571223556" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1571225825" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1571223556"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1571225825"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -74,14 +74,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/docs/js/lunr.min.js?1571223556"></script>
-<script type="text/javascript" src="/docs/js/auto-complete.js?1571223556"></script>
+<script type="text/javascript" src="/docs/js/lunr.min.js?1571225825"></script>
+<script type="text/javascript" src="/docs/js/auto-complete.js?1571225825"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/egendata.github.io\/docs";
     
 </script>
-<script type="text/javascript" src="/docs/js/search.js?1571223556"></script>
+<script type="text/javascript" src="/docs/js/search.js?1571225825"></script>
 
     
   </div>
@@ -301,7 +301,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#writing-to-pds">Writing to PDS</a></li>
+<li><a href="#reading-from-pds">Reading from PDS</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -326,7 +334,29 @@
 
 
 
-	<p>Placeholder</p>
+	
+
+<p>Placeholder</p>
+
+<h2 id="writing-to-pds">Writing to PDS</h2>
+
+<ol>
+<li>The Operator receives the incoming message(JWT) and validates the integrity of the message(JWT signature verification).</li>
+<li>After that, the Operator performs queries to its own database based upon the JWT properties &ldquo;sub&rdquo;, &ldquo;iss&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo; of each &ldquo;content path&rdquo; entry. (See the Egendata messaging schemas&hellip;)</li>
+<li>If valid write permissions are found by the queries, the query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
+<li>The destination PDS directory path is defined based upon &ldquo;connectionId&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo;.
+<code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
+<li>The JWE(encrypted at the service) of the received JWT, is extracted and written to the users PDS and a successful status code 201 is returned to the service, alternatively 403 upon error.</li>
+</ol>
+
+<h2 id="reading-from-pds">Reading from PDS</h2>
+
+<ol>
+<li>The Operator receives the incoming message(JWT) and performs a lookup in its database to verify that the requesting Service has sufficient read permissions for a user’s PDS.</li>
+<li>If valid sufficient read permissions are found, the database query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
+<li>The Operator constructs the &ldquo;content path&rdquo; strings that locate the data within the user&rsquo;s PDS. <code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
+<li>The data(JWE) is read from the user&rsquo;s PDS, packed into a new JWT message of type &ldquo;DATA_READ_RESPONSE&rdquo; and finally transmitted back to the requesting Service.</li>
+</ol>
 
 
 
@@ -503,19 +533,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1571223556"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1571223556"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571223556"></script>
-    <script src="/docs/js/jquery.sticky.js?1571223556"></script>
-    <script src="/docs/js/featherlight.min.js?1571223556"></script>
-    <script src="/docs/js/highlight.pack.js?1571223556"></script>
+    <script src="/docs/js/clipboard.min.js?1571225825"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1571225825"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571225825"></script>
+    <script src="/docs/js/jquery.sticky.js?1571225825"></script>
+    <script src="/docs/js/featherlight.min.js?1571225825"></script>
+    <script src="/docs/js/highlight.pack.js?1571225825"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1571223556"></script>
-    <script src="/docs/js/learn.js?1571223556"></script>
-    <script src="/docs/js/hugo-learn.js?1571223556"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1571225825"></script>
+    <script src="/docs/js/learn.js?1571225825"></script>
+    <script src="/docs/js/hugo-learn.js?1571225825"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1571223556" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1571223556"></script>
+    <link href="/docs/mermaid/mermaid.css?1571225825" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1571225825"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
