@@ -81,12 +81,16 @@ Property | Purpose
 --- | ---
 
 ### SERVICE_REGISTRATION
+<<<<<<< HEAD
 
 _This is the message sent to the operator by a service, when the later registers itself._
+=======
+_Message sent to the operator by a service, when it registers itself._
+>>>>>>> dd3d0f38c49df64c2a344a805b9fba075de6224e
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE_GOES_HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `displayName` | _The name the service wants to display to users._
 `description` | _The description the service wants to display to the users._
@@ -98,28 +102,28 @@ Property | Purpose
 
 ### ACCOUNT_REGISTRATION
 
-_PURPOSE-GOES-HERE_
+_Message sent from the user's device to the operator when they are registering an account._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`pds` | _PURPOSE-GOES-HERE_
-`- pds.provider` | _PURPOSE-GOES-HERE_
-`- access_token` | _PURPOSE-GOES-HERE_
+`pds` | _Information about the PDS the user has selected for their account._
+`- pds.provider` | _The type of PDS used. As of now the options are Dropbox and in memory. In memory means the operators internal memory._
+`- access_token` | _In the case the PDS requires authentication, this is the token to be used for it. As of now this applies to the Dropbox option._
 
 ---
 
 ### AUTHENTICATION_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Message sent by the service to teh user's device to authenticate them._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` |_Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
-`eventsURI` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
+`eventsURI` | _The URI that the service expects the responses to the messages to be received._
 
 ---
 
@@ -129,9 +133,9 @@ _Initiates a connection between the user and the service. Is triggered when ther
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` |_Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
 
 ---
 
@@ -154,204 +158,204 @@ Property | Purpose
 
 ### PERMISSION_BASE
 
-_PURPOSE-GOES-HERE_
+_Contains base information about the requested permissions. Each permission requested has a permission base attached to it._
 
 Property | Purpose
 --- | ---
 `...CONTENT_PATH` | _PURPOSE-GOES-HERE_
 `id` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._ 
-`lawfulBasis` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of permission that is requested, READ or WRITE._ 
+`lawfulBasis` | _The legal basis under which the permission is requested._
 
 ---
 
 ### READ_PERMISSION_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Message sent to request a read permission.This can contain more than one `READ_PERMISSION`._
 
 Property | Purpose
 --- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`purpose` | _PURPOSE-GOES-HERE_
-`jwk` | _PURPOSE-GOES-HERE_
+`...PERMISSION_BASE` | _Adds basic information about the permission requested._
+`type` | _Defines the type of permission that is requested as READ._ 
+`purpose` | _The purpose of the permission being requested._
+`jwk` | _The key of the service that will be used when they decrypt the data for read purposes._
 
 ---
 
 ### WRITE_PERMISSION_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Message sent to request a write permissions. This can contain more than one `WRITE_PERMISSION`._
 
 Property | Purpose
 --- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`description` | _PURPOSE-GOES-HERE_
+`...PERMISSION_BASE` |  _Adds basic information about the permission requested._
+`type` | _Defines the type of permission that is requested as WRITE._ 
+`description` | _The description of the requested permission._ //How is this different from the purpose in the READ_PERMISSION_REQUEST???
 
 ---
 
 ### PERMISSION_REQUEST_ARRAY
 
-_PURPOSE-GOES-HERE_
+_The list of permission requests sent to the user for approval._
 
 Property | Purpose
 --- | ---
-`READ_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
-`WRITE_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
+`READ_PERMISSION_REQUEST` | _The read permissions requested._
+`WRITE_PERMISSION_REQUEST` | _The write permissions requested._
 
 ---
 
 ### READ_PERMISSION
 
-_PURPOSE-GOES-HERE_
+_The information for each individual read permission requested._
 
 Property | Purpose
 --- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`purpose` | _PURPOSE-GOES-HERE_
+`...PERMISSION_BASE` |  _Adds basic information about the permission requested._
+`type` | _Defines the type of permission that is requested as READ._ 
+`purpose` | _The reason teh permission is requested._ // Why is the purpose needed in the READ_PERMISSION_REQUEST if it is here???
 `kid` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### WRITE_PERMISSION
 
-_PURPOSE-GOES-HERE_
+_The information for each individual write permission requested._
 
 Property | Purpose
 --- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`description` | _PURPOSE-GOES-HERE_
-`jwks` | _PURPOSE-GOES-HERE_
+`...PERMISSION_BASE` |  _Adds basic information about the permission requested._
+`type` | _Defines the type of permission that is requested as WRITE._ 
+`description` | _PURPOSE-GOES-HERE_ // Why is the description needed in the WRITE_PERMISSION_REQUEST if it is here???
+`jwks` | _Link to the key store where the keys required to encrypt the data is stored._
 
 ---
 
 ### PERMISSION_ARRAY
 
-_PURPOSE-GOES-HERE_
+_List of the permissions accepted by the user for this service._ 
 
 Property | Purpose
 --- | ---
-`READ_PERMISSION` | _PURPOSE-GOES-HERE_
-`WRITE_PERMISSION` | _PURPOSE-GOES-HERE_
+`READ_PERMISSION` | _The read permissions requested._
+`WRITE_PERMISSION` | _The write permissions requested._
 
 ---
 
 ### PERMISSION_DENIED
 
-_PURPOSE-GOES-HERE_
+_A permission that has been denied by the user for this service._ 
 
 Property | Purpose
 --- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
+`...PERMISSION_BASE` | _Adds basic information about the permission requested._
 
 ---
 
 ### PERMISSION_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Message sent by the service to the operator in order to request permissions._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`permissions` | _PURPOSE-GOES-HERE_
+`permissions` | _A `PERMISSION_ARRAY`containing at least one permission._
 `sub` | _PURPOSE-GOES-HERE_
-`sid` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
 
 ---
 
 ### CONNECTION_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Response to a `CONNECTION_INIT` message. Sent to the user's device by teh service._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`permissions` | _PURPOSE-GOES-HERE_
-`sid` | _PURPOSE-GOES-HERE_
-`displayName` | _PURPOSE-GOES-HERE_
-`description` | _PURPOSE-GOES-HERE_
-`iconURI` | _PURPOSE-GOES-HERE_
+`permissions` | _A `PERMISSION_REQUEST_ARRAY` list of at least one with permissions for the user to accept or deny._
+`sid` | _The (browser) session id that this message was sent during._
+`displayName` | _The display name of the service._
+`description` | _The description of the service._
+`iconURI` | _The icon of the service._
 
 ---
 
 ### CONNECTION
 
-_PURPOSE-GOES-HERE_
+_Message sent from the user's device the operator who then forwards it to the service, containing information about the connection between the two endpoints._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
 `sub` | _PURPOSE-GOES-HERE_
-`permissions` | _PURPOSE-GOES-HERE_
-`- approved` | _PURPOSE-GOES-HERE_
-`- denied` | _PURPOSE-GOES-HERE_
+`permissions` | _Information about the permissions the user has accepted and denied._
+`- approved` | _The list of approved permissions._
+`- denied` | _The list of denied permissions._
 
 ---
 
 ### CONNECTION_RESPONSE
 
-_PURPOSE-GOES-HERE_
+_The message sent by the device to the operator containing the `CONNECTION` message._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
+`payload` | _The `CONNECTION`message sent as a serialized JWS type._
 
 ---
 
 ### CONNECTION_EVENT
 
-_PURPOSE-GOES-HERE_
+_The message sent by the operator to the service containing the `CONNECTION` message._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
+`payload` | _The `CONNECTION`message sent as a serialized JWS type._
 
 ---
 
 ### LOGIN
 
-_PURPOSE-GOES-HERE_
+_Message sent from the user's device the operator who then forwards it to the service, so the user can login to the service._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
 `sub` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### LOGIN_RESPONSE
 
-_PURPOSE-GOES-HERE_
+_The message sent by the device to the operator containing the `LOGIN` message._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
+`payload` | _The `LOGIN`message sent as a serialized JWS type._
 
 ---
 
 ### LOGIN_EVENT
 
-_PURPOSE-GOES-HERE_
+_The message sent by the operator to the service containing the `LOGIN` message._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
+`payload` | _The `LOGIN`message sent as a serialized JWS type._
 
 ---
 
@@ -361,7 +365,7 @@ _PURPOSE-GOES-HERE_
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sub` | _PURPOSE-GOES-HERE_
 
@@ -369,48 +373,48 @@ Property | Purpose
 
 ### DATA_READ_REQUEST
 
-_PURPOSE-GOES-HERE_
+_Message sent by the service to the operator to request data for read purposes. This can contain more than one requests._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
-`- domain` | _PURPOSE-GOES-HERE_
-`- area` | _PURPOSE-GOES-HERE_
+`paths` | _The paths to the data the service is requesting to read,_
+`- domain` | _The domain of the data the service requests to read. By default it is its own domain, but could also be a different service's domain._
+`- area` | _The section of data the service requests to read, for example education, languages so on._
 
 ---
 
 ### DATA_READ_RESPONSE
 
-_PURPOSE-GOES-HERE_
+_Response to a `DATA_READ_REQUEST` sent to the service by the operator. Each read request is handled and responded to individually._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
+`paths` | _The paths to the data the service is requesting to read,_
 `- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`- data` | _PURPOSE-GOES-HERE_
-`- error` | _PURPOSE-GOES-HERE_
-`- - message` | _PURPOSE-GOES-HERE_
-`- - status` | _PURPOSE-GOES-HERE_
-`- - code` | _PURPOSE-GOES-HERE_
+`- data` | _The data sent back to the service for this particular request._
+`- error` | _Error messages that might occur, for example missing data or denied permissions._
+`- - message` | _The message of the error message._
+`- - status` | _The status of the error message._
+`- - code` | _The code of the error message._
 `- - stack` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### DATA_WRITE
 
-_PURPOSE-GOES-HERE_
+_Message sent containing encrypted data to be written to the users PDS. The message is sent by the service to the operator. All the different domain and area paths that will be written to are handled together by one message of this type._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
 `type` | _Defines the type of the message sent._
 `sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
+`paths` | _List of domain and area paths that the data will be written to._
 `- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`- data` | _PURPOSE-GOES-HERE_
+`- data` | _The data to be written in this path._
