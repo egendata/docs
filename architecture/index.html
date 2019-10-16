@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Client :: My New Hugo Site</title>
+    <title>Architecture :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1571213905" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/client/">
+  <body class="" data-url="/architecture/">
     <nav id="sidebar" class="">
 
 
@@ -94,8 +94,8 @@
   
     
     <li data-nav-id="/architecture/" title="Architecture" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/architecture/">
@@ -116,8 +116,8 @@
   
     
     <li data-nav-id="/client/" title="Client" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/client/">
@@ -264,7 +264,7 @@
             
           
           
-            <a href='/'>Introduction</a> > Client
+            <a href='/'>Introduction</a> > Architecture
           
          
           
@@ -277,7 +277,18 @@
     <div class="wrapper">
 <nav id="TableOfContents">
 <ul>
-<li><a href="#client">Client</a></li>
+<li><a href="#så-fungerar-egendatas-infrastruktur">Så fungerar Egendatas infrastruktur</a></li>
+<li><a href="#komponenter">Komponenter</a>
+<ul>
+<li>
+<ul>
+<li><a href="#tjänst-services"><a href="services">Tjänst</a></a></li>
+<li><a href="#app-app"><a href="app">App</a></a></li>
+<li><a href="#operator-operator"><a href="operator">Operator</a></a></li>
+<li><a href="#pds-personal-data-store">PDS (Personal Data Store)</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#användningsflöde-registrering">Användningsflöde registrering</a></li>
 </ul>
 </nav>
     </div>
@@ -295,7 +306,7 @@
           
             <h1>
               
-              Client
+              Architecture
             </h1>
           
 
@@ -306,10 +317,42 @@
 
 	
 
-<h1 id="client">Client</h1>
+<h1 id="så-fungerar-egendatas-infrastruktur">Så fungerar Egendatas infrastruktur</h1>
 
-<pre><code class="language-js">const client = require('@egendata/client');
-</code></pre>
+<p><img src="architecture.png" alt="Diagram över Egendatas arkitektur" /></p>
+
+<h1 id="komponenter">Komponenter</h1>
+
+<h3 id="tjänst-services"><a href="services">Tjänst</a></h3>
+
+<p>En sajt eller applikation som använder sig av Egendata för att hantera persondata. Klientbibliotektet Client är till för att göra det enkelt för tjänster att implementera Egendata.</p>
+
+<p>För mer detaljer om hur en tjänst fungerar och hur du sätter upp en, se <a href="services">tjänster</a>.</p>
+
+<h3 id="app-app"><a href="app">App</a></h3>
+
+<p>En mobilapplikation med vilken användaren kontrollerar rättigheterna till sin data. Tekniskt sett är det Appen som representerar användaren gentemot resten av infrastrukturen.</p>
+
+<p>När användaren skapar ett konto genereras användarens kryptografiska nycklar i Appen; den privata delen av nyckeln lämnar sedan aldrig Appen och används för att bevisa att det är användaren som står bakom de kommandon användaren skickar till andra delar av infrastrukturen (exempelvis ändring i rättigheter).</p>
+
+<h3 id="operator-operator"><a href="operator">Operator</a></h3>
+
+<p>Operatorn agerar knytpunkt i Egendata-nätverket; den slussar meddelanden mellan användare (App) och tjänster samt krypterad data mellan tjänster och lagringsutrymme (PDS).</p>
+
+<p>Operatorn måste vara tillgänglig för att nätverket ska gå att använda. En viktig detalj är att operatorn inte har någon möjlighet att läsa eller ändra i data eller rättigheter. Dessa är krypterade och/eller signerade så att en operator som missköter sig inte kan komma över någon persondata.</p>
+
+<h3 id="pds-personal-data-store">PDS (Personal Data Store)</h3>
+
+<p>En lagringsyta där användarens krypterade persondata lagras och läses av Operator. Kan vara vilken typ av lagring som helst som Operator stödjer. Användaren har möjlighet att välja var hens data lagras genom att välja PDS i Appen.</p>
+
+<h1 id="användningsflöde-registrering">Användningsflöde registrering</h1>
+
+<p>Användaren:
+* Installerar Egendata-Appen på sin telefon, skapar ett konto och väljer var dess data ska lagras (vilken PDS).
+* Besöker en tjänst som använder Egendata, klickar på &ldquo;Logga in&rdquo; och blir presenterad med en QR-kod
+* Skannar QR-koden med Appen och får då frågan om hen vill registrera sig
+* Användaren blir presenterad med beskrivning av den data tjänsten vill läsa eller skriva och varför
+* När användaren godkänner detta loggas hen in i tjänsten</p>
 
 
 
@@ -350,25 +393,6 @@
             
                 
                     
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                     
                 
                 
@@ -388,6 +412,22 @@
                     
                         
                         
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
                     
                 
                 
@@ -457,10 +497,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/architecture/" title="Architecture"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/" title="Introduction"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/cryptography/" title="Cryptography" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/client/" title="Client" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

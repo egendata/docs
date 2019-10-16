@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title>Client :: My New Hugo Site</title>
+    <title>Cryptography :: My New Hugo Site</title>
 
     
     <link href="/css/nucleus.css?1571213905" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/client/">
+  <body class="" data-url="/cryptography/">
     <nav id="sidebar" class="">
 
 
@@ -116,8 +116,8 @@
   
     
     <li data-nav-id="/client/" title="Client" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/client/">
@@ -138,8 +138,8 @@
   
     
     <li data-nav-id="/cryptography/" title="Cryptography" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/cryptography/">
@@ -264,7 +264,7 @@
             
           
           
-            <a href='/'>Introduction</a> > Client
+            <a href='/'>Introduction</a> > Cryptography
           
          
           
@@ -277,7 +277,11 @@
     <div class="wrapper">
 <nav id="TableOfContents">
 <ul>
-<li><a href="#client">Client</a></li>
+<li><a href="#kryptering-och-signering">Kryptering och signering</a>
+<ul>
+<li><a href="#algoritmer">Algoritmer</a></li>
+<li><a href="#javascript-object-signing-and-encryption-jose">JavaScript Object Signing and Encryption - JOSE</a></li>
+</ul></li>
 </ul>
 </nav>
     </div>
@@ -295,7 +299,7 @@
           
             <h1>
               
-              Client
+              Cryptography
             </h1>
           
 
@@ -306,10 +310,37 @@
 
 	
 
-<h1 id="client">Client</h1>
+<h1 id="kryptering-och-signering">Kryptering och signering</h1>
 
-<pre><code class="language-js">const client = require('@egendata/client');
-</code></pre>
+<p>En grundläggande regel inom kryptering är: Never roll your own. Kryptering är svårt och det är lätt att begå misstag. Av det skälet har vi valt att använda oss av verifierade algoritmer och öppna standarder.</p>
+
+<h2 id="algoritmer">Algoritmer</h2>
+
+<p>Det finns en rad olika krypteringsalgoritmer. Några av dessa ingår i den nya standarden för browsers – SubtleCrypto-gränssnittet mot Web Crypto API. Av dessa använder sig Egendata av:</p>
+
+<ul>
+<li><p><strong>AES-128-CBC</strong> för symmetrisk kryptering</p></li>
+
+<li><p><strong>RSAES-OAEP med 2048 bitars nyckel</strong> för asymmetrisk kryptering</p></li>
+
+<li><p><strong>RSASSA-PSS (PS256) med 2048 bitars nyckel</strong> för signering</p></li>
+</ul>
+
+<p>Vi ser för närvarande över möjligheten att ändra till <code>AES-256-CBC</code> för symmetrisk kryptering. Det finns för närvarande inga planer på att byta till <code>ECDSA</code> för signering.</p>
+
+<h2 id="javascript-object-signing-and-encryption-jose">JavaScript Object Signing and Encryption - JOSE</h2>
+
+<p>Som format för överföring och lagring av signerad och krypterad information används ramverket JOSE vilket i sin tur består av ett antal RFC:er:</p>
+
+<ul>
+<li><p><strong>JWK - JSON Web Key</strong> <a href="https://tools.ietf.org/html/rfc7517">RFC7517</a> Format för krypteringsnycklar.</p></li>
+
+<li><p><strong>JWE - JSON Web Encryption</strong> <a href="https://tools.ietf.org/html/rfc7516">RFC7516</a> Format för krypterad data. I Egendata används enbart <code>General JWE JSON Serialization Syntax</code> då endast denna stöder flera mottagare. Innehållet krypteras med <code>A128CBC-HS256</code> och mottagarnas nycklar med <code>RSA-OAP</code></p></li>
+
+<li><p><strong>JWS - JSON Web Signature</strong> <a href="https://tools.ietf.org/html/rfc7515">RFC7515</a> Format för signerad information. All data signeras innan den krypteras. Detta möjliggör validering av att datan kommer från den Tjänst som påstås.</p></li>
+
+<li><p><strong>JWT - JSON Web Token</strong> <a href="https://tools.ietf.org/html/rfc7519">RFC7519</a> Format för överföring av <code>claims</code> mellan plattformens olika delar. Alla anrop mellan Tjänst, Operator och Egendata-appen skickas i form av JWT:er signerade med partens huvudsigneringsnyckel. Eventuellt kommer rotation av nycklar införas för detta. Varje meddelande valideras av mottagande part genom att nyckeln hämtas från sändande tjänst i ett separat anrop. Undantaget är Egendata-appen som inte kan agera server utan därför bilägger nyckeln i anropet.</p></li>
+</ul>
 
 
 
@@ -369,6 +400,22 @@
             
                 
                     
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 
@@ -388,22 +435,6 @@
                     
                         
                         
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
                     
                 
                 
@@ -457,10 +488,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/architecture/" title="Architecture"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/client/" title="Client"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/cryptography/" title="Cryptography" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/operator/" title="Operator" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
