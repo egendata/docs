@@ -41,23 +41,28 @@ In this case, the user’s device recognises that there is an existing connectio
 1. The operator extracts the `LOGIN` from the `LOGIN_RESPONSE` a wraps it in a new  `LOGIN_EVENT` message and forwards the message to the service. This happens so the service doesn’t get access to the user’s ID.
 
 #### Without an established connection
+
 If this user’s device does not recognise the service then the following messages are triggered:
 
 1. A `CONNECTION_INIT` is sent from the user’s device directly to the service’s `/events` endpoint.
 1. The service responds with a `CONNECTION_REQUEST` to the user’s device.
-1. The `CONNECTION_REQUEST` might optionally contain a `PERMISSION_REQUEST_ARRAY` detailing all the areas it is requesting access from the user’s profile. 
+1. The `CONNECTION_REQUEST` might optionally contain a `PERMISSION_REQUEST_ARRAY` detailing all the areas it is requesting access from the user’s profile.
 1. If the `PERMISSION_REQUEST_ARRAY` is missing, at the moment, there is no way to send this in a later stage in the communication. There is no error handling for this eventuality and it will result in the system not working, because it will find a null string where it is expecting a not null string.
 1. Each `PERMISSION_REQUEST` in the `PERMISSION_REQUEST_ARRAY` contains a `LAWFUL_BASIS`. In the current implementation this is defaulted to consent unless specified otherwise.
-1. For read permissions the read key is sent alongside the permission, in the form of a kid. 
+1. For read permissions the read key is sent alongside the permission, in the form of `kid` (key id).
 1. The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.
 1. The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.
 1. After receiving the `CONNECTION_REQUEST` the device generates a `CONNECTION` wrapped in a `CONNECTION_RESPONSE` that is sent to the operator.
-1. The operator upon receiving the CONNECTION_RESPONSE extracts from it the `CONNECTION` and rewrapes it in a `CONNECTION_EVENT` that is sent to the service. 
+1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewrapes it in a `CONNECTION_EVENT` that is sent to the service.
 
 ## Reading data from PDS
 
-For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message. 
+For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message.
 The requested data is sent to the service by the operator with a `DATA_READ_RESPONSE`.
+
+{{% notice tip %}}
+Currently only Dropbox is supported as a PDS. It is, however, called through an abstraction which treats it as `fs`. This means that as long as another PDS can be called through the same abstraction, it is simple to implement.
+{{% /notice % }}
 
 - The domain defined in the request in the services ID, which is the URI of the service.
 - The areas that are defined in the request are the different areas of the CV.
@@ -66,12 +71,14 @@ The requested data is sent to the service by the operator with a `DATA_READ_RESP
 
 ## Writing data to a PDS
 
-For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator. 
-The data are encrypted before being sent to the operator, and then written to the PDS. 
+For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator.
+The data are encrypted before being sent to the operator, and then written to the PDS.
 If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
 Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.
 
 ## Egendata message/schema definitions
+
+All message schemas are defined in and validated through [./lib/schemas.js](https://github.com/egendata/messaging/blob/master/lib/schemas.js) in the `@egendata/messaging` npm package.
 
 ### Common
 
@@ -79,19 +86,20 @@ _Some values are present in all messages. These are reused as `JWT_DEFAULTS`:
 
 Property | Purpose
 --- | ---
+iss | The issuer of the message. Example: `https://myservice.org`
+aud | The intended audience of the message. Example: `https://operator.egendata.se`
+iat | Unix timestamp for when the message was created.
+exp | Unix timestamp for when the message expires.
 
 ### SERVICE_REGISTRATION
-<<<<<<< HEAD
 
-_This is the message sent to the operator by a service, when the later registers itself._
-=======
 _Message sent to the operator by a service, when it registers itself._
->>>>>>> dd3d0f38c49df64c2a344a805b9fba075de6224e
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
-`type` | _Defines the type of the message sent._
+`type` | _SERVICE_REGISTRATION_
+`iss` | _The service's host URL_
+`aud` | _The URL of the Operator
 `displayName` | _The name the service wants to display to users._
 `description` | _The description the service wants to display to the users._
 `iconURI` | _Relative or actual URI of the icon the service wants to display to the users._
@@ -106,8 +114,9 @@ _Message sent from the user's device to the operator when they are registering a
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
-`type` | _Defines the type of the message sent._
+`type` | _ACCOUNT_REGISTRATION_
+`iss` | _egendata://account/[account_id]_
+`aud` | _The URL of the Operator_
 `pds` | _Information about the PDS the user has selected for their account._
 `- pds.provider` | _The type of PDS used. As of now the options are Dropbox and in memory. In memory means the operators internal memory._
 `- access_token` | _In the case the PDS requires authentication, this is the token to be used for it. As of now this applies to the Dropbox option._
@@ -120,7 +129,9 @@ _Message sent by the service to the user's device to authenticate them._
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
+`type` | _AUTHENTICATION_REQUEST_
+`iss` | _The service's host URL_
+`aud` | _egendata://account_
 `type` | _Defines the type of the message sent._
 `sid` | _The (browser) session id that this message was sent during._
 `eventsURI` | _The URI that the service expects the responses to the messages to be received._
@@ -133,45 +144,33 @@ _Initiates a connection between the user and the service. Is triggered when ther
 
 Property | Purpose
 --- | ---
-`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
-`type` | _Defines the type of the message sent._
+`type` | _CONNECTION_INIT_
+`iss` | _egendata://account_
+`aud` | _The service's host URL_
 `sid` | _The (browser) session id that this message was sent during._
 
 ---
 
 ### LAWFUL_BASIS
 
-_Defines the reasons the service needs to request each piece of data from the user. Is defined when the service is registered. Unless specified otherwise this is allows consent to the areas._
+_Defines the lawful basis of the information permission request as defined in GDPR. Currently all requests default to `CONSENT` and no architectural consessions have been made to handle other cases. Therefore all other values are disallowed in validation._
 
 ---
 
 ### CONTENT_PATH
 
-_PURPOSE-GOES-HERE_
+_Instead of obtaining permission to store all sorts of data about the user, Egendata requires explicit permission per information area. These permissions might eventually be obtained with different lawful bases. Examples are `base_info`, `education`, `work-experience` and so on. Technically these areas will translate into paths on the PDS._
 
 Property | Purpose
 --- | ---
-`domain` | _PURPOSE-GOES-HERE_
-`area` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_BASE
-
-_Contains base information about the requested permissions. Each permission requested has a permission base attached to it._
-
-Property | Purpose
---- | ---
-`...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`id` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of permission that is requested, READ or WRITE._ 
-`lawfulBasis` | _The legal basis under which the permission is requested._
+`domain` | _The URL of the data generating service_
+`area` | _The name of the information given by the issuing service_
 
 ---
 
 ### READ_PERMISSION_REQUEST
 
-_Message sent to request a read permission.This can contain more than one `READ_PERMISSION`._
+_Message sent to request a read permission._
 
 Property | Purpose
 --- | ---
@@ -249,20 +248,6 @@ _A permission that has been denied by the user for this service._
 Property | Purpose
 --- | ---
 `...PERMISSION_BASE` | _Adds basic information about the permission requested._
-
----
-
-### PERMISSION_REQUEST
-
-_Message sent by the service to the operator in order to request permissions._
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
-`type` | _Defines the type of the message sent._
-`permissions` | _A `PERMISSION_ARRAY`containing at least one permission._
-`sub` | _PURPOSE-GOES-HERE_
-`sid` | _The (browser) session id that this message was sent during._
 
 ---
 
@@ -418,3 +403,17 @@ Property | Purpose
 `paths` | _List of domain and area paths that the data will be written to._
 `- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
 `- data` | _The data to be written in this path._
+
+## Not yet implemented
+
+### PERMISSION_REQUEST
+
+_Message sent by the service to the operator in order to request permissions._
+
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _Adds the information needed about the source of the message._
+`type` | _Defines the type of the message sent._
+`permissions` | _A `PERMISSION_ARRAY`containing at least one permission._
+`sub` | _PURPOSE-GOES-HERE_
+`sid` | _The (browser) session id that this message was sent during._
