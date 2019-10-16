@@ -12,20 +12,20 @@
     <title>Client :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/theme.css?1571221083" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1571221083" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/theme.css?1571223556" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1571223556" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1571221083" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1571223556" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1571221083"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1571223556"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -74,14 +74,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/docs/js/lunr.min.js?1571221083"></script>
-<script type="text/javascript" src="/docs/js/auto-complete.js?1571221083"></script>
+<script type="text/javascript" src="/docs/js/lunr.min.js?1571223556"></script>
+<script type="text/javascript" src="/docs/js/auto-complete.js?1571223556"></script>
 <script type="text/javascript">
     
         var baseurl = "\/\/egendata.github.io\/docs";
     
 </script>
-<script type="text/javascript" src="/docs/js/search.js?1571221083"></script>
+<script type="text/javascript" src="/docs/js/search.js?1571223556"></script>
 
     
   </div>
@@ -148,6 +148,28 @@
         ">
       <a href="/docs/cryptography/">
           Cryptography
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/data/" title="Data" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/data/">
+          Data
           
       </a>
       
@@ -279,7 +301,20 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#client-configuration-properties">Client configuration properties</a></li>
+<li><a href="#keyprovider">KeyProvider</a></li>
+<li><a href="#prefixes-defined-in-client-library">Prefixes defined in Client library</a></li>
+<li><a href="#saving-key-to-keyvaluestore">Saving key to keyValueStore</a></li>
+<li><a href="#saving-write-keys-to-keyvaluestore">Saving write keys to keyValueStore:</a></li>
+<li><a href="#saving-authentication-token-to-keyvaluestore">Saving authentication token to keyValueStore</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -304,8 +339,144 @@
 
 
 
-	<pre><code class="language-js">const client = require('@egendata/client');
+	
+
+<h2 id="usage">Usage</h2>
+
+<pre><code class="language-js">const client = require('@egendata/client');
 </code></pre>
+
+<h2 id="client-configuration-properties">Client configuration properties</h2>
+
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Data type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>displayName</code></td>
+<td><code>string</code></td>
+<td><em>Name of this service/application</em></td>
+</tr>
+
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td><em>A short description of this Service</em></td>
+</tr>
+
+<tr>
+<td><code>iconURI</code></td>
+<td><code>string</code></td>
+<td><em>A URI to this service&rsquo;s logotype/icon</em></td>
+</tr>
+
+<tr>
+<td><code>clientId</code></td>
+<td><code>string</code></td>
+<td><em>This is the identifier which this service will use to identify/register itself to the Operator with. Typically this will be the public <code>https://domain:port</code> this service is hosted on</em></td>
+</tr>
+
+<tr>
+<td><code>operator</code></td>
+<td><code>string</code></td>
+<td><em>This is field specifies the <code>https://domain:port</code> to the central Operator service.</em></td>
+</tr>
+
+<tr>
+<td><code>jwksPath</code></td>
+<td><code>string</code></td>
+<td><em>This field specifies where this service&rsquo;s JWKS is exposed/found, e.g. <code>/jwks</code></em></td>
+</tr>
+
+<tr>
+<td><code>clientKey</code></td>
+<td><code>string</code></td>
+<td><em>This field specifies the private key(<code>PEM</code>/<code>JWK</code>) this service will use for encrypting- and signing of data.</em></td>
+</tr>
+
+<tr>
+<td><code>keyValueStore</code></td>
+<td><code>object</code></td>
+<td><em>A reference to an object/adapter which can read, write and remove data to/from a storage. The keyValueStore must implement the following interface: <code>keyValueStore.save(key, value, ttl)</code>, <code>keyValueStore.load(key)</code> and <code>keyValueStore.remove(key)</code>.</em></td>
+</tr>
+
+<tr>
+<td><code>defaultPermissions</code></td>
+<td><code>array</code></td>
+<td><em>An array of desired read/write permissions</em></td>
+</tr>
+
+<tr>
+<td><code>defaultPermissions.#.area</code></td>
+<td><code>string</code></td>
+<td><em>An area describes where in the user&rsquo;s PDS to store/read data from, e.g. <code>baseData</code> or <code>experiences</code></em></td>
+</tr>
+
+<tr>
+<td><code>defaultPermissions.#.types</code></td>
+<td><code>array</code></td>
+<td><em>An array that denotes which types of permissions are desired for this specific area. e.g. <code>['READ']</code>, <code>['WRITE']</code> or both <code>['READ', 'WRITE']</code></em></td>
+</tr>
+
+<tr>
+<td><code>defaultPermissions.#.purpose</code></td>
+<td><code>string</code></td>
+<td><em>A short purpose description of why this service requests this specific read/write permission, e.g. <code>'In order to create a CV using our website.'</code></em></td>
+</tr>
+
+<tr>
+<td><code>defaultPermissions.#.description</code></td>
+<td><code>string</code></td>
+<td>_A short description of the area this permission request relates to, e.g. <code>'Personal information.'</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="keyprovider">KeyProvider</h2>
+
+<p>The KeyProvider class is responsible for keeping track of known keys and tokens.</p>
+
+<p>A configuration object must be passed into the KeyProvider constructor upon initialization.
+There are 5 configuration properties that affect the construction of the KeyProvider object.</p>
+
+<ul>
+<li><code>config.clientKey</code></li>
+<li><code>config.keyValueStore</code></li>
+<li><code>config.keyOptions</code></li>
+<li><code>config.jwksURI</code></li>
+<li><code>config.alg</code></li>
+</ul>
+
+<p>The <code>KeyProvider</code> will utilize the <code>keyValueStorage</code> property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the redis database. The <code>KeyProvider</code> will utilize and assume that three functions are defined in the referenced <code>KeyValueStore</code> object: <code>save(key, value, ttl)</code>, <code>load(key)</code> and <code>remove(key)</code>.</p>
+
+<p>Values written by the Client to the external/referenced <code>KeyValueStore</code> are base64 encoded.</p>
+
+<p>The Client signing key(aka. <code>clientKey</code>) is provided through the configuration parameter upon initialization of the <code>Client</code>. This client key is used for all signing done by this Client, however there are ideas to implement different signing keys for different domains/areas and/or key rotation.</p>
+
+<h2 id="prefixes-defined-in-client-library">Prefixes defined in Client library</h2>
+
+<pre><code>const KEY_PREFIX = 'key|&gt;'
+const WRITE_KEYS_PREFIX = 'permissionId|&gt;'
+const AUTHENTICATION_ID_PREFIX = 'authentication|&gt;'
+</code></pre>
+
+<h2 id="saving-key-to-keyvaluestore">Saving key to keyValueStore</h2>
+
+<p><code>${KEY_PREFIX}${key.kid}</code>: key</p>
+
+<h2 id="saving-write-keys-to-keyvaluestore">Saving write keys to keyValueStore:</h2>
+
+<p><code>${WRITE_KEYS_PREFIX}${domain}|${area}</code>: jwks</p>
+
+<h2 id="saving-authentication-token-to-keyvaluestore">Saving authentication token to keyValueStore</h2>
+
+<p><code>${AUTHENTICATION_ID_PREFIX}${sid}</code>: accessToken</p>
 
 
 
@@ -444,6 +615,22 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
         
@@ -466,19 +653,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1571221083"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1571221083"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571221083"></script>
-    <script src="/docs/js/jquery.sticky.js?1571221083"></script>
-    <script src="/docs/js/featherlight.min.js?1571221083"></script>
-    <script src="/docs/js/highlight.pack.js?1571221083"></script>
+    <script src="/docs/js/clipboard.min.js?1571223556"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1571223556"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1571223556"></script>
+    <script src="/docs/js/jquery.sticky.js?1571223556"></script>
+    <script src="/docs/js/featherlight.min.js?1571223556"></script>
+    <script src="/docs/js/highlight.pack.js?1571223556"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1571221083"></script>
-    <script src="/docs/js/learn.js?1571221083"></script>
-    <script src="/docs/js/hugo-learn.js?1571221083"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1571223556"></script>
+    <script src="/docs/js/learn.js?1571223556"></script>
+    <script src="/docs/js/hugo-learn.js?1571223556"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1571221083" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1571221083"></script>
+    <link href="/docs/mermaid/mermaid.css?1571223556" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1571223556"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
