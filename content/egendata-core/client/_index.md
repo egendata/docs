@@ -2,7 +2,7 @@
 title: Client
 ---
 
-For [Service](#) providers The Client library alleviates the integration complexity with the Egendata [Operator](/operator).
+The Client library serves to alleviate the Egendata integration complexity for [Service](#) providers.
 
 For reference, the following example sites utilize the Client library:
 
@@ -11,8 +11,46 @@ For reference, the following example sites utilize the Client library:
 
 ## Usage
 
+The Client library is distributed via the NPM software registry and can be installed with:
+
+```bash
+npm install @egendata/client
+```
+
+Import and start using the Client library:
+
 ```js
 const client = require('@egendata/client');
+
+// A key-value based storage module that implements the required interface methods listed below:
+//   * keyValueStore.save(key, value, ttl)
+//   * keyValueStore.load(key)
+//   * keyValueStore.remove(key)
+const keyValueStore = require('../services/keyValueStore')
+
+// An example Client configuration
+const config = {
+  displayName: 'My service',
+  description: 'A service that integrates with Egendata',
+  iconURI: 'http://my-service-domain.com/icon.png',
+  clientId: process.env.CLIENT_ID,
+  operator: process.env.OPERATOR_URL,
+  jwksPath: '/jwks',
+  eventsPath: '/events',
+  clientKey: process.env.PRIVATE_KEY,
+  keyValueStore: keyValueStore,
+  defaultPermissions: [
+    {
+      area: 'baseData',
+      types: ['READ', 'WRITE'],
+      purpose: 'Purpose of requesting permission.',
+      description: 'Short description of requested permission.'
+    }
+  ]
+}
+
+// Create the Client which will be used all communication with Egendata Operator.
+client.create(config)
 ```
 
 ## Client configuration properties
@@ -33,7 +71,7 @@ Configuration property | Data type | Purpose
 `defaultPermissions.#.purpose` | `string` | _A short purpose description of why this service requests this specific read/write permission, e.g. `'In order to create a CV using our website.'`_
 `defaultPermissions.#.description` | `string` | _A short description of the area this permission request relates to, e.g. `'Personal information.'`
 
-## KeyProvider
+## Key Provider
 
 The KeyProvider class is responsible for keeping track of known keys and tokens.
 
@@ -46,28 +84,12 @@ There are 5 configuration properties that affect the construction of the KeyProv
   - `config.jwksURI`
   - `config.alg`
 
-The `KeyProvider` will utilize the `keyValueStorage` property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the redis database. The `KeyProvider` will utilize and assume that three functions are defined in the referenced `KeyValueStore` object: `save(key, value, ttl)`, `load(key)` and `remove(key)`. 
+The `KeyProvider` will utilize the `keyValueStorage` property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the Redis database. The `KeyProvider` assumes that three functions are defined in the referenced `KeyValueStore` object:
 
-Values written by the Client to the external/referenced `KeyValueStore` are base64 encoded.
+- `keyValueStorage.save(key, value, ttl)`
+- `keyValueStorage.load(key)`
+- `keyValueStorage.remove(key)`
+
+All values written by the KeyProvider to the external/referenced `KeyValueStore` are base64 encoded.
 
 The Client signing key(aka. `clientKey`) is provided through the configuration parameter upon initialization of the `Client`. This client key is used for all signing done by this Client, however there are ideas to implement different signing keys for different domains/areas and/or key rotation.
-
-## Prefixes defined in Client library
-
-```
-const KEY_PREFIX = 'key|>'
-const WRITE_KEYS_PREFIX = 'permissionId|>'
-const AUTHENTICATION_ID_PREFIX = 'authentication|>'
-```
-
-## Saving key to keyValueStore
-
-`${KEY_PREFIX}${key.kid}`: key
-
-## Saving write keys to keyValueStore:
-
-`${WRITE_KEYS_PREFIX}${domain}|${area}`: jwks
-
-## Saving authentication token to keyValueStore
-
-`${AUTHENTICATION_ID_PREFIX}${sid}`: accessToken
