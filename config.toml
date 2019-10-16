@@ -5,3 +5,4 @@ theme = "hugo-theme-learn-master"
 
 [params]
   themeVariant = "mine"
+  disableInlineCopyToClipBoard = "true"
