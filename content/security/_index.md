@@ -2,7 +2,6 @@
 title: Security
 ---
 
-
 # Encryption and signing
 
 The Egendata solution uses standard algorithms for all encryption and signatures.
@@ -42,51 +41,51 @@ This kind of signature verification also occurs when services consume data produ
 ### SERVICE_REGISTRATION
 _This is the message sent to the operator by a service, when the later registers itself._
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |  
-| `type` | _Defines the type of the message sent._ |
-| `displayName` | _The name the service wants to display to users._ |  
-| `description` | _The description the service wants to display to the users._ |  
-| `iconURI` | _Relative or actual URI of the icon the service wants to display to the users._ |  
-| `jwksURI` | _The main URI linked to the service. It will also be used as the service’s id in the database._ |  
-| `eventsURI` | _The URI the service will be receiving event responses._ |  
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE_GOES_HERE_
+`type` | _Defines the type of the message sent._
+`displayName` | _The name the service wants to display to users._
+`description` | _The description the service wants to display to the users._
+`iconURI` | _Relative or actual URI of the icon the service wants to display to the users._
+`jwksURI` | _The main URI linked to the service. It will also be used as the service’s id in the database._
+`eventsURI` | _The URI the service will be receiving event responses._
 
 ---
 
 ### ACCOUNT_REGISTRATION
 __
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |  
-| `type` | _Defines the type of the message sent._ |
-| `pds` | _<PURPOSE_GOES_HERE>_ |  
-| `- pds.provider` | _<PURPOSE_GOES_HERE>_ |  
-| `- access_token` | _<PURPOSE_GOES_HERE>_ |  
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`pds` | _PURPOSE-GOES-HERE_
+`- pds.provider` | _PURPOSE-GOES-HERE_
+`- access_token` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### AUTHENTICATION_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |  
-| `type` | _Defines the type of the message sent._ |  
-| `sid` | _<PURPOSE_GOES_HERE>_ |  
-| `eventsURI` | _<PURPOSE_GOES_HERE>_ |  
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sid` | _PURPOSE-GOES-HERE_
+`eventsURI` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### CONNECTION_INIT
 _Initiates a connection between the user and the service. Is triggered when there is no pre-existing connection between these two parties._
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |  
-| `sid` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sid` | _PURPOSE-GOES-HERE_
 
 ---
 
@@ -96,257 +95,257 @@ _Defines the reasons the service needs to request each piece of data from the us
 ---
 
 ### CONTENT_PATH
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `domain` | _<PURPOSE_GOES_HERE>_ |
-| `area` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`domain` | _PURPOSE-GOES-HERE_
+`area` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### PERMISSION_BASE
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...CONTENT_PATH` | _<PURPOSE_GOES_HERE>_ |
-| `id` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |  
-| `lawfulBasis` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...CONTENT_PATH` | _PURPOSE-GOES-HERE_
+`id` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._ 
+`lawfulBasis` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### READ_PERMISSION_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...PERMISSION_BASE` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |  
-| `purpose` | _<PURPOSE_GOES_HERE>_ |
-| `jwk` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`purpose` | _PURPOSE-GOES-HERE_
+`jwk` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### WRITE_PERMISSION_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...PERMISSION_BASE` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |  
-| `description` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`description` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### PERMISSION_REQUEST_ARRAY
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `READ_PERMISSION_REQUEST` | _<PURPOSE_GOES_HERE>_ |
-| `WRITE_PERMISSION_REQUEST` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`READ_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
+`WRITE_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### READ_PERMISSION
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...PERMISSION_BASE` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |  
-| `purpose` | _<PURPOSE_GOES_HERE>_ |
-| `kid` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`purpose` | _PURPOSE-GOES-HERE_
+`kid` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### WRITE_PERMISSION
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...PERMISSION_BASE` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `description` | _<PURPOSE_GOES_HERE>_ |
-| `jwks` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`description` | _PURPOSE-GOES-HERE_
+`jwks` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### PERMISSION_ARRAY
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `READ_PERMISSION` | _<PURPOSE_GOES_HERE>_ |
-| `WRITE_PERMISSION` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`READ_PERMISSION` | _PURPOSE-GOES-HERE_
+`WRITE_PERMISSION` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### PERMISSION_DENIED
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...PERMISSION_BASE` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### PERMISSION_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `permissions` | _<PURPOSE_GOES_HERE>_ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
-| `sid` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`permissions` | _PURPOSE-GOES-HERE_
+`sub` | _PURPOSE-GOES-HERE_
+`sid` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### CONNECTION_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `permissions` | _<PURPOSE_GOES_HERE>_ |
-| `sid` | _<PURPOSE_GOES_HERE>_ |
-| `displayName` | _<PURPOSE_GOES_HERE>_ |
-| `description` | _<PURPOSE_GOES_HERE>_ |
-| `iconURI` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`permissions` | _PURPOSE-GOES-HERE_
+`sid` | _PURPOSE-GOES-HERE_
+`displayName` | _PURPOSE-GOES-HERE_
+`description` | _PURPOSE-GOES-HERE_
+`iconURI` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### CONNECTION
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sid` | _<PURPOSE_GOES_HERE>_ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
-| `permissions` | _<PURPOSE_GOES_HERE>_ |
-| `- approved` | _<PURPOSE_GOES_HERE>_ |
-| `- denied` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sid` | _PURPOSE-GOES-HERE_
+`sub` | _PURPOSE-GOES-HERE_
+`permissions` | _PURPOSE-GOES-HERE_
+`- approved` | _PURPOSE-GOES-HERE_
+`- denied` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### CONNECTION_RESPONSE
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `payload` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`payload` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### CONNECTION_EVENT
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `payload` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`payload` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### LOGIN
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sid` | _<PURPOSE_GOES_HERE>_ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sid` | _PURPOSE-GOES-HERE_
+`sub` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### LOGIN_RESPONSE
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| ...JWT_DEFAULTS | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| payload | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`payload` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### LOGIN_EVENT
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `payload` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`payload` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### ACCESS_TOKEN
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sub` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### DATA_READ_REQUEST
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
-| `paths` | _<PURPOSE_GOES_HERE>_ |
-| `- domain` | _<PURPOSE_GOES_HERE>_ |
-| `- area` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sub` | _PURPOSE-GOES-HERE_
+`paths` | _PURPOSE-GOES-HERE_
+`- domain` | _PURPOSE-GOES-HERE_
+`- area` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### DATA_READ_RESPONSE
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
-| `paths` | _<PURPOSE_GOES_HERE>_ |
-| `- ...CONTENT_PATH` | _<PURPOSE_GOES_HERE>_ |
-| `- data` | _<PURPOSE_GOES_HERE>_ |
-| `- error` | _<PURPOSE_GOES_HERE>_ |
-| `- - message` | _<PURPOSE_GOES_HERE>_ |
-| `- - status` | _<PURPOSE_GOES_HERE>_ |
-| `- - code` | _<PURPOSE_GOES_HERE>_ |
-| `- - stack` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sub` | _PURPOSE-GOES-HERE_
+`paths` | _PURPOSE-GOES-HERE_
+`- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
+`- data` | _PURPOSE-GOES-HERE_
+`- error` | _PURPOSE-GOES-HERE_
+`- - message` | _PURPOSE-GOES-HERE_
+`- - status` | _PURPOSE-GOES-HERE_
+`- - code` | _PURPOSE-GOES-HERE_
+`- - stack` | _PURPOSE-GOES-HERE_
 
 ---
 
 ### DATA_WRITE
-_<PURPOSE_GOES_HERE>_
+_PURPOSE-GOES-HERE_
 
-| Property | Purpose |
-| - | - |
-| `...JWT_DEFAULTS` | _<PURPOSE_GOES_HERE>_ |
-| `type` | _Defines the type of the message sent._ |
-| `sub` | _<PURPOSE_GOES_HERE>_ |
-| `paths` | _<PURPOSE_GOES_HERE>_ |
-| `- ...CONTENT_PATH` | _<PURPOSE_GOES_HERE>_ |
-| `- data` | _<PURPOSE_GOES_HERE>_ |
+Property | Purpose
+--- | ---
+`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
+`type` | _Defines the type of the message sent._
+`sub` | _PURPOSE-GOES-HERE_
+`paths` | _PURPOSE-GOES-HERE_
+`- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
+`- data` | _PURPOSE-GOES-HERE_
 
 ## Steps performed upon writing to PDS.
 
@@ -470,21 +469,21 @@ Since all of the data are handled with one message, if even one of the areas is 
 ## Configuration properties for Client library
 This section describes each configuration property of the Client library.
 
-| Configurtaion property | Data type | Purpose |
-| - | - | - |
-| `displayName` | `string` | _Name of this service/application_ |
-| `description` | `string` | _A short description of this Service_ |
-| `iconURI` | `string` | _A URI to this service's logotype/icon_ |
-| `clientId` | `string` | _This is the identifier which this service will use to identify/register itself to the Operator with. Typically this will be the public `https://domain:port` this service is hosted on_ |
-| `operator` | `string` | _This is field specifies the `https://domain:port` to the central Operator service._ |
-| `jwksPath` | `string` | _This field specifies where this service's JWKS is exposed/found, e.g. `/jwks`_ |
-| `clientKey` | `string` | _This field specifies the private key(`PEM`/`JWK`) this service will use for encrypting- and signing of data._ |
-| `keyValueStore` | `object` | _A reference to an object/adapter which can read, write and remove data to/from a storage. The keyValueStore must implement the following interface: `keyValueStore.save(key, value, ttl)`, `keyValueStore.load(key)` and `keyValueStore.remove(key)`._ |
-| `defaultPermissions` | `array` | _An array of desired read/write permissions_ |
-| `defaultPermissions.#.area` | `string` | _An area describes where in the user's PDS to store/read data from, e.g. `baseData` or `experiences`_ |
-| `defaultPermissions.#.types` | `array` | _An array that denotes which types of permissions are desired for this specific area. e.g. `['READ']`, `['WRITE']` or both `['READ', 'WRITE']`_ |
-| `defaultPermissions.#.purpose` | `string` | _A short purpose description of why this service requests this specific read/write permission, e.g. `'In order to create a CV using our website.'`_ |
-| `defaultPermissions.#.description` | `string` | _A short description of the area this permission request relates to, e.g. `'Personal information.'` |
+Configuration property | Data type | Purpose
+--- | --- | ---
+`displayName` | `string` | _Name of this service/application_
+`description` | `string` | _A short description of this Service_
+`iconURI` | `string` | _A URI to this service's logotype/icon_
+`clientId` | `string` | _This is the identifier which this service will use to identify/register itself to the Operator with. Typically this will be the public `https://domain:port` this service is hosted on_
+`operator` | `string` | _This is field specifies the `https://domain:port` to the central Operator service._
+`jwksPath` | `string` | _This field specifies where this service's JWKS is exposed/found, e.g. `/jwks`_
+`clientKey` | `string` | _This field specifies the private key(`PEM`/`JWK`) this service will use for encrypting- and signing of data._
+`keyValueStore` | `object` | _A reference to an object/adapter which can read, write and remove data to/from a storage. The keyValueStore must implement the following interface: `keyValueStore.save(key, value, ttl)`, `keyValueStore.load(key)` and `keyValueStore.remove(key)`._
+`defaultPermissions` | `array` | _An array of desired read/write permissions_
+`defaultPermissions.#.area` | `string` | _An area describes where in the user's PDS to store/read data from, e.g. `baseData` or `experiences`_
+`defaultPermissions.#.types` | `array` | _An array that denotes which types of permissions are desired for this specific area. e.g. `['READ']`, `['WRITE']` or both `['READ', 'WRITE']`_
+`defaultPermissions.#.purpose` | `string` | _A short purpose description of why this service requests this specific read/write permission, e.g. `'In order to create a CV using our website.'`_
+`defaultPermissions.#.description` | `string` | _A short description of the area this permission request relates to, e.g. `'Personal information.'`
 
 # KeyProvider (Client)
 
@@ -492,11 +491,12 @@ The KeyProvider class is responsible for keeping track of known keys and tokens.
 
 A configuration object must be passed into the KeyProvider constructor upon initialization.
 There are 5 configuration properties that affect the construction of the KeyProvider object.
- - `config.clientKey`
- - `config.keyValueStore`
- - `config.keyOptions`
- - `config.jwksURI`
- - `config.alg`
+
+  - `config.clientKey`
+  - `config.keyValueStore`
+  - `config.keyOptions`
+  - `config.jwksURI`
+  - `config.alg`
 
 The `KeyProvider` will utilize the `keyValueStorage` property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the redis database. The `KeyProvider` will utilize and assume that three functions are defined in the referenced `KeyValueStore` object: `save(key, value, ttl)`, `load(key)` and `remove(key)`. 
 
