@@ -7,7 +7,7 @@ jobs:
         - sudo dpkg -i hugo_0.58.3_Linux-64bit.deb
 
       script:
-        - hugo
+        - hugo --baseURL=//egendata.github.io/docs
         
       deploy:
         provider: pages
