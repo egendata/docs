@@ -1,8 +1,8 @@
 ---
-title: client
+title: cli
 ---
 
-This guide should help you setup from scratch or understand how the CI for [client](https://github.com/egendata/client) is configured
+This guide should help you setup from scratch or understand how the CI for [cli](https://github.com/egendata/cli) is configured
 
 ## Automating things with Travis and semantic-release
 
@@ -14,13 +14,13 @@ This guide should help you setup from scratch or understand how the CI for [clie
 
 - We use [semantic-release](https://github.com/semantic-release/semantic-release) for automating the package release workflow based on the commit messages
 
-- The [Travis configuration](https://github.com/egendata/client/blob/master/.travis.yml) is rather simple and consists of 2 stages (`lint-and-test` and `publish`)
+- The [Travis configuration](https://github.com/egendata/cli/blob/master/.travis.yml) is rather simple and consists of 2 stages (`lint-and-test` and `publish`)
 
   - `lint-and-test` stage runs for every branch (except `master`) and it will install npm dependencies, run lint and unit tests; This is a good tool that assists you when you review a pull-request as you can see that tests are failing or passing
 
   - `publish` stage runs only on the `master` branch and it runs `semantic-release`
 
-- We also set several environment variable [inside Travis](https://travis-ci.com/egendata/client/settings):
+- We also set several environment variable [inside Travis](https://travis-ci.com/egendata/cli/settings):
 
   - `GITHUB_TOKEN` is used for push back to Github a new release, update CHANGELOG (it needs to have write access to the repository)
 
@@ -34,7 +34,7 @@ This guide should help you setup from scratch or understand how the CI for [clie
   "semantic-release": "^15.13.24",
   ```
 
-- We mostly use [semantic-release plugins](https://semantic-release.gitbook.io/semantic-release/extending/plugins-list) with the default configuration and the pipeline for it looks as follows as defined in the [.releaserc.json](https://github.com/egendata/client/blob/master/.releaserc.json)
+- We mostly use [semantic-release plugins](https://semantic-release.gitbook.io/semantic-release/extending/plugins-list) with the default configuration and the pipeline for it looks as follows as defined in the [.releaserc.json](https://github.com/egendata/cli/blob/master/.releaserc.json)
 
   ```json
   {
@@ -59,7 +59,7 @@ This guide should help you setup from scratch or understand how the CI for [clie
 
     ![release notes](./release-notes.png)
 
-  - `@semantic-release/changelog` is the module that creates and updates the [CHANGELOG](https://github.com/egendata/client/blob/master/CHANGELOG.md)
+  - `@semantic-release/changelog` is the module that creates and updates the [CHANGELOG](https://github.com/egendata/cli/blob/master/CHANGELOG.md)
 
   - `@semantic-release/npm` is used to publish to NPM.
 
