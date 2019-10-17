@@ -11,7 +11,15 @@
   </url>
   
   <url>
+    <loc>//egendata.github.io/docs/infrastructure/cli/</loc>
+  </url>
+  
+  <url>
     <loc>//egendata.github.io/docs/egendata-core/client/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/infrastructure/client/</loc>
   </url>
   
   <url>
@@ -27,11 +35,35 @@
   </url>
   
   <url>
+    <loc>//egendata.github.io/docs/infrastructure/example-cv/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/infrastructure/example-national-registration/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/infrastructure/</loc>
+  </url>
+  
+  <url>
     <loc>//egendata.github.io/docs/</loc>
   </url>
   
   <url>
+    <loc>//egendata.github.io/docs/infrastructure/messaging/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/infrastructure/operator/</loc>
+  </url>
+  
+  <url>
     <loc>//egendata.github.io/docs/operator/</loc>
+  </url>
+  
+  <url>
+    <loc>//egendata.github.io/docs/infrastructure/react-native-simple-crypto/</loc>
   </url>
   
   <url>

@@ -8,7 +8,7 @@
 
 
     <link rel="shortcut icon" href="//egendata.github.io/docs/images/egendata.png" type="image/x-icon" />
-    <title>Services :: My New Hugo Site</title>
+    <title>Infrastructure :: My New Hugo Site</title>
 
     
     <link href="/docs/css/nucleus.css?1571319208" rel="stylesheet">
@@ -38,7 +38,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/egendata-core/services/">
+  <body class="" data-url="/docs/infrastructure/">
     <nav id="sidebar" class="">
 
 
@@ -108,7 +108,7 @@
   
     
     <li data-nav-id="/docs/egendata-core/" title="Egendata Core" class="dd-item 
-        parent
+        
         
         
         ">
@@ -207,8 +207,8 @@
   
     
     <li data-nav-id="/docs/egendata-core/services/" title="Services" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/docs/egendata-core/services/">
@@ -238,8 +238,8 @@
   
     
     <li data-nav-id="/docs/infrastructure/" title="Infrastructure" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/infrastructure/">
@@ -500,13 +500,7 @@
             
           
           
-            
-            
-          
-          
-            <a href='/docs/'>Introduction</a> > <a href='/docs/egendata-core/'>Egendata Core</a> > Services
-          
-         
+            <a href='/docs/'>Introduction</a> > Infrastructure
           
          
           
@@ -521,21 +515,7 @@
 <ul>
 <li>
 <ul>
-<li><a href="#read-from-pds-via-operator">Read from PDS via Operator</a>
-<ul>
-<li><a href="#sending-the-read-request">Sending the read request</a></li>
-<li><a href="#handling-the-read-response">Handling the read response</a></li>
-</ul></li>
-<li><a href="#write-to-pds-via-operator">Write to PDS via Operator</a>
-<ul>
-<li><a href="#sending-the-write-request">Sending the write request</a></li>
-<li><a href="#handling-the-write-response">Handling the write response</a></li>
-</ul></li>
-<li><a href="#flöde">Flöde</a>
-<ul>
-<li><a href="#för-användaren">För användaren</a></li>
-<li><a href="#så-här-går-det-till-i-bakgrunden">Så här går det till i bakgrunden</a></li>
-</ul></li>
+<li><a href="#documentation-for-the-infrastructure-of-egendata-repositories">Documentation for the Infrastructure of Egendata repositories</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -554,7 +534,7 @@
           
             <h1>
               
-              Services
+              Infrastructure
             </h1>
           
 
@@ -565,73 +545,142 @@
 
 	
 
-<h2 id="read-from-pds-via-operator">Read from PDS via Operator</h2>
+<h2 id="documentation-for-the-infrastructure-of-egendata-repositories">Documentation for the Infrastructure of Egendata repositories</h2>
 
-<h3 id="sending-the-read-request">Sending the read request</h3>
+<p>Before you begin, this guides assume that&hellip;</p>
 
-<ol>
-<li>The Service constructs a JWT message (&ldquo;DATA_READ_REQUEST&rdquo;) with desired &ldquo;content paths&rdquo; and a connectionId(sub).</li>
-<li>The message(JWT) is transmitted to the Operator.</li>
-</ol>
+<ul>
+<li>&hellip;you have access to the <a href="https://console.dev.services.jtech.se:8443/">OpenShift cluster</a> or have a functioning OpenShift cluster</li>
+<li>&hellip;you are familiar with OpenShift (and Kubernetes) and have the <a href="https://docs.openshift.com/container-platform/3.7/cli_reference/get_started_cli.html#installing-the-cli">OpenShift CLI installed</a> version 3.x</li>
+<li>&hellip;you have access to the <code>mydata</code> project namespace inside OpenShift (if you use the above existing cluster)</li>
+<li>&hellip;you have access to the <a href="https://github.com/egendata">Github organization</a></li>
+<li>&hellip;you are familiar with <a href="https://travis-ci.com/">Travis CI</a> that is used for automating the CI process</li>
+<li>&hellip;you are familiar with <a href="https://www.conventionalcommits.org/en/v1.0.0-beta.2/#summary">conventional commits or semantic commit messages</a> and <a href="https://github.com/semantic-release/semantic-release">semantic-release</a> that we use for automating the package release workflow based on the commit messages</li>
+<li>&hellip;you have access to the <a href="https://cloud.docker.com/u/jobtechswe/repository/list">Dockerhub organization</a> where we push the Docker images for services that run in OpenShift</li>
+<li>&hellip;you have access to the <a href="https://www.npmjs.com/settings/egendata/packages">NPM organization</a></li>
+</ul>
 
-<h3 id="handling-the-read-response">Handling the read response</h3>
+<p>Go ahead and get familiar with the things above, make sure you have access to OpenShift and Github and let&rsquo;s start.</p>
 
-<ol>
-<li>The service receives the incoming message(JWT) and iterates through all listed &ldquo;content paths&rdquo;
 
-<ol>
-<li>The Service inspects the JWE and locates its own &ldquo;Recipient&rdquo; key.</li>
-<li>The Service obtains the required decryption key for the encrypted data, through decrypting its own &ldquo;Recipient&rdquo; entry with it&rsquo;s own private key.</li>
-<li>The JWE is then decrypted with the decryption key.</li>
-</ol></li>
-<li>All &ldquo;content paths&rdquo; are returned with decrypted data, alternatively error if something went wrong in the previous step.</li>
-</ol>
 
-<p>:warning: Ask/Check if the Service&rsquo;s received message contains all intended Recipients or just a single one.</p>
 
-<h2 id="write-to-pds-via-operator">Write to PDS via Operator</h2>
 
-<h3 id="sending-the-write-request">Sending the write request</h3>
 
-<ol>
-<li>When a service wants to write to a user’s PDS, a JWT message of type &ldquo;DATA_WRITE&rdquo; is constructed with the following inputs are required: &ldquo;domain&rdquo;, &ldquo;area&rdquo; and optionally &ldquo;data&rdquo;(JWE). A &ldquo;DATA_WRITE&rdquo; without any data is essentially the same as clearing the data located at the “content path” of the user’s PDS.</li>
-<li>First a signing key(JWK) is constructed based upon the &ldquo;domain&rdquo; and &ldquo;area&rdquo; (This is not fully implemented and instead the service&rsquo;s own private key(from the client configuration) is used).</li>
-<li>The &ldquo;data&rdquo; is signed with the service&rsquo;s private key and represented as an JWS object.</li>
-<li>A JWE is then constructed based upon the JWS and each read permissioned recipient.</li>
-<li>Finally the JWE is packed into a JWT and transmitted over to the Operator.</li>
-</ol>
 
-<h3 id="handling-the-write-response">Handling the write response</h3>
 
-<p>Placeholder</p>
+<ul class="children children-li">
+	
 
-<hr />
+	
+		
+			
+		
+	
 
-<p><strong>TODO: hur sätter man upp en tjänst. länka till repo för service</strong></p>
+	
 
-<h2 id="flöde">Flöde</h2>
+	
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/cli/" >cli</a>
+</li>
+				
 
-<p>När en användare vill använda en tjänst sker det genom ett antal steg. Flera av dessa är osynliga för användaren och, om Tjänsten använder använder befintliga kodbibliotek, ingenting som Tjänstens systemutvecklare ser då de sker i bakgrunden. Flödet för anslutning till en tjänst, medgivande för dataläsning/-skrivning och uppdateringar beskrivs här översiktligt och på djupet (för den som är intresserad).</p>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/client/" >client</a>
+</li>
+				
 
-<h3 id="för-användaren">För användaren</h3>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/example-cv/" >Example-CV</a>
+</li>
+				
 
-<ol>
-<li><p>Användaren går in på en Tjänst och erbjuds registrera sig/logga in med Egendata. Detta sker genom att antingen scanna en QR-kod med Egendata-appen eller, om hen använder mobilen, klicka på en länk.</p></li>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/example-national-registration/" >Example-National-Registration</a>
+</li>
+				
 
-<li><p>Egendata-appen frågar användaren om hen vill logga in om registrering redan har skett, eller skapa en relation med Tjänsten om detta är första besöket. Användaren får, i det senare fallet, även möjligheten att godkänna Tjänstens begäran om att läsa/skriva data.</p></li>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/messaging/" >messaging</a>
+</li>
+				
 
-<li><p>När användaren har svarat, än hen inloggad på Tjänsten och kan börja använda den.</p></li>
-</ol>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/operator/" >Operator</a>
+</li>
+				
 
-<h3 id="så-här-går-det-till-i-bakgrunden">Så här går det till i bakgrunden</h3>
+				
+			
+			
+		
+	
+		
+			
+				
+<li>
+<a href="/docs/infrastructure/react-native-simple-crypto/" >react-native-simple-crypto</a>
+</li>
+				
 
-<ol>
-<li><p>Tjänsten presenterar en länk, vilken också kodas som en QR-kod. Länken beskriver tjänsten med id för tjänsten och ett sessionsid för att kunna koppla svaret till rätt användarsession. All information är signerad med tjänstens signeringsnyckel.</p></li>
+				
+			
+			
+		
+	
 
-<li><p>Egendata-appen kontaktar tjänsten och begär signeringsnyckeln. Den verifierar sedan informationen.</p></li>
+	
+</ul>
 
-<li><p>Egendata-appen kontrollerar om användaren och tjänsten redan har en relation eller om en sådan måste skapas.</p></li>
-</ol>
+
+
+
 
 
 
@@ -707,7 +756,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -722,9 +770,6 @@
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -774,7 +819,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -794,8 +838,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -811,6 +853,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -947,10 +992,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/docs/egendata-core/security/" title="Security"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/docs/egendata-core/services/" title="Services"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/docs/infrastructure/" title="Infrastructure" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/docs/infrastructure/cli/" title="cli" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

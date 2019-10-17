@@ -8,7 +8,7 @@
 
 
     <link rel="shortcut icon" href="//egendata.github.io/docs/images/egendata.png" type="image/x-icon" />
-    <title>Services :: My New Hugo Site</title>
+    <title>react-native-simple-crypto :: My New Hugo Site</title>
 
     
     <link href="/docs/css/nucleus.css?1571319208" rel="stylesheet">
@@ -38,7 +38,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/egendata-core/services/">
+  <body class="" data-url="/docs/infrastructure/react-native-simple-crypto/">
     <nav id="sidebar" class="">
 
 
@@ -108,7 +108,7 @@
   
     
     <li data-nav-id="/docs/egendata-core/" title="Egendata Core" class="dd-item 
-        parent
+        
         
         
         ">
@@ -207,8 +207,8 @@
   
     
     <li data-nav-id="/docs/egendata-core/services/" title="Services" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/docs/egendata-core/services/">
@@ -238,7 +238,7 @@
   
     
     <li data-nav-id="/docs/infrastructure/" title="Infrastructure" class="dd-item 
-        
+        parent
         
         
         ">
@@ -409,8 +409,8 @@
   
     
     <li data-nav-id="/docs/infrastructure/react-native-simple-crypto/" title="react-native-simple-crypto" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/infrastructure/react-native-simple-crypto/">
@@ -504,7 +504,7 @@
             
           
           
-            <a href='/docs/'>Introduction</a> > <a href='/docs/egendata-core/'>Egendata Core</a> > Services
+            <a href='/docs/'>Introduction</a> > <a href='/docs/infrastructure/'>Infrastructure</a> > react-native-simple-crypto
           
          
           
@@ -521,21 +521,7 @@
 <ul>
 <li>
 <ul>
-<li><a href="#read-from-pds-via-operator">Read from PDS via Operator</a>
-<ul>
-<li><a href="#sending-the-read-request">Sending the read request</a></li>
-<li><a href="#handling-the-read-response">Handling the read response</a></li>
-</ul></li>
-<li><a href="#write-to-pds-via-operator">Write to PDS via Operator</a>
-<ul>
-<li><a href="#sending-the-write-request">Sending the write request</a></li>
-<li><a href="#handling-the-write-response">Handling the write response</a></li>
-</ul></li>
-<li><a href="#flöde">Flöde</a>
-<ul>
-<li><a href="#för-användaren">För användaren</a></li>
-<li><a href="#så-här-går-det-till-i-bakgrunden">Så här går det till i bakgrunden</a></li>
-</ul></li>
+<li><a href="#automating-things-with-travis-and-semantic-release">Automating things with Travis and semantic-release</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -554,7 +540,7 @@
           
             <h1>
               
-              Services
+              react-native-simple-crypto
             </h1>
           
 
@@ -565,73 +551,87 @@
 
 	
 
-<h2 id="read-from-pds-via-operator">Read from PDS via Operator</h2>
+<p>This guide should help you setup from scratch or understand how the CI for <a href="https://github.com/egendata/react-native-simple-crypto">react-native-simple-crypto</a> is configured</p>
 
-<h3 id="sending-the-read-request">Sending the read request</h3>
+<h2 id="automating-things-with-travis-and-semantic-release">Automating things with Travis and semantic-release</h2>
 
-<ol>
-<li>The Service constructs a JWT message (&ldquo;DATA_READ_REQUEST&rdquo;) with desired &ldquo;content paths&rdquo; and a connectionId(sub).</li>
-<li>The message(JWT) is transmitted to the Operator.</li>
-</ol>
+<ul>
+<li><p>This project is meant to be used as an NPM package, as so we automate the process of publishing to NPM</p></li>
 
-<h3 id="handling-the-read-response">Handling the read response</h3>
+<li><p>We use <a href="https://travis-ci.com/">Travis CI</a> to build, test and deploy. It is free as long as the project you build is open source</p></li>
 
-<ol>
-<li>The service receives the incoming message(JWT) and iterates through all listed &ldquo;content paths&rdquo;
+<li><p>The way Travis CI works is that everytime your repository is updated (new branch, new commit, new tag) it picks up that branch and will run the specified tasks from your configuration</p></li>
 
-<ol>
-<li>The Service inspects the JWE and locates its own &ldquo;Recipient&rdquo; key.</li>
-<li>The Service obtains the required decryption key for the encrypted data, through decrypting its own &ldquo;Recipient&rdquo; entry with it&rsquo;s own private key.</li>
-<li>The JWE is then decrypted with the decryption key.</li>
-</ol></li>
-<li>All &ldquo;content paths&rdquo; are returned with decrypted data, alternatively error if something went wrong in the previous step.</li>
-</ol>
+<li><p>We use <a href="https://github.com/semantic-release/semantic-release">semantic-release</a> for automating the package release workflow based on the commit messages</p></li>
 
-<p>:warning: Ask/Check if the Service&rsquo;s received message contains all intended Recipients or just a single one.</p>
+<li><p>The <a href="https://github.com/egendata/react-native-simple-crypto/blob/master/.travis.yml">Travis configuration</a> is rather simple and consists of 2 stages (<code>lint-and-test</code> and <code>publish</code>)</p>
 
-<h2 id="write-to-pds-via-operator">Write to PDS via Operator</h2>
+<ul>
+<li><p><code>lint-and-test</code> stage runs for every branch (except <code>master</code>) and it will install npm dependencies, run lint and unit tests; This is a good tool that assists you when you review a pull-request as you can see that tests are failing or passing</p></li>
 
-<h3 id="sending-the-write-request">Sending the write request</h3>
+<li><p><code>publish</code> stage runs only on the <code>master</code> branch and it runs <code>semantic-release</code></p></li>
+</ul></li>
 
-<ol>
-<li>When a service wants to write to a user’s PDS, a JWT message of type &ldquo;DATA_WRITE&rdquo; is constructed with the following inputs are required: &ldquo;domain&rdquo;, &ldquo;area&rdquo; and optionally &ldquo;data&rdquo;(JWE). A &ldquo;DATA_WRITE&rdquo; without any data is essentially the same as clearing the data located at the “content path” of the user’s PDS.</li>
-<li>First a signing key(JWK) is constructed based upon the &ldquo;domain&rdquo; and &ldquo;area&rdquo; (This is not fully implemented and instead the service&rsquo;s own private key(from the client configuration) is used).</li>
-<li>The &ldquo;data&rdquo; is signed with the service&rsquo;s private key and represented as an JWS object.</li>
-<li>A JWE is then constructed based upon the JWS and each read permissioned recipient.</li>
-<li>Finally the JWE is packed into a JWT and transmitted over to the Operator.</li>
-</ol>
+<li><p>We also set several environment variable <a href="https://travis-ci.com/egendata/react-native-simple-crypto/settings">inside Travis</a>:</p>
 
-<h3 id="handling-the-write-response">Handling the write response</h3>
+<ul>
+<li><p><code>GITHUB_TOKEN</code> is used for push back to Github a new release, update CHANGELOG (it needs to have write access to the repository)</p></li>
 
-<p>Placeholder</p>
+<li><p><code>NPM_TOKEN</code> is used for publishing to NPM</p></li>
+</ul></li>
 
-<hr />
+<li><p>For <code>semantic-release</code> we have the following dev dependencies (plugins) installed at the time of writing this (<code>semantic-release</code> comes with a set of plugins included and some we install and explain further down):</p>
 
-<p><strong>TODO: hur sätter man upp en tjänst. länka till repo för service</strong></p>
+<pre><code class="language-json">&quot;@semantic-release/changelog&quot;: &quot;^3.0.4&quot;,
+&quot;@semantic-release/git&quot;: &quot;^7.0.16&quot;,
+&quot;semantic-release&quot;: &quot;^15.13.24&quot;,
+</code></pre></li>
 
-<h2 id="flöde">Flöde</h2>
+<li><p>We mostly use <a href="https://semantic-release.gitbook.io/semantic-release/extending/plugins-list">semantic-release plugins</a> with the default configuration and the pipeline for it looks as follows as defined in the <a href="https://github.com/egendata/react-native-simple-crypto/blob/master/.releaserc.json">.releaserc.json</a></p>
 
-<p>När en användare vill använda en tjänst sker det genom ett antal steg. Flera av dessa är osynliga för användaren och, om Tjänsten använder använder befintliga kodbibliotek, ingenting som Tjänstens systemutvecklare ser då de sker i bakgrunden. Flödet för anslutning till en tjänst, medgivande för dataläsning/-skrivning och uppdateringar beskrivs här översiktligt och på djupet (för den som är intresserad).</p>
+<pre><code class="language-json">{
+&quot;plugins&quot;: [
+  &quot;@semantic-release/commit-analyzer&quot;,
+  &quot;@semantic-release/release-notes-generator&quot;,
+  &quot;@semantic-release/changelog&quot;,
+  &quot;@semantic-release/npm&quot;,
+  &quot;@semantic-release/github&quot;,
+  &quot;@semantic-release/git&quot;
+]
+}
+</code></pre></li>
 
-<h3 id="för-användaren">För användaren</h3>
+<li><p>Now let&rsquo;s dive deeper into each plugin and what and why we do things in this way:</p>
 
-<ol>
-<li><p>Användaren går in på en Tjänst och erbjuds registrera sig/logga in med Egendata. Detta sker genom att antingen scanna en QR-kod med Egendata-appen eller, om hen använder mobilen, klicka på en länk.</p></li>
+<ul>
+<li><p><code>@semantic-release/commit-analyzer</code> is the one that analyzes commits since the last release and determines if a new and what type of release should be made; It is going to retrieve the latest Git tag from the Github repo and go through the commits made since that tag and determine if a new release should be made (that is if <code>fix:</code> or <code>feat:</code> commits are present)</p></li>
 
-<li><p>Egendata-appen frågar användaren om hen vill logga in om registrering redan har skett, eller skapa en relation med Tjänsten om detta är första besöket. Användaren får, i det senare fallet, även möjligheten att godkänna Tjänstens begäran om att läsa/skriva data.</p></li>
+<li><p><strong>!!! IMPORTANT NOTICE: If you add <code>semantic-release</code> to a new project and don&rsquo;t want your first release to bump directly to 1.0.0 you should manually create a git tag like <code>git tag v0.0.0</code> in case you have initialized your repo version with 0.0.0 in the <code>package.json</code> and push the tag to remote before running <code>semantic-release</code>. This will make so that it determines the next version based on 0.0.0 !!!</strong></p></li>
 
-<li><p>När användaren har svarat, än hen inloggad på Tjänsten och kan börja använda den.</p></li>
-</ol>
+<li><p><code>@semantic-release/release-notes-generator</code> is the one that makes the release notes look nice like this:</p></li>
+</ul>
 
-<h3 id="så-här-går-det-till-i-bakgrunden">Så här går det till i bakgrunden</h3>
+<p><img src="./release-notes.png" alt="release notes" /></p>
 
-<ol>
-<li><p>Tjänsten presenterar en länk, vilken också kodas som en QR-kod. Länken beskriver tjänsten med id för tjänsten och ett sessionsid för att kunna koppla svaret till rätt användarsession. All information är signerad med tjänstens signeringsnyckel.</p></li>
+<ul>
+<li><p><code>@semantic-release/changelog</code> is the module that creates and updates the <a href="https://github.com/egendata/react-native-simple-crypto/blob/master/CHANGELOG.md">CHANGELOG</a></p></li>
 
-<li><p>Egendata-appen kontaktar tjänsten och begär signeringsnyckeln. Den verifierar sedan informationen.</p></li>
+<li><p><code>@semantic-release/npm</code> is used to publish to NPM.</p></li>
 
-<li><p>Egendata-appen kontrollerar om användaren och tjänsten redan har en relation eller om en sådan måste skapas.</p></li>
-</ol>
+<li><p><strong>!!! IMPORTANT NOTICE: If you are setting this up for a new project that should be <a href="https://www.npmjs.com/settings/egendata/packages">scoped to @egendata</a> you need this following part inside your <code>package.json</code> to be able to create the package !!!</strong></p>
+
+<pre><code class="language-json">&quot;publishConfig&quot;: {
+&quot;access&quot;: &quot;public&quot;
+},
+</code></pre></li>
+
+<li><p><code>@semantic-release/github</code> is the one that pushes the new tag and release notes back to Github and needs the <code>GITHUB_TOKEN</code> environment variable set in Travis</p></li>
+
+<li><p><code>@semantic-release/git</code> is an extra plugin that we added because we want to commit and push back to Github the updated <code>CHANGELOG.md</code> and <code>package.json</code>. Without this module the <code>package.json</code> is never pushed back to Github, this isn&rsquo;t a problem since <code>semantic-release</code> determines the next version based on existing Git tags but it&rsquo;s nice to have it updated. It uses the default configuration and commits with <code>chore:</code> which will not trigger a new release.</p></li>
+</ul>
+
+<p><img src="./semantic-git-commit.png" alt="release notes" /></p></li>
+</ul>
 
 
 
@@ -707,96 +707,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -843,6 +753,60 @@
             
             
                 
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -919,6 +883,19 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
             
         
                     
@@ -926,6 +903,29 @@
             
             
                 
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -947,10 +947,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/docs/egendata-core/security/" title="Security"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/docs/infrastructure/operator/" title="Operator"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/docs/infrastructure/" title="Infrastructure" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/docs/operator/" title="Operator" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
