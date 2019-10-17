@@ -1,8 +1,8 @@
 ---
-title: Operator
+title: Example-CV
 ---
 
-This guide should help you setup from scratch or understand how the CI for [operator](https://github.com/egendata/operator) is configured
+This guide should help you setup from scratch or understand how the CI for [example-cv](https://github.com/egendata/example-cv) is configured
 
 ## Step 1 - creating a deployment, service and route in OpenShift (The one where things are done manual)
 
@@ -14,13 +14,12 @@ This guide should help you setup from scratch or understand how the CI for [oper
 
 - We choose to store the configurations in Github and use it for version control and then use `oc` to create or apply changes when needed
 
-- We separate environments into separate folders inside the [openshift folder](https://github.com/egendata/infrastructure/tree/master/openshift) (`ci, test, legacy-operator`)
+- We separate environments into separate folders inside the [openshift folder](https://github.com/egendata/infrastructure/tree/master/openshift) (`ci, test`)
 
   - `ci` is the environment that uses the latest Docker images (we set the tag `latest` for the Docker image inside the deployment configuration) and is being redeployed automatically through Travis CI when the following conditions are satisfied:
     - code is pushed/merged to the `master` branch
     - `semantic-release` determined that a new release should be created based on the commits since the last release (meaning `chore:` or `docs:` commits do not trigger releases)
   - `test` is the environment that uses semver tags for the Docker images in the deployment configurations and deployments are manual using a [deploy script](https://github.com/egendata/infrastructure/blob/master/openshift/README.md#releasing-a-new-tag-to-test)
-  - `legacy-operator` is an environment that runs an older version of the operator that is used by myskills project running in Openshift (the version pre dates the refactor of the protocol)
 
 - All OpenShift resources for a specific environment are grouped using `metadata.labels.app` for example setting `metadata.labels.app: CI` would make it look like this inside OpenShift:
   ![OpenShift overview](./openshift-overview.png)
@@ -40,38 +39,36 @@ selector:
 
 - For every environment (let's use [ci](https://github.com/egendata/infrastructure/tree/master/openshift/ci) folder as an example) we divided the resources needed for a specific service into separate files for every OpenShift resource that it needs and they follow the naming convention like `[Service name]-[OpenShift Resource Type].yml`
 
-- So in the case of the operator there would be a [DeploymentConfig](https://github.com/egendata/infrastructure/blob/master/openshift/ci/operator-DeploymentConfig.yml) named `operator-DeploymentConfig.yml`, [Service](https://github.com/egendata/infrastructure/blob/master/openshift/ci/operator-Service.yml) named `operator-Service.yml` and [Route](https://github.com/egendata/infrastructure/blob/master/openshift/ci/operator-Route.yml) named `operator-Route.yml`
+- So in the case of the `example-cv` there would be a [DeploymentConfig](https://github.com/egendata/infrastructure/blob/master/openshift/ci/cv-DeploymentConfig.yml) named `cv-DeploymentConfig.yml`, [Service](https://github.com/egendata/infrastructure/blob/master/openshift/ci/cv-Service.yml) named `cv-Service.yml` and [Route](https://github.com/egendata/infrastructure/blob/master/openshift/ci/cv-Route.yml) named `cv-Route.yml`
 
 - If at this point you are confused with the OpenShift Resource Types (deployment config, service, route) here is a quick explanation:
 
-  - a `DeploymentConfig` is a template for your deployment, here you customize number of replicas you want to run, rolling strategies, Docker image that your containers should run (in some cases you may want to configure even `initContainers` which may be some init command like in the case of the operator where we run `npm run migrate`) and environment variables
+  - a `DeploymentConfig` is a template for your deployment, here you customize number of replicas you want to run, rolling strategies, Docker image that your containers should run and environment variables
   - a `Service` serves as an internal load balancer that identifies a set of pods in order to proxy connections that it receives to them. The use case of a Service is to be able to access a pod created by our deployment with a specified name inside the cluster.
   - a `Route` is the way we expose a `Service` by having an external reachable hostname, and also configure things like TLS. So that means that for some applications that don't need external access, we don't create a Route (like in the case for postgres or redis)
 
-- In theory for the existing project for the `ci` application you should not need to make any changes to the operator files, but when you want to add new environment variables, modify existing ones, change rules for the Service or Route you can make the changes, apply them by running any of the commands related to your changed file and remember to commit and push the changes to Github:
+- In theory for the existing project for the `ci` application you should not need to make any changes to the example-cv files, but when you want to add new environment variables, modify existing ones, change rules for the Service or Route you can make the changes, apply them by running any of the commands related to your changed file and remember to commit and push the changes to Github:
 
   - Navigate to where you cloned [infrastructure repository](https://github.com/egendata/infrastructure/) and then:
-  - `oc apply -f openshift/ci/operator-DeploymentConfig.yml`
-  - `oc apply -f openshift/ci/operator-Service.yml`
-  - `oc apply -f openshift/ci/operator-Route.yml`
+  - `oc apply -f openshift/ci/cv-DeploymentConfig.yml`
+  - `oc apply -f openshift/ci/cv-Service.yml`
+  - `oc apply -f openshift/ci/cv-Route.yml`
 
-  - sometimes some changes (like for the Route) require you to delete it first (`oc delete -f openshift/ci/operator-Route.yml`) and then apply
+  - sometimes some changes (like for the Route) require you to delete it first (`oc delete -f openshift/ci/cv-Route.yml`) and then apply
 
-- **The same commands apply even when you want to create things from scratch, just make sure you have created the [secrets](https://github.com/egendata/infrastructure/blob/master/openshift/README.md#secrets) and apply the above files plus extra dependencies for the operator (postgres and redis)**:
+- **The same commands apply even when you want to create things from scratch, just make sure you have created the [secrets](https://github.com/egendata/infrastructure/blob/master/openshift/README.md#secrets) and apply the above files plus extra dependencies for the example-cv (redis)**:
 
-  - `oc apply -f openshift/ci/postgresql-operator-DeploymentConfig.yml`
-  - `oc apply -f openshift/ci/postgresql-operator-Service.yml`
   - `oc apply -f openshift/ci/redis-DeploymentConfig.yml`
   - `oc apply -f openshift/ci/redis-Service.yml`
 
-- If you check the deployment config for operator in the `ci` folder you can see that it uses the `latest` tag of the Docker image and the pull policy is set to Always (which means that it will always try to retrieve the latest from Dockerhub)
+- If you check the deployment config for example-cv in the `ci` folder you can see that it uses the `latest` tag of the Docker image and the pull policy is set to Always (which means that it will always try to retrieve the latest from Dockerhub)
 
 ```yaml
-image: jobtechswe/mydata-operator:latest
+image: jobtechswe/mydata-cv:latest
 imagePullPolicy: Always
 ```
 
-- Now if you have manually built the Dockerfile in the operator folder and pushed it to Dockerhub you could manually trigger a redeploy from the OpenShift interface by pressing the `Deploy` button as shown below:
+- Now if you have manually built the Dockerfile in the [example-cv folder](https://github.com/egendata/example-cv) and pushed it to Dockerhub you could manually trigger a redeploy from the OpenShift interface by pressing the `Deploy` button as shown below:
 
 ![Manual deploy](./manual-deploy-openshift.png)
 
@@ -85,21 +82,21 @@ imagePullPolicy: Always
 
 - We use [semantic-release](https://github.com/semantic-release/semantic-release) for automating the package release workflow based on the commit messages
 
-- The [Travis configuration](https://github.com/egendata/operator/blob/master/.travis.yml) is rather simple and consists of 2 stages (`lint-and-test` and `publish`)
+- The [Travis configuration](https://github.com/egendata/example-cv/blob/master/.travis.yml) is rather simple and consists of 2 stages (`lint-and-test` and `publish`)
 
   - `lint-and-test` stage runs for every branch (except `master`) and it will install npm dependencies, run lint and unit tests; This is a good tool that assists you when you review a pull-request as you can see that tests are failing or passing
 
   - `publish` stage runs only on the `master` branch and it installs the OpenShift cli and then runs `semantic-release`
 
-- We also set several environment variable [inside Travis](https://travis-ci.com/egendata/operator/settings):
+- We also set several environment variable [inside Travis](https://travis-ci.com/egendata/example-cv/settings):
 
-  - `DOCKER_PASSWORD` and `DOCKER_USERNAME` for pushing the [Docker image](https://cloud.docker.com/u/jobtechswe/repository/docker/jobtechswe/mydata-operator)
+  - `DOCKER_PASSWORD` and `DOCKER_USERNAME` for pushing the [Docker image](https://cloud.docker.com/u/jobtechswe/repository/docker/jobtechswe/mydata-cv)
 
   - `GITHUB_TOKEN` is used for push back to Github a new release, update CHANGELOG (it needs to have write access to the repository)
 
   - `OPENSHIFT_URL` is the url of the OpenShift cluster
 
-  - `OPENSHIFT_TOKEN` is needed for being able to redeploy the [operator-ci](https://console.dev.services.jtech.se:8443/console/project/mydata/browse/dc/operator-ci?tab=history). [This README](https://github.com/egendata/infrastructure/tree/master/travis#openshift) should explain how to create a service account and retrieve it's token
+  - `OPENSHIFT_TOKEN` is needed for being able to redeploy the [cv-ci](https://console.dev.services.jtech.se:8443/console/project/mydata/browse/dc/cv-ci?tab=history). [This README](https://github.com/egendata/infrastructure/tree/master/travis#openshift) should explain how to create a service account and retrieve it's token
 
   - `OPENSHIFT_CERT` is used so that the communication with the cluster is secured. For this we need the intermediate certificate for the cluster and uploading it to Travis. [This README](https://github.com/egendata/infrastructure/tree/master/travis#openshift) should explain how to get the certificate, base64 encode it and then save it as an environment variable
 
@@ -113,7 +110,7 @@ imagePullPolicy: Always
 "semantic-release-docker": "^2.2.0",
 ```
 
-- We mostly use [semantic-release plugins](https://semantic-release.gitbook.io/semantic-release/extending/plugins-list) with the default configuration and the pipeline for it looks as follows as defined in the [.releaserc.json](https://github.com/egendata/operator/blob/master/.releaserc.json)
+- We mostly use [semantic-release plugins](https://semantic-release.gitbook.io/semantic-release/extending/plugins-list) with the default configuration and the pipeline for it looks as follows as defined in the [.releaserc.json](https://github.com/egendata/example-cv/blob/master/.releaserc.json)
 
 ```json
 {
@@ -132,14 +129,14 @@ imagePullPolicy: Always
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "docker build -t jobtechswe/mydata-operator ."
+        "publishCmd": "docker build -t jobtechswe/mydata-cv ."
       }
     ],
     [
       "semantic-release-docker",
       {
         "registryUrl": "docker.io",
-        "name": "jobtechswe/mydata-operator"
+        "name": "jobtechswe/mydata-cv"
       }
     ],
     [
@@ -162,7 +159,7 @@ imagePullPolicy: Always
 
     ![release notes](./release-notes.png)
 
-    - `@semantic-release/changelog` is the module that creates and updates the [CHANGELOG](https://github.com/egendata/operator/blob/master/CHANGELOG.md)
+    - `@semantic-release/changelog` is the module that creates and updates the [CHANGELOG](https://github.com/egendata/example-cv/blob/master/CHANGELOG.md)
 
     - `@semantic-release/npm` is used with the option `"npmPublish": false` (so it won't actually publish to npm) since it's the one that will update the version inside `package.json` which we want updated
 
@@ -180,25 +177,25 @@ imagePullPolicy: Always
 
     This one will push both the `latest` tag and a semver tag (like `0.31.1` if that is the next version that `semantic-release` determined that it will release)
 
-    - We run `@semantic-release/exec` as the final step where we redeploy the `operator-ci` in OpenShift
+    - We run `@semantic-release/exec` as the final step where we redeploy the `cv-ci` in OpenShift
 
- - Taking a look at the contents of [.deploy.bash](https://github.com/egendata/operator/blob/master/.deploy.bash) we login towards the OpenShift cluster using the service account that we have created and run a deploy command and then we logout and delete the certificate from the machine where we ran the Travis tasks:
+ - Taking a look at the contents of [.deploy.bash](https://github.com/egendata/example-cv/blob/master/.deploy.bash) we login towards the OpenShift cluster using the service account that we have created and run a deploy command and then we logout and delete the certificate from the machine where we ran the Travis tasks:
 
  ```bash
- oc rollout latest operator-ci -n mydata
+ oc rollout latest cv-ci -n mydata
  ```
 
 ## Step 3 - deploy to the test environment
 
-- If you have followed along so far and have pushed to the `master` branch a commit that is either a `fix:` or a `feat:` or maybe a `feat:` that includes a `BREAKING CHANGES:` you will see that `operator-ci` has redeployed your changes when Travis completed the `publish` stage.
+- If you have followed along so far and have pushed to the `master` branch a commit that is either a `fix:` or a `feat:` or maybe a `feat:` that includes a `BREAKING CHANGES:` you will see that `cv-ci` has redeployed your changes when Travis completed the `publish` stage.
 
-- Now you might want to deploy to `operator-test` in OpenShift.
+- Now you might want to deploy to `cv-test` in OpenShift.
 
 - As described above in Step 1, you saw how we group resources in OpenShift using an `app:` label/selector.
 
 - The files for the `test` environment are inside the [test folder](https://github.com/egendata/infrastructure/tree/master/openshift/test)
 
-- They are created the same way as we did for `ci` with the difference inside the deployment config being the image that is set to a semver tag `image: jobtechswe/mydata-operator:0.31.1`
+- They are created the same way as we did for `ci` with the difference inside the deployment config being the image that is set to a semver tag `image: jobtechswe/mydata-cv:0.31.1`
 
 - We don't have an automated process for updating the test applications and we run it manual using a [script](https://github.com/egendata/infrastructure/tree/master/openshift#releasing-a-new-tag-to-test)
 
