@@ -22,20 +22,21 @@ This guide should help you setup from scratch or understand how the CI for [exam
   - `test` is the environment that uses semver tags for the Docker images in the deployment configurations and deployments are manual using a [deploy script](https://github.com/egendata/infrastructure/blob/master/openshift/README.md#releasing-a-new-tag-to-test)
 
 - All OpenShift resources for a specific environment are grouped using `metadata.labels.app` for example setting `metadata.labels.app: CI` would make it look like this inside OpenShift:
+
   ![OpenShift overview](./openshift-overview.png)
 
 - The above grouping is achieved by adding the `label app: CI` or `selector app: CI` as you can see in the `yml` files like (or `TEST` for the test ones):
 
-```yaml
-metadata:
-  labels:
-    app: CI
-```
+  ```yaml
+  metadata:
+    labels:
+      app: CI
+  ```
 
-```yaml
-selector:
-  app: CI
-```
+  ```yaml
+  selector:
+    app: CI
+  ```
 
 - For every environment (let's use [ci](https://github.com/egendata/infrastructure/tree/master/openshift/ci) folder as an example) we divided the resources needed for a specific service into separate files for every OpenShift resource that it needs and they follow the naming convention like `[Service name]-[OpenShift Resource Type].yml`
 
@@ -60,14 +61,14 @@ selector:
 
 - If you check the deployment config for example-national-registration in the `ci` folder you can see that it uses the `latest` tag of the Docker image and the pull policy is set to Always (which means that it will always try to retrieve the latest from Dockerhub)
 
-```yaml
-image: jobtechswe/mydata-natreg:latest
-imagePullPolicy: Always
-```
+  ```yaml
+  image: jobtechswe/mydata-natreg:latest
+  imagePullPolicy: Always
+  ```
 
 - Now if you have manually built the Dockerfile in the [example-national-registration folder](https://github.com/egendata/example-national-registration) and pushed it to Dockerhub you could manually trigger a redeploy from the OpenShift interface by pressing the `Deploy` button as shown below:
 
-![Manual deploy](./manual-deploy-openshift.png)
+  ![Manual deploy](./manual-deploy-openshift.png)
 
 - However let's go further and discover how things are automated with Travis
 
@@ -99,52 +100,52 @@ imagePullPolicy: Always
 
 - For `semantic-release` we have the following dev dependencies (plugins) installed at the time of writing this (`semantic-release` comes with a set of plugins included and some we install and explain further down):
 
-```json
-"@semantic-release/changelog": "^3.0.4",
-"@semantic-release/exec": "^3.3.7",
-"@semantic-release/git": "^7.0.16",
-"semantic-release": "^15.13.24",
-"semantic-release-docker": "^2.2.0",
-```
+  ```json
+  "@semantic-release/changelog": "^3.0.4",
+  "@semantic-release/exec": "^3.3.7",
+  "@semantic-release/git": "^7.0.16",
+  "semantic-release": "^15.13.24",
+  "semantic-release-docker": "^2.2.0",
+  ```
 
 - We mostly use [semantic-release plugins](https://semantic-release.gitbook.io/semantic-release/extending/plugins-list) with the default configuration and the pipeline for it looks as follows as defined in the [.releaserc.json](https://github.com/egendata/example-national-registration/blob/master/.releaserc.json)
 
-```json
-{
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
-    [
-      "@semantic-release/npm",
-      {
-        "npmPublish": false
-      }
-    ],
-    "@semantic-release/github",
-    "@semantic-release/git",
-    [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "docker build -t jobtechswe/mydata-natreg ."
-      }
-    ],
-    [
-      "semantic-release-docker",
-      {
-        "registryUrl": "docker.io",
-        "name": "jobtechswe/mydata-natreg"
-      }
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "bash ./.deploy.bash ${nextRelease.version}"
-      }
+  ```json
+  {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/github",
+      "@semantic-release/git",
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "docker build -t jobtechswe/mydata-natreg ."
+        }
+      ],
+      [
+        "semantic-release-docker",
+        {
+          "registryUrl": "docker.io",
+          "name": "jobtechswe/mydata-natreg"
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "bash ./.deploy.bash ${nextRelease.version}"
+        }
+      ]
     ]
-  ]
-}
-```
+  }
+  ```
 
 - Now let's dive deeper into each plugin and what and why we do things in this way:
 
@@ -154,7 +155,7 @@ imagePullPolicy: Always
 
     - `@semantic-release/release-notes-generator` is the one that makes the release notes look nice like this:
 
-    ![release notes](./release-notes.png)
+      ![release notes](./release-notes.png)
 
     - `@semantic-release/changelog` is the module that creates and updates the [CHANGELOG](https://github.com/egendata/example-national-registration/blob/master/CHANGELOG.md)
 
@@ -164,23 +165,23 @@ imagePullPolicy: Always
 
     - `@semantic-release/git` is an extra plugin that we added because we want to commit and push back to Github the updated `CHANGELOG.md` and `package.json`. Without this module the `package.json` is never pushed back to Github, this isn't a problem since `semantic-release` determines the next version based on existing Git tags but it's nice to have it updated. It uses the default configuration and commits with `chore:` which will not trigger a new release.
 
-    ![release notes](./semantic-git-commit.png)
+      ![release notes](./semantic-git-commit.png)
 
     - `@semantic-release/exec` is used to execute custom shell commands. We use it for building the Docker image and deploying to OpenShift
 
-    **You might notice that we only build the Docker image at this stage. The reason for that is so that we include the updated `package.json` in the new Docker image**
+      **You might notice that we only build the Docker image at this stage. The reason for that is so that we include the updated `package.json` in the new Docker image**
 
     - `semantic-release-docker` is used for publishing the Docker image to Dockerhub. We specify the name of the registry and image.
 
-    This one will push both the `latest` tag and a semver tag (like `0.31.1` if that is the next version that `semantic-release` determined that it will release)
+      This one will push both the `latest` tag and a semver tag (like `0.31.1` if that is the next version that `semantic-release` determined that it will release)
 
     - We run `@semantic-release/exec` as the final step where we redeploy the `natreg-ci` in OpenShift
 
  - Taking a look at the contents of [.deploy.bash](https://github.com/egendata/example-national-registration/blob/master/.deploy.bash) we login towards the OpenShift cluster using the service account that we have created and run a deploy command and then we logout and delete the certificate from the machine where we ran the Travis tasks:
 
- ```bash
- oc rollout latest natreg-ci -n mydata
- ```
+    ```bash
+    oc rollout latest natreg-ci -n mydata
+    ```
 
 ## Step 3 - deploy to the test environment
 
