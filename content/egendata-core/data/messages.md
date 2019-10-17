@@ -48,8 +48,8 @@ type | ACCOUNT_REGISTRATION
 iss | egendata://account/[account_id]
 aud | The URL of the Operator
 pds | Information about the PDS the user has selected for their account.
-- pds.provider | The type of PDS used. As of now the options are Dropbox and in memory. Inmemory means the operators internal memory._
-- access_token | In the case the PDS requires authentication, this is the token to be used forit. As of now this applies to the Dropbox option._
+ pds.provider | The type of PDS used. As of now the options are Dropbox and in memory. In memory means the operators internal memory.
+ pds. access_token | In the case the PDS requires authentication, this is the token to be used for it. As of now this applies to the Dropbox option.
 
 ---
 
@@ -89,7 +89,7 @@ Property | Purpose
 --- | ---
 ...JWT_DEFAULTS | Adds the information needed about the source of the message.
 type | Defines the type of the message sent.
-permissions | A `PERMISSION_REQUEST_ARRAY` list of at least one with permissions for the userto accept or deny._
+permissions | A `PERMISSION_REQUEST_ARRAY` list of at least one with permissions for the user to accept or deny.
 sid | The (browser) session id that this message was sent during.
 displayName | The display name of the service.
 description | The description of the service.

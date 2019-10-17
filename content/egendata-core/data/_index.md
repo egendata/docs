@@ -37,14 +37,14 @@ In this step we need to consider if the user has an already established connecti
 
 #### With an established connection
 
-In this case, the user’s device recognises that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:
+In this case, the user’s device recognizes that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:
 
 1. A `LOGIN_RESPONSE` containing a serialized JWS `LOGIN` as payload is sent to the operator. This `LOGIN_RESPONSE` contains the user’s ID as the subject(iss?), and the service as a string in the body(within the `LOGIN`).
 1. The operator extracts the `LOGIN` from the `LOGIN_RESPONSE` a wraps it in a new  `LOGIN_EVENT` message and forwards the message to the service. This happens so the service doesn’t get access to the user’s ID.
 
 #### Without an established connection
 
-If this user’s device does not recognise the service then the following messages are triggered:
+If this user’s device does not recognize the service then the following messages are triggered:
 
 1. A `CONNECTION_INIT` is sent from the user’s device directly to the service’s `/events` endpoint.
 1. The service responds with a `CONNECTION_REQUEST` to the user’s device.
@@ -55,7 +55,7 @@ If this user’s device does not recognise the service then the following messag
 1. The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.
 1. The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.
 1. After receiving the `CONNECTION_REQUEST` the device generates a `CONNECTION` wrapped in a `CONNECTION_RESPONSE` that is sent to the operator.
-1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewrapes it in a `CONNECTION_EVENT` that is sent to the service.
+1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewraps it in a `CONNECTION_EVENT` that is sent to the service.
 
 ## Reading data from PDS
 
@@ -68,7 +68,7 @@ Currently only Dropbox is supported as a PDS. It is, however, called through an 
 
 - The domain defined in the request in the services ID, which is the URI of the service.
 - The areas that are defined in the request are the different areas of the CV.
-- The response to the request is sent with a <> message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
+- The response to the request is sent with a DATA_READ_RESPONSE message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
 - These responses are sent encrypted and then decrypted by the client library.
 
 ## Writing data to a PDS
