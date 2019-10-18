@@ -62,7 +62,6 @@ Property | Purpose
 type | AUTHENTICATION_REQUEST
 iss | The service's host URL
 aud | egendata://account
-type | Defines the type of the message sent.
 sid | The (browser) session id that this message was sent during.
 eventsURI | The URI that the service expects the responses to the messages to be received.
 
@@ -87,8 +86,11 @@ _Response to a `CONNECTION_INIT` message. Sent to the user's device by the servi
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | CONNECTION_REQUEST
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO>   
 permissions | A `PERMISSION_REQUEST_ARRAY` list of at least one with permissions for the user to accept or deny.
 sid | The (browser) session id that this message was sent during.
 displayName | The display name of the service.
@@ -103,10 +105,13 @@ _Message sent from the user's device the operator who then forwards it to the se
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | CONNECTION
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO>   
 sid | The (browser) session id that this message was sent during.
-sub | PURPOSE-GOES-HERE
+sub | <INFO>
 permissions | Information about the permissions the user has accepted and denied.
 - approved | The list of approved permissions.
 - denied | The list of denied permissions.
@@ -119,8 +124,11 @@ _The message sent by the device to the operator containing the `CONNECTION` mess
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | CONNECTION_RESPONSE
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 payload | The `CONNECTION`message sent as a serialized JWS type.
 
 ---
@@ -131,8 +139,11 @@ _The message sent by the operator to the service containing the `CONNECTION` mes
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | CONNECTION_EVENT
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 payload | The `CONNECTION`message sent as a serialized JWS type.
 
 ---
@@ -143,10 +154,13 @@ _Message sent from the user's device the operator who then forwards it to the se
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | LOGIN
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 sid | The (browser) session id that this message was sent during.
-sub | PURPOSE-GOES-HERE
+sub | <INFO>
 
 ---
 
@@ -156,8 +170,11 @@ _The message sent by the device to the operator containing the `LOGIN` message._
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | LOGIN_RESPONSE
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 payload | The `LOGIN` message sent as a serialized JWS type.
 
 ---
@@ -168,8 +185,11 @@ _The message sent by the operator to the service containing the `LOGIN` message.
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | LOGIN_EVENT
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 payload | The `LOGIN` message sent as a serialized JWS type.
 
 ---
@@ -180,17 +200,21 @@ _PURPOSE-GOES-HERE_
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
-sub | PURPOSE-GOES-HERE
+type | ACCESS_TOKEN
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
+sub | <INFO>
 
 ---
 
-### Fields and values
+### Fields & values
+
 
 #### LAWFUL_BASIS
 
-_Defines the lawful basis of the information permission request as defined in GDPR. Currently all requests default to `CONSENT` and no architectural consessions have been made to handle other cases. Therefore all other values are disallowed in validation._
+_Defines the lawful basis of the information permission request as defined in GDPR. Currently all requests default to `CONSENT` and no architectural concessions have been made to handle other cases. Therefore all other values are disallowed in validation._
 
 ---
 
@@ -212,7 +236,7 @@ _Message sent to request a read permission._
 Property | Purpose
 --- | ---
 ...PERMISSION_BASE | Adds basic information about the permission requested.
-type | Defines the type of permission that is requested as READ._
+type | READ
 purpose | The purpose of the permission being requested.
 jwk | The key of the service that will be used when they decrypt the data for read purposes.
 
@@ -225,8 +249,8 @@ _Message sent to request a write permissions. This can contain more than one `WR
 Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
-type | Defines the type of permission that is requested as WRITE._
-description | The description of the requested permission._ //How is this different from thepurpose in the READ_PERMISSION_REQUEST???
+type | WRITE
+description | The description of the requested permission._ //How is this different from the purpose in the READ_PERMISSION_REQUEST???
 
 ---
 
@@ -248,7 +272,7 @@ _The information for each individual read permission requested._
 Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
-type | Defines the type of permission that is requested as READ._
+type | READ
 purpose | The reason the permission is requested._ // Why is the purpose needed in theREAD_PERMISSION_REQUEST if it is here???
 kid | PURPOSE-GOES-HERE
 
@@ -261,7 +285,7 @@ _The information for each individual write permission requested._
 Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
-type | Defines the type of permission that is requested as WRITE.
+type | WRITE
 description | PURPOSE-GOES-HERE_ // Why is the description needed in theWRITE_PERMISSION_REQUEST if it is here???
 jwks | Link to the key store where the keys required to encrypt the data is stored.
 
@@ -294,9 +318,12 @@ _Message sent by the service to the operator to request data for read purposes. 
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
-sub | PURPOSE-GOES-HERE
+type | DATA_READ_REQUEST
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO>
+sub | <INFO>
 paths | The paths to the data the service is requesting to read,
 - domain | The domain of the data the service requests to read. By default it is its own domain but could also be a different service's domain._
 - area | The section of data the service requests to read, for example education, languages soon._
@@ -309,17 +336,20 @@ _Response to a `DATA_READ_REQUEST` sent to the service by the operator. Each rea
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
-sub | PURPOSE-GOES-HERE
+type | DATA_READ_RESPONSE
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
+sub | <INFO>
 paths | The paths to the data the service is requesting to read,
-- ...CONTENT_PATH | PURPOSE-GOES-HERE
+- ...CONTENT_PATH | <INFO>
 - data | The data sent back to the service for this particular request.
 - error | Error messages that might occur, for example missing data or denied permissions.
 - - message | The message of the error message.
 - - status | The status of the error message.
 - - code | The code of the error message.
-- - stack | PURPOSE-GOES-HERE
+- - stack | <INFO>
 
 ---
 
@@ -329,11 +359,14 @@ _Message sent containing encrypted data to be written to the users PDS. The mess
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
-sub | PURPOSE-GOES-HERE
+type | DATA_WRITE
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
+sub | <INFO>
 paths | List of domain and area paths that the data will be written to.
-- ...CONTENT_PATH | PURPOSE-GOES-HERE
+- ...CONTENT_PATH | <INFO>
 - data | The data to be written in this path.
 
 ### Not yet implemented
@@ -344,8 +377,11 @@ _Message sent by the service to the operator in order to request permissions._
 
 Property | Purpose
 --- | ---
-...JWT_DEFAULTS | Adds the information needed about the source of the message.
-type | Defines the type of the message sent.
+type | PERMISSION_REQUEST
+aud |  <INFO>      
+exp |  <INFO>      
+iat |  <INFO>      
+iss | <INFO> 
 permissions | A `PERMISSION_ARRAY`containing at least one permission.
-sub | PURPOSE-GOES-HERE
+sub | <INFO>
 sid | The (browser) session id that this message was sent during.
