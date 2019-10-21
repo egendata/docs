@@ -14,10 +14,14 @@ All [Services](/services) or devices that establish connectivity with the [Opera
 Thus communication with the [Operator](/operator) is considered trusted and secure.
 
 {{% notice warning %}}
-Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.
-
+Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.  
+<br>
 It is, however, possible for the Operator to assert that an account uses one and only one key for signing
 its communication. This is currently not enforced.
+{{% /notice %}}
+
+{{% notice warning %}}
+There is one exceptional case when the App needs to establish a new connection with a Service. The `CONNECT_INIT` message originating from the App is not transmitted via the Operator, instead it's directly transmitted to the Service's `/events` endpoint. This outgoing `CONNECT_INIT` message and response could potentially be tampered with if the Service doesn't utilize the TLS protocol.
 {{% /notice %}}
 
 ## Encryption
@@ -55,6 +59,10 @@ The recipient of an incoming Egendata [Message](/data/#egendata-message-schema-d
 
 Through secure TLS connection the verifier can with high confidence trust that it is in contact with the correct signee service.
 
+{{% notice warning %}}
+The signature verification procedure described in this section is not yet implemented in the Client library, see: [GitHub Client](https://github.com/egendata/client/blob/master/lib/data.js#L74).
+{{% /notice %}}
+
 ## Transactions
 
 All messages exchanged between [Services](/services), [Operator](/operator) & Applications are signed with the sender party's own signing key and transmitted as [JWT](https://tools.ietf.org/html/rfc7519) to the receiving party.
@@ -77,18 +85,4 @@ There are no current plans to migrate to `ECDSA` for signing.
 
 Eventually signing key rotation is expected to be implemented, so that each message can be validated against the public key announced by sending party. The exception is the App, which is not acting as a Webserver, and therefore can't publically announce its own public key, instead the public key is included in the message.
 
-!!! Is there ANY cases where the App initiates a message directly to the Service? That message could potentially be tampered with. Yes, as far as we identified we can see that the CONNECTION_INIT message is transmitted directly to the Service if the App(device) doesn’t have an (cached) existing record of connection with the Service.
-
-!!! Currently TLS is not enforced by the Egendata solution but it should probably be.
-
-!!! The data producer signature verification is intended to be implemented in the Client library, however it's not yet implemented, see: [GitHub Client](https://github.com/egendata/client/blob/master/lib/data.js#L74).
-
 There are potential optimizations to be done in the Panva JOSE library regarding the contruction and decryption the JWT's JWE content, e.g. the extraction of the correct key from the recipient list and to reuse of the same encryption key(but always with unique IV).
-
-## Other
-
-! The Example project uses "Client" (and indirectly "Messaging") library
-! The Operator uses "Messaging" library
-! The App uses "Messaging" library
-! Describe the purpose of the "Messaging" library.
-! Describe the purpose of the "Client" library, and update the current Readme.
