@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const marked = require('./marked.js');
+const marked = require('marked');
 const fs = require('fs');
 
 async function getGitHubReadme(repo) {
