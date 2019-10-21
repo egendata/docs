@@ -92,4 +92,18 @@ The `KeyProvider` will utilize the `keyValueStorage` property to read and write 
 
 All values written by the KeyProvider to the external/referenced `KeyValueStore` are base64 encoded.
 
-The Client signing key(aka. `clientKey`) is provided through the configuration parameter upon initialization of the `Client`. This client key is used for all signing done by this Client, however there are ideas to implement different signing keys for different domains/areas and/or key rotation.
+The Client signing key(aka. `clientKey`) is provided through the configuration parameter upon initialization of the `Client`. This client key is used for all signing done by this Client, however there are future ideas to implement different signing keys for different domains/areas and/or key rotation.
+
+## Key Value Store
+
+In order to utilize the Egendata Client, one must first create a KeyValueStore object to be provided in the configuration to the Client constructor.
+
+### Interface definition
+
+The following interface is expected to be implemented in the Service's KeyValueStore object.
+
+Function | Description
+--- | ---
+`save(key, value, ttl)` | &bull; `key`: The lookup key of which this saved record will be identified by in persistent storage.<br>&bull; `value`: The value to be stored in persistent storage.<br>&bull; `ttl`: The KeyValueStore must respect the specified TTL(Time to live) of the saved record, as such it must be automatically removed from storage upon TTL expiry.
+`load(key)` | &bull; `key`: The lookup key a record to load and return back to caller.
+`remove(key)` | &bull; `key`: The lookup key of which all associated record(s) shall permanently removed from persistent storage.
