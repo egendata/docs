@@ -51,7 +51,7 @@ function getAllGitHubReadmes(options) {
 }
 
 const options = {
-    outputDir: '../content/repositories',
+    outputDir: 'content/repositories',
     repositories: [
         { url: 'egendata/docs', filename: 'docs.html' },
         { url: 'egendata/app', filename: 'app.html' },

@@ -1,0 +1,25 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://travis-ci.com/egendata/docs.svg?branch=master)](https://travis-ci.com/egendata/docs)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "github": "node github-loader/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egendata/docs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/egendata/docs/issues"
+  },
+  "homepage": "https://github.com/egendata/docs#readme",
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "marked": "^0.7.0",
+    "node-fetch": "^2.6.0"
+  }
+}
