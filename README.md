@@ -22,6 +22,13 @@ Visit http://localhost:1313
 hugo
 ```
 
+## Fetch readme pages from GitHub
+
+```bash
+npm install
+npm run github
+```
+
 The static site ends up in `./public`
 
 ## Contributing
