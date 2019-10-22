@@ -59,7 +59,8 @@ const options = {
         { url: 'egendata/messaging', filename: 'messaging.html' },
         { url: 'egendata/infrastructure', filename: 'infrastructure.html' },
         { url: 'egendata/cli', filename: 'cli.html' },
-        { url: 'egendata/example-cv', filename: 'example.cv.html' },
+        { url: 'egendata/example-cv', filename: 'example-cv.html' },
+        { url: 'egendata/react-native-simple-crypto', filename: 'react-native-simple-crypto.html' },
     ]
 }
 
