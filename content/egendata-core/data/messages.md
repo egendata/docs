@@ -23,13 +23,17 @@ exp | Unix timestamp for when the message expires.
 
 #### SERVICE_REGISTRATION
 
-_Message sent to the operator by a service, when it registers itself._
+From | To
+--- | ---
+Service | Operator
+
+_Message sent when the service registers itself._
 
 Property | Purpose
 --- | ---
 type | SERVICE_REGISTRATION
-iss | The service's host URL
-aud | The URL of the Operator
+JWT_DEFAULTS.iss | The service's host URL
+JWT_DEFAULTS.aud | The URL of the Operator
 displayName | The name the service wants to display to users.
 description | The description the service wants to display to the users.
 iconURI | Relative or actual URI of the icon the service wants to display to the users.
@@ -40,13 +44,17 @@ eventsURI | The URI the service will be receiving event responses.
 
 #### ACCOUNT_REGISTRATION
 
-_Message sent from the user's device to the operator when they are registering an account._
+From | To
+--- | ---
+User device | Operator
+
+_Message sent when the user is registering an account._
 
 Property | Purpose
 --- | ---
 type | ACCOUNT_REGISTRATION
-iss | egendata://account/[account_id]
-aud | The URL of the Operator
+JWT_DEFAULTS.iss | egendata://account/[account_id]
+JWT_DEFAULTS.aud | The URL of the Operator
 pds | Information about the PDS the user has selected for their account.
  pds.provider | The type of PDS used. As of now the options are Dropbox and in memory. In memory means the operators internal memory.
  pds. access_token | In the case the PDS requires authentication, this is the token to be used for it. As of now this applies to the Dropbox option.
@@ -55,13 +63,17 @@ pds | Information about the PDS the user has selected for their account.
 
 #### AUTHENTICATION_REQUEST
 
-_Message sent by the service to the user's device to authenticate them._
+From | To
+--- | ---
+Service | User device
+
+_Message sent for authentication between the sender and receiver._
 
 Property | Purpose
 --- | ---
 type | AUTHENTICATION_REQUEST
-iss | The service's host URL
-aud | egendata://account
+JWT_DEFAULTS.iss | The service's host URL
+JWT_DEFAULTS.aud | egendata://account
 sid | The (browser) session id that this message was sent during.
 eventsURI | The URI that the service expects the responses to the messages to be received.
 
@@ -69,28 +81,36 @@ eventsURI | The URI that the service expects the responses to the messages to be
 
 #### CONNECTION_INIT
 
+From | To
+--- | ---
+User device | Service
+
 _Initiates a connection between the user and the service. Is triggered when there is no pre-existing connection between these two parties._
 
 Property | Purpose
 --- | ---
 type | CONNECTION_INIT
-iss | egendata://account
-aud | The service's host URL
+JWT_DEFAULTS.iss | egendata://account
+JWT_DEFAULTS.aud | The service's host URL
 sid | The (browser) session id that this message was sent during.
 
 ---
 
 #### CONNECTION_REQUEST
+ 
+From | To
+--- | ---
+Service | User device
 
-_Response to a `CONNECTION_INIT` message. Sent to the user's device by the service._
+_Response to a `CONNECTION_INIT` message._
 
 Property | Purpose
 --- | ---
 type | CONNECTION_REQUEST
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO>   
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO>   
 permissions | A `PERMISSION_REQUEST_ARRAY` list of at least one with permissions for the user to accept or deny.
 sid | The (browser) session id that this message was sent during.
 displayName | The display name of the service.
@@ -101,64 +121,80 @@ iconURI | The icon of the service.
 
 #### CONNECTION
 
+From | To
+--- | ---
+User device | Operator -> Service
+
 _Message sent from the user's device the operator who then forwards it to the service, containing information about the connection between the two endpoints._
 
 Property | Purpose
 --- | ---
 type | CONNECTION
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO>   
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO>   
 sid | The (browser) session id that this message was sent during.
 sub | <INFO>
 permissions | Information about the permissions the user has accepted and denied.
-- approved | The list of approved permissions.
-- denied | The list of denied permissions.
+ permissions.approved | The list of approved permissions.
+ permissions.denied | The list of denied permissions.
 
 ---
 
 #### CONNECTION_RESPONSE
+
+From | To
+--- | ---
+User device | Operator
 
 _The message sent by the device to the operator containing the `CONNECTION` message._
 
 Property | Purpose
 --- | ---
 type | CONNECTION_RESPONSE
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 payload | The `CONNECTION`message sent as a serialized JWS type.
 
 ---
 
 #### CONNECTION_EVENT
 
+From | To
+--- | ---
+Operator | Service
+
 _The message sent by the operator to the service containing the `CONNECTION` message._
 
 Property | Purpose
 --- | ---
 type | CONNECTION_EVENT
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 payload | The `CONNECTION`message sent as a serialized JWS type.
 
 ---
 
 #### LOGIN
 
+From | To
+--- | ---
+User device | Operator
+
 _Message sent from the user's device the operator who then forwards it to the service, so the user can login to the service._
 
 Property | Purpose
 --- | ---
 type | LOGIN
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 sid | The (browser) session id that this message was sent during.
 sub | <INFO>
 
@@ -166,45 +202,57 @@ sub | <INFO>
 
 #### LOGIN_RESPONSE
 
+From | To
+--- | ---
+User device | Operator
+
 _The message sent by the device to the operator containing the `LOGIN` message._
 
 Property | Purpose
 --- | ---
 type | LOGIN_RESPONSE
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 payload | The `LOGIN` message sent as a serialized JWS type.
 
 ---
 
 #### LOGIN_EVENT
 
+From | To
+--- | ---
+Operator | Service
+
 _The message sent by the operator to the service containing the `LOGIN` message._
 
 Property | Purpose
 --- | ---
 type | LOGIN_EVENT
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 payload | The `LOGIN` message sent as a serialized JWS type.
 
 ---
 
 #### ACCESS_TOKEN
 
+From | To
+--- | ---
+<INFO> | <INFO>
+
 _PURPOSE-GOES-HERE_
 
 Property | Purpose
 --- | ---
 type | ACCESS_TOKEN
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 sub | <INFO>
 
 ---
@@ -250,7 +298,7 @@ Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
 type | WRITE
-description | The description of the requested permission._ //How is this different from the purpose in the READ_PERMISSION_REQUEST???
+description | The description of the requested permission. //How is this different from the purpose in the READ_PERMISSION_REQUEST???
 
 ---
 
@@ -319,14 +367,14 @@ _Message sent by the service to the operator to request data for read purposes. 
 Property | Purpose
 --- | ---
 type | DATA_READ_REQUEST
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO>
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO>
 sub | <INFO>
 paths | The paths to the data the service is requesting to read,
-- domain | The domain of the data the service requests to read. By default it is its own domain but could also be a different service's domain._
-- area | The section of data the service requests to read, for example education, languages soon._
+ paths.domain | The domain of the data the service requests to read. By default it is its own domain but could also be a different service's domain._
+ paths.area | The section of data the service requests to read, for example education, languages soon._
 
 ---
 
@@ -337,19 +385,19 @@ _Response to a `DATA_READ_REQUEST` sent to the service by the operator. Each rea
 Property | Purpose
 --- | ---
 type | DATA_READ_RESPONSE
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 sub | <INFO>
 paths | The paths to the data the service is requesting to read,
-- ...CONTENT_PATH | <INFO>
-- data | The data sent back to the service for this particular request.
-- error | Error messages that might occur, for example missing data or denied permissions.
-- - message | The message of the error message.
-- - status | The status of the error message.
-- - code | The code of the error message.
-- - stack | <INFO>
+ paths....CONTENT_PATH | <INFO>
+ paths.data | The data sent back to the service for this particular request.
+ paths.error | Error messages that might occur, for example missing data or denied permissions.
+  paths.error.message | The message of the error message.
+  paths.error.status | The status of the error message.
+  paths.error.code | The code of the error message.
+  paths.error.stack | <INFO>
 
 ---
 
@@ -360,14 +408,14 @@ _Message sent containing encrypted data to be written to the users PDS. The mess
 Property | Purpose
 --- | ---
 type | DATA_WRITE
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 sub | <INFO>
-paths | List of domain and area paths that the data will be written to.
-- ...CONTENT_PATH | <INFO>
-- data | The data to be written in this path.
+paths | List of at least one, of domain and area paths that the data will be written to.
+ paths....CONTENT_PATH | <INFO>
+ paths.data | The data to be written in this path.
 
 ### Not yet implemented
 
@@ -378,10 +426,10 @@ _Message sent by the service to the operator in order to request permissions._
 Property | Purpose
 --- | ---
 type | PERMISSION_REQUEST
-aud |  <INFO>      
-exp |  <INFO>      
-iat |  <INFO>      
-iss | <INFO> 
+JWT_DEFAULTS.aud |  <INFO>      
+JWT_DEFAULTS.exp |  <INFO>      
+JWT_DEFAULTS.iat |  <INFO>      
+JWT_DEFAULTS.iss | <INFO> 
 permissions | A `PERMISSION_ARRAY`containing at least one permission.
 sub | <INFO>
 sid | The (browser) session id that this message was sent during.
