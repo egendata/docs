@@ -54,13 +54,55 @@ If this user’s device does not recognize the service then the following messag
 1. For read permissions the read key is sent alongside the permission, in the form of `kid` (key id).
 1. The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.
 1. The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.
+    1. For each read permission a set of keys is generated at both the service and the user. 
+    1. These keys are used to encrypt and decrypt Content Encryption Keys (CEKs) that is generated for each of the areas of each domain and used to encrypt the data stored in the PDS.
+    1. Each of the CEKs is encrypted once with the user's public key and once with teh service's public key and stored in the document with the encrypted data.
 1. After receiving the `CONNECTION_REQUEST` the device generates a `CONNECTION` wrapped in a `CONNECTION_RESPONSE` that is sent to the operator.
-1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewraps it in a `CONNECTION_EVENT` that is sent to the service.
+1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewraps it in a `CONNECTION_EVENT` that is sent to the service. 
+
+{{% notice tip %}}
+The keys for these connections (not the CEKs, those only exist within each document they encrypt and only in an encrypted state) are stored in the cache memory of the user's device. 
+If the cache is cleaned or the phone lost these connections cannot be recovered, since the keys cannot be recovered or recreated and the data cannot be decrypted. There is a connection entry in the operator for each connection made for each user, but the private keys are only stored in the device and thus irreplaceable.
+{{% /notice %}}
+
+## Revoking consent
+
+There are several ways of revoking consent to an area of the PDS
+
+### Deleting the data
+
+A way of revoking consent is by deleting the data stored for that area in the domain's storage in the user's PDS. 
+This however leads to complete and irreversible data loss.
+
+### "Changing the locks"  * *NOT IMPLEMENTED* * 
+
+The way this is accomplished is by replacing the CEK the data for the specific are has been encrypted with. 
+1. The data is decrypted.
+1. A new CEK is generated.
+1. The data us encrypted with teh new CEK.
+1. The new CEK is encrypted only with the user's public key for this domain+area and stored in the encrypted document.
+1. the connection ID in the operator is destroyed.
+
+- In this case there is no data loss.
+- The user can still decrypt and read their data.
+- In teh eventuality the user decides to re-allow access to the service the process is repeated again and the new CEK is again encrypted and stored in both ends. 
+    - When this happens a new connection ID is generated in the operator for tis new connection.
+    - this means that the service will recognize this user as a new user (with the same data as an old one).
+
+{{% notice tip %}}
+Currently there is no implementation for the application to unpack a JWE. There exists a library for RSA and AES but no full JOSE implementation or native JOSE implementation.
+{{% /notice %}}
 
 ## Reading data from PDS
 
-For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message.
-The requested data is sent to the service by the operator with a `DATA_READ_RESPONSE`.
+- For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. 
+    - This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message, this however has not been implemented.
+- In the `DATA_READ_REQUEST` the service includes the connection id that it wants the data to come from.
+    - This happens because the service does not know the ids of the users it has connections with, it only knows the connection ids.
+- Upon receiving the `DATA_READ_REQUEST` the operator will verify that 
+    - The connection exists,
+    - The consent has been given
+- The requested data is sent to the service by the operator with a `DATA_READ_RESPONSE`.
 
 {{% notice tip %}}
 Currently only Dropbox is supported as a PDS. It is, however, called through an abstraction which treats it as `fs`. This means that as long as another PDS can be called through the same abstraction, it is simple to implement.
@@ -68,13 +110,17 @@ Currently only Dropbox is supported as a PDS. It is, however, called through an 
 
 - The domain defined in the request in the services ID, which is the URI of the service.
 - The areas that are defined in the request are the different areas of the CV.
-- The response to the request is sent with a DATA_READ_RESPONSE message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
+- The response to the request is sent with a `DATA_READ_RESPONSE` message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
 - These responses are sent encrypted and then decrypted by the client library.
 
 ## Writing data to a PDS
 
-For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator.
-The data are encrypted before being sent to the operator, and then written to the PDS.
-If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
-Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.
+- For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator.
+- The data are encrypted before being sent to the operator, and then written to the PDS.
+- The encryption is performed with a Content Encryption Key (CEK).
+- If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
+- Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.
 
+{{% notice tip %}}
+It should be noted here that  is should not be assumed that the user is not the owner of the data stored in their PDS. Ownership implies that the data can be altered, which is not the case for many peaces of data (i.e. tax agency information, police and criminal records). The user is the controller of their own data. This implies that they have control over who has access to their data.
+{{% /notice %}}

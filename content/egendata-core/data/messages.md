@@ -298,7 +298,7 @@ Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
 type | WRITE
-description | The description of the requested permission. //How is this different from the purpose in the READ_PERMISSION_REQUEST???
+description | The description of the information that will be written. 
 
 ---
 
@@ -321,7 +321,7 @@ Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
 type | READ
-purpose | The reason the permission is requested._ // Why is the purpose needed in theREAD_PERMISSION_REQUEST if it is here???
+purpose | The reason the permission is requested.
 kid | PURPOSE-GOES-HERE
 
 ---
@@ -334,7 +334,7 @@ Property | Purpose
 --- | ---
 ...PERMISSION_BASE |  _Adds basic information about the permission requested._
 type | WRITE
-description | PURPOSE-GOES-HERE_ // Why is the description needed in theWRITE_PERMISSION_REQUEST if it is here???
+description | The description of the information that will be written.
 jwks | Link to the key store where the keys required to encrypt the data is stored.
 
 ---
