@@ -86,7 +86,7 @@ Fastlane looks for these variables automatically and uses them if specified.
 
 Now we take a look in the `ios/Fastfile`, and the lane `ios_testflight`: 
 
-`setup_travis` Don't know exactly what this does but it's needed.
+- [`setup_travis`](https://docs.fastlane.tools/actions/setup_travis/) configures the keychain and profiles for use with Travis.
 
 `match(type: "appstore", ...)` Runs match to get the provisioning profile and certificate. It looks for the "appstore" profiles and certificates in the repo.
 
