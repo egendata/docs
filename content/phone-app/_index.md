@@ -76,7 +76,7 @@ It will also ask you to provide a password that can decrypt the repository data 
 
 Using match for deployments:
 
-For this setup, we used a separate apple user that we setup and added to the apple dev team.
+For this setup, we used a separate Apple user that we setup and added to the Apple dev team.
 
 **The user email is declared as the environment variable FASTLANE_USER in our CI**
 
