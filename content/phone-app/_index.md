@@ -108,6 +108,6 @@ Now we take a look in the `ios/Fastfile`, and the lane `ios_testflight`:
 
 Going through the `android/fastlane/Fastfile`:
 
-`gradle(...)` Builds the app with gradle and tells it to make a `bundleRelease`, which generates a .aab bundle that is x64 and x86 compatible.
+`gradle(...)` Builds the app with gradle and tells it to make a `bundleRelease`, which generates an `.aab`-bundle that is x64 and x86 compatible.
 
 `upload_to_play_store(track: 'internal')` Does what it says and puts in in the "internal" track on Google developer console. From there you manually do whatever you wish, like moving  it to beta, or google play store.
