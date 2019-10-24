@@ -76,7 +76,7 @@ It will also ask you to provide a password that can decrypt the repository data 
 
 Using match for deployments:
 
-For this setup, we used a separate apple user that we setup and added to the apple dev team.
+For this setup, we used a separate Apple user that we setup and added to the Apple dev team.
 
 **The user email is declared as the environment variable FASTLANE_USER in our CI**
 
@@ -86,7 +86,7 @@ Fastlane looks for these variables automatically and uses them if specified.
 
 Now we take a look in the `ios/Fastfile`, and the lane `ios_testflight`: 
 
-`setup_travis` Don't know exactly what this does but it's needed.
+- [`setup_travis`](https://docs.fastlane.tools/actions/setup_travis/) configures the keychain and profiles for use with Travis.
 
 `match(type: "appstore", ...)` Runs match to get the provisioning profile and certificate. It looks for the "appstore" profiles and certificates in the repo.
 
@@ -108,6 +108,6 @@ Now we take a look in the `ios/Fastfile`, and the lane `ios_testflight`:
 
 Going through the `android/fastlane/Fastfile`:
 
-`gradle(...)` Builds the app with gradle and tells it to make a `bundleRelease`, which generates a .aab bundle that is x64 and x86 compatible.
+`gradle(...)` Builds the app with gradle and tells it to make a `bundleRelease`, which generates an `.aab`-bundle that is x64 and x86 compatible.
 
 `upload_to_play_store(track: 'internal')` Does what it says and puts in in the "internal" track on Google developer console. From there you manually do whatever you wish, like moving  it to beta, or google play store.
