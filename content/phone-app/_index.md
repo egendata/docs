@@ -99,7 +99,7 @@ Now we take a look in the `ios/Fastfile`, and the lane `ios_testflight`:
 
 **Android specific prerequisites:**
 
-*We use [travis file encryption](https://docs.travis-ci.com/user/encrypting-files/) for handling all the relevant secrets for the android build and deploy step. In the `.travis.yml`s android `before_install` step, we decrypt those files that are available in the build context as secrets and we decrypt them and put them in the right directories. The files are the **google_play.json**, **release.keystore**, and the **gradle.properties**.*
+*We use [travis file encryption](https://docs.travis-ci.com/user/encrypting-files/) for handling all the relevant secrets for the android build and deploy step. In the `.travis.yml`s android `before_install` step, we decrypt those files that are available in the build context as secrets and put them in the right directories. The files are the **google_play.json**, **release.keystore**, and the **gradle.properties**.*
 
 - Google dev console development team.
 - Secret JSON file with android specific signing details. Get from Google dev console.
