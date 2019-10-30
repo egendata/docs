@@ -21,7 +21,7 @@ aud | The intended audience of the message. Example: `https://operator.egendata.
 iat | Unix timestamp for when the message was created.
 exp | Unix timestamp for when the message expires.
 
-### Messages currently in use
+### Messages
 
 #### SERVICE_REGISTRATION
 
@@ -153,6 +153,42 @@ payload | The [`CONNECTION`](#connection) as a serialized JWS.
 
 ---
 
+#### LOGIN_EVENT
+
+From | To
+--- | ---
+Operator | Service
+
+_Sent by the operator to the service containing the [`LOGIN`](#login)._
+
+Property | Purpose
+--- | ---
+type | LOGIN_EVENT
+[JWT_DEFAULTS](#jwt-defaults).aud | URL of the service
+[JWT_DEFAULTS](#jwt-defaults).iss | URL of the operator
+payload | The [`LOGIN`](#login) as a serialized JWS.
+
+---
+
+#### ACCESS_TOKEN
+
+From | To
+--- | ---
+Service backend | Service frontend
+
+_JWT used to access a resource. Currently used by the service frontend (ie. the user's browser) to store its login session with the service backend; but could in the future be used to control other types of access as well._
+
+Property | Purpose
+--- | ---
+type | ACCESS_TOKEN
+[JWT_DEFAULTS](#jwt-defaults).aud | URL of the service
+[JWT_DEFAULTS](#jwt-defaults).iss | URL of the service 
+sub | V4 uuid of the [CONNECTION](#connection) which is logged in
+
+---
+
+### Fields & values
+
 #### CONNECTION
 
 From | To
@@ -174,40 +210,6 @@ permissions *optional* | Information about any permissions the user has accepted
 
 ---
 
-#### LOGIN_RESPONSE
-
-From | To
---- | ---
-User device | Operator
-
-_Sent by the device to the operator containing the [`LOGIN`](#login)._
-
-Property | Purpose
---- | ---
-type | LOGIN_RESPONSE
-[JWT_DEFAULTS](#jwt-defaults).aud | URL of the operator
-[JWT_DEFAULTS](#jwt-defaults).iss | egendata://account/[account_id] 
-payload | The [`LOGIN`](#login) as a serialized JWS.
-
----
-
-#### LOGIN_EVENT
-
-From | To
---- | ---
-Operator | Service
-
-_Sent by the operator to the service containing the [`LOGIN`](#login)._
-
-Property | Purpose
---- | ---
-type | LOGIN_EVENT
-[JWT_DEFAULTS](#jwt-defaults).aud | URL of the service
-[JWT_DEFAULTS](#jwt-defaults).iss | URL of the operator
-payload | The [`LOGIN`](#login) as a serialized JWS.
-
----
-
 #### LOGIN
 
 From | To
@@ -226,50 +228,26 @@ sub | V4 uuid of the [`CONNECTION`](#connection) that should be logged in.
 
 ---
 
-#### ACCESS_TOKEN
+#### PERMISSION_BASE
 
-From | To
---- | ---
-<INFO> | <INFO>
-
-_PURPOSE-GOES-HERE_
+_These properties are present in several objects related to permissions._
 
 Property | Purpose
 --- | ---
-type | ACCESS_TOKEN
-[JWT_DEFAULTS](#jwt-defaults).aud | URL of the service
-[JWT_DEFAULTS](#jwt-defaults).iss | URL of the service 
-sub | <INFO>
-
----
-
-### Fields & values
-
-
-#### LAWFUL_BASIS
-
-_Defines the lawful basis of the information permission request as defined in GDPR. Currently all requests default to `CONSENT` and no architectural concessions have been made to handle other cases. Therefore all other values are disallowed in validation._
-
----
-
-#### CONTENT_PATH
-
-_Instead of obtaining permission to store all sorts of data about the user, Egendata requires explicit permission per information area. These permissions might eventually be obtained with different lawful bases. Examples are `base_info`, `education`, `work-experience` and so on. Technically these areas will translate into paths on the PDS._
-
-Property | Purpose
---- | ---
-domain | The URL of the data generating service
-area | The name of the information given by the issuing service
+...CONTENT_PATH | 
+id | A uuid identifying this permission-object.
+type | The type of the permission, right now only 'READ' and 'WRITE' are supported.
+lawfulBasis | The legal basis for processing information, as defined in the GDPR. Currently only 'CONSENT' is supported.
 
 ---
 
 #### READ_PERMISSION_REQUEST
 
-_Message sent to request a read permission._
+_Message sent to request permission to read and process the content._
 
 Property | Purpose
 --- | ---
-...PERMISSION_BASE | Adds basic information about the permission requested.
+[...PERMISSION_BASE](#permission-base) |
 type | READ
 purpose | The purpose of the permission being requested.
 jwk | The key of the service that will be used when they decrypt the data for read purposes.
@@ -282,9 +260,35 @@ _Message sent to request a write permissions. This can contain more than one `WR
 
 Property | Purpose
 --- | ---
-...PERMISSION_BASE |  _Adds basic information about the permission requested._
+[...PERMISSION_BASE](#permission-base) | 
 type | WRITE
 description | The description of the information that will be written. 
+
+---
+
+#### READ_PERMISSION
+
+_A permission to read and process data. Signed by the approving party._
+
+Property | Purpose
+--- | ---
+[...PERMISSION_BASE](#permission-base) | 
+type | READ
+purpose | The purpose of processing data.
+kid | Id of the key that will be used to read the data in question.
+
+---
+
+#### WRITE_PERMISSION
+
+_A permission to write data. Signed by the approving party._
+
+Property | Purpose
+--- | ---
+[...PERMISSION_BASE](#permission-base) | 
+type | WRITE
+description | The description of the information that will be written.
+jwks | Link to the key store where the keys required to encrypt the data is stored.
 
 ---
 
@@ -296,32 +300,6 @@ Property | Purpose
 --- | ---
 READ_PERMISSION_REQUEST | The read permissions requested.
 WRITE_PERMISSION_REQUEST | The write permissions requested.
-
----
-
-#### READ_PERMISSION
-
-_The information for each individual read permission requested._
-
-Property | Purpose
---- | ---
-...PERMISSION_BASE |  _Adds basic information about the permission requested._
-type | READ
-purpose | The reason the permission is requested.
-kid | PURPOSE-GOES-HERE
-
----
-
-#### WRITE_PERMISSION
-
-_The information for each individual write permission requested._
-
-Property | Purpose
---- | ---
-...PERMISSION_BASE |  _Adds basic information about the permission requested._
-type | WRITE
-description | The description of the information that will be written.
-jwks | Link to the key store where the keys required to encrypt the data is stored.
 
 ---
 
@@ -342,7 +320,7 @@ _A permission that has been denied by the user for this service._
 
 Property | Purpose
 --- | ---
-...PERMISSION_BASE | Adds basic information about the permission requested.
+[...PERMISSION_BASE](#permission-base) |
 
 ---
 
@@ -358,7 +336,7 @@ type | DATA_READ_REQUEST
 [JWT_DEFAULTS](#jwt-defaults).iat |  <INFO>      
 [JWT_DEFAULTS](#jwt-defaults).iss | <INFO>
 sub | <INFO>
-paths | The paths to the data the service is requesting to read,
+paths[] | The paths to the data the service is requesting to read,
  paths.domain | The domain of the data the service requests to read. By default it is its own domain but could also be a different service's domain._
  paths.area | The section of data the service requests to read, for example education, languages soon._
 
@@ -376,8 +354,9 @@ type | DATA_READ_RESPONSE
 [JWT_DEFAULTS](#jwt-defaults).iat |  <INFO>      
 [JWT_DEFAULTS](#jwt-defaults).iss | <INFO> 
 sub | <INFO>
-paths | The paths to the data the service is requesting to read,
- paths....CONTENT_PATH | <INFO>
+paths[] | The paths to the data the service is requesting to read,
+ domain | The URL of the service creating data
+ area | The particular data point for that domain. The creator of the data chooses which points to divide the data into.
  paths.data | The data sent back to the service for this particular request.
  paths.error | Error messages that might occur, for example missing data or denied permissions.
   paths.error.message | The message of the error message.
@@ -399,8 +378,9 @@ type | DATA_WRITE
 [JWT_DEFAULTS](#jwt-defaults).iat |  <INFO>      
 [JWT_DEFAULTS](#jwt-defaults).iss | <INFO> 
 sub | <INFO>
-paths | List of at least one, of domain and area paths that the data will be written to.
- paths....CONTENT_PATH | <INFO>
+paths[] | List of at least one, of domain and area paths that the data will be written to.
+ domain | The URL of the service creating data
+ area | The particular data point for that domain. The creator of the data chooses which points to divide the data into.
  paths.data | The data to be written in this path.
 
 ### Not yet implemented
