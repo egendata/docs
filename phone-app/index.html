@@ -8,7 +8,7 @@
 
 
     <link rel="shortcut icon" href="//egendata.github.io/docs/images/egendata.png" type="image/x-icon" />
-    <title>Operator :: My New Hugo Site</title>
+    <title>Mobile App :: My New Hugo Site</title>
 
     
     <link href="/docs/css/nucleus.css?1578902268" rel="stylesheet">
@@ -38,7 +38,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/operator/">
+  <body class="" data-url="/docs/phone-app/">
     <nav id="sidebar" class="">
 
 
@@ -440,8 +440,8 @@
   
     
     <li data-nav-id="/docs/phone-app/" title="Mobile App" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/phone-app/">
@@ -462,8 +462,8 @@
   
     
     <li data-nav-id="/docs/operator/" title="Operator" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/docs/operator/">
@@ -522,7 +522,7 @@
             
           
           
-            <a href='/docs/'>Introduction</a> > Operator
+            <a href='/docs/'>Introduction</a> > Mobile App
           
          
           
@@ -537,8 +537,14 @@
 <ul>
 <li>
 <ul>
-<li><a href="#writing-to-pds">Writing to PDS</a></li>
-<li><a href="#reading-from-pds">Reading from PDS</a></li>
+<li><a href="#builds-and-deployments">Builds and deployments</a>
+<ul>
+<li><a href="#context">Context</a></li>
+<li><a href="#shared-prerequisites">Shared Prerequisites</a></li>
+<li><a href="#how-it-s-set-up">How it&rsquo;s set up:</a></li>
+<li><a href="#ios"><strong>iOS</strong></a></li>
+<li><a href="#android"><strong>Android</strong></a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -557,7 +563,7 @@
           
             <h1>
               
-              Operator
+              Mobile App
             </h1>
           
 
@@ -568,27 +574,129 @@
 
 	
 
-<p>Placeholder</p>
+<h2 id="builds-and-deployments">Builds and deployments</h2>
 
-<h2 id="writing-to-pds">Writing to PDS</h2>
+<h3 id="context">Context</h3>
 
-<ol>
-<li>The Operator receives the incoming message(JWT) and validates the integrity of the message(JWT signature verification).</li>
-<li>After that, the Operator performs queries to its own database based upon the JWT properties &ldquo;sub&rdquo;, &ldquo;iss&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo; of each &ldquo;content path&rdquo; entry. (See the Egendata messaging schemas&hellip;)</li>
-<li>If valid write permissions are found by the queries, the query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
-<li>The destination PDS directory path is defined based upon &ldquo;connectionId&rdquo;, &ldquo;domain&rdquo; and &ldquo;area&rdquo;.
-<code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
-<li>The JWE(encrypted at the service) of the received JWT, is extracted and written to the users PDS and a successful status code 201 is returned to the service, alternatively 403 upon error.</li>
-</ol>
+<p>While developing on this application. Our intention has been to regularly redistribute it to testers through Google play store and Apple Testflight. As a means to achieve this, we have started implementing a continuous deployment pipeline where we have integrated Fastlane into our Travis CI setup.</p>
 
-<h2 id="reading-from-pds">Reading from PDS</h2>
+<h3 id="shared-prerequisites">Shared Prerequisites</h3>
 
-<ol>
-<li>The Operator receives the incoming message(JWT) and performs a lookup in its database to verify that the requesting Service has sufficient read permissions for a user’s PDS.</li>
-<li>If valid sufficient read permissions are found, the database query result contains details about the &ldquo;pdsProvider&rdquo; and &ldquo;pdsCredentials&rdquo;.</li>
-<li>The Operator constructs the &ldquo;content path&rdquo; strings that locate the data within the user&rsquo;s PDS. <code>/data/${encodeURIComponent(connectionId)}/${encodeURIComponent(domain)}/${encodeURIComponent(area)}/data.json</code></li>
-<li>The data(JWE) is read from the user&rsquo;s PDS, packed into a new JWT message of type &ldquo;DATA_READ_RESPONSE&rdquo; and finally transmitted back to the requesting Service.</li>
-</ol>
+<p><em>- Or what we have now that someone who wants to adopt this process needs to set up.</em></p>
+
+<ul>
+<li>Travis CI</li>
+<li>Fastlane</li>
+</ul>
+
+<h3 id="how-it-s-set-up">How it&rsquo;s set up:</h3>
+
+<h3 id="ios"><strong>iOS</strong></h3>
+
+<p><em>We use <a href="https://docs.fastlane.tools/actions/match/">Fastlane match</a> for distributing the iOS app to Testflight. Match is a command within Fastlane that lets you (a team) use a single signing certificate and provisioning profile for building and distributing your application, rather than having several personal certificates. Using match with a private repository for storing certificates as a single source of truth is arguably a lot easier than having several certificates for different users.</em></p>
+
+<p><strong>iOS specific prerequisites:</strong>
+- Apple developer team account
+- Private github repository for storing iOS provisioning profile and signing certificates</p>
+
+<p>Not needed but nice to have:
+- Separate apple account with limited privilege that acts as a CI user for iOS distribution</p>
+
+<p>Initiating a Matchfile:</p>
+
+<p><code>project-root/ios</code></p>
+
+<pre><code class="language-bash">fastlane match init
+</code></pre>
+
+<p>This command will generate a <code>Matchfile</code> in the <code>ios/fastlane</code> directory with the following content:</p>
+
+<pre><code>git_url(...)
+app_identifier(...)
+username(...)
+</code></pre>
+
+<p><code>git_url</code> is the private repository where the provisioning profile and certificates will be stored.</p>
+
+<blockquote>
+<p>This will be empty first and when you run <code>match</code> later it will notice that it&rsquo;s empty and prompt you about consent for generating new profiles and certificates to put there. More on this later.</p>
+</blockquote>
+
+<p><code>app_identifier</code> is the app name in xcode land. In our case, <code>com.egendata.ios</code></p>
+
+<p><code>username</code> is the apple user who will perform the match operations.</p>
+
+<blockquote>
+<p>Needs to be a part of the apple developer team.</p>
+</blockquote>
+
+<p>Furthermore, we extend the Matchfile with the following:</p>
+
+<p><code>storage_mode(&quot;git&quot;)</code></p>
+
+<blockquote>
+<p>This just specifies what kind of storage you want to use for your certificates and profile.</p>
+</blockquote>
+
+<p><code>type(&quot;appstore&quot;)</code></p>
+
+<blockquote>
+<p>Fastlane match has different types. Don&rsquo;t really know what the difference is, but this needs to be synced with the type of provisioning profile and signing certificate you will generate later when you run <code>fastlane match appstore</code>. <code>appstore</code> is the type we went with.</p>
+</blockquote>
+
+<p>Initiating the private Github repository you have write access to:</p>
+
+<pre><code class="language-bash">fastlane match appstore
+</code></pre>
+
+<blockquote>
+<p>We used the ssh url (git@&hellip;) the first time for creating the certificates etc. The one you see in the current match file is for bypassing ssh setup on CI. Now, instead, we use a github personal access token with repo privileges for authenticating. You can see how we use it in the top of the Matchfile.</p>
+</blockquote>
+
+<p>This will run match with parts of the configuration that is specified in your <code>Matchfile</code>. Since the repository will be empty at this stage, match will prompt for your consent to generate a new certificate and provisioning profile and put it there.</p>
+
+<p>It will also ask you to provide a password that can decrypt the repository data on subsequent operations. <strong>This password is set as MATCH_PASSWORD environment variable in our CI pipeline (travis).</strong></p>
+
+<p>Using match for deployments:</p>
+
+<p>For this setup, we used a separate Apple user that we setup and added to the Apple dev team.</p>
+
+<p><strong>The user email is declared as the environment variable FASTLANE_USER in our CI</strong></p>
+
+<p><strong>The user password is declared as the environment variable FASTLANE_PASSWORD in our CI</strong></p>
+
+<p>Fastlane looks for these variables automatically and uses them if specified.</p>
+
+<p>Now we take a look in the <code>ios/Fastfile</code>, and the lane <code>ios_testflight</code>:</p>
+
+<ul>
+<li><a href="https://docs.fastlane.tools/actions/setup_travis/"><code>setup_travis</code></a> configures the keychain and profiles for use with Travis.</li>
+</ul>
+
+<p><code>match(type: &quot;appstore&quot;, ...)</code> Runs match to get the provisioning profile and certificate. It looks for the &ldquo;appstore&rdquo; profiles and certificates in the repo.</p>
+
+<p><code>build_app(...)</code> This builds the app using the signing pulled by <code>match</code> and builds the app. Also exports it with &ldquo;app-store&rdquo; configuration, this needs to match certificates too.</p>
+
+<p><code>pilot()</code> Handles upload to testflight.</p>
+
+<h3 id="android"><strong>Android</strong></h3>
+
+<p><strong>Android specific prerequisites:</strong></p>
+
+<p>*We use <a href="https://docs.travis-ci.com/user/encrypting-files/">travis file encryption</a> for handling all the relevant secrets for the android build and deploy step. In the <code>.travis.yml</code>s android <code>before_install</code> step, we decrypt those files that are available in the build context as secrets and put them in the right directories. The files are the <strong>google_play.json</strong>, <strong>release.keystore</strong>, and the <strong>gradle.properties</strong>.*</p>
+
+<ul>
+<li>Google dev console development team.</li>
+<li>Secret JSON file with android specific signing details. Get from Google dev console.</li>
+<li><code>gradle.properties</code> file with app specific signing variables.</li>
+<li><code>release.keystore</code> file that also handles signing in some way.
+
+Going through the <code>android/fastlane/Fastfile</code>:</li>
+</ul>
+
+<p><code>gradle(...)</code> Builds the app with gradle and tells it to make a <code>bundleRelease</code>, which generates an <code>.aab</code>-bundle that is x64 and x86 compatible.</p>
+
+<p><code>upload_to_play_store(track: 'internal')</code> Does what it says and puts in in the &ldquo;internal&rdquo; track on Google developer console. From there you manually do whatever you wish, like moving  it to beta, or google play store.</p>
 
 
 
@@ -876,6 +984,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -892,6 +1001,8 @@
             
                 
                     
+                        
+                        
                     
                 
                 
@@ -913,10 +1024,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/docs/phone-app/" title="Mobile App"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/docs/infrastructure/react-native-simple-crypto/" title="react-native-simple-crypto"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/docs/architecture/" title="Architecture" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/docs/operator/" title="Operator" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
