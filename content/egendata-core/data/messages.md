@@ -288,7 +288,7 @@ Property | Purpose
 [...PERMISSION_BASE](#permission-base) | 
 type | WRITE
 description | The description of the information that will be written.
-jwks | Link to the key store where the keys required to encrypt the data is stored.
+jwks | Key store with the keys required to encrypt the data is stored.
 
 ---
 
