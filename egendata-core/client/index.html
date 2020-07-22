@@ -11,20 +11,20 @@
     <title>Client :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/theme.css?1595422087" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/theme.css?1595422100" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1595422100" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1595422087" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1595422100" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1595422087"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1595422100"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -545,11 +545,11 @@
 <ul>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#client-configuration-properties">Client configuration properties</a></li>
-<li><a href="#keyprovider">KeyProvider</a></li>
-<li><a href="#prefixes-defined-in-client-library">Prefixes defined in Client library</a></li>
-<li><a href="#saving-key-to-keyvaluestore">Saving key to keyValueStore</a></li>
-<li><a href="#saving-write-keys-to-keyvaluestore">Saving write keys to keyValueStore:</a></li>
-<li><a href="#saving-authentication-token-to-keyvaluestore">Saving authentication token to keyValueStore</a></li>
+<li><a href="#key-provider">Key Provider</a></li>
+<li><a href="#key-value-store">Key Value Store</a>
+<ul>
+<li><a href="#interface-definition">Interface definition</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -579,9 +579,55 @@
 
 	
 
+<p>The Client library serves to alleviate the Egendata integration complexity for <a href="#">Service</a> providers.</p>
+
+<p>For reference, the following example sites utilize the Client library:</p>
+
+<ul>
+<li><a href="https://github.com/egendata/example-cv">Example CV</a></li>
+<li><a href="https://github.com/JobtechSwe/myskills-api">MySkills API</a></li>
+</ul>
+
 <h2 id="usage">Usage</h2>
 
+<p>The Client library is distributed via the NPM software registry and can be installed with:</p>
+
+<pre><code class="language-bash">npm install @egendata/client
+</code></pre>
+
+<p>Import and start using the Client library:</p>
+
 <pre><code class="language-js">const client = require('@egendata/client');
+
+// A key-value based storage module that implements the required interface methods listed below:
+//   * keyValueStore.save(key, value, ttl)
+//   * keyValueStore.load(key)
+//   * keyValueStore.remove(key)
+const keyValueStore = require('../services/keyValueStore')
+
+// An example Client configuration
+const config = {
+  displayName: 'My service',
+  description: 'A service that integrates with Egendata',
+  iconURI: 'http://my-service-domain.com/icon.png',
+  clientId: process.env.CLIENT_ID,
+  operator: process.env.OPERATOR_URL,
+  jwksPath: '/jwks',
+  eventsPath: '/events',
+  clientKey: process.env.PRIVATE_KEY,
+  keyValueStore: keyValueStore,
+  defaultPermissions: [
+    {
+      area: 'baseData',
+      types: ['READ', 'WRITE'],
+      purpose: 'Purpose of requesting permission.',
+      description: 'Short description of requested permission.'
+    }
+  ]
+}
+
+// Create the Client which will be used all communication with Egendata Operator.
+client.create(config)
 </code></pre>
 
 <h2 id="client-configuration-properties">Client configuration properties</h2>
@@ -676,7 +722,7 @@
 </tbody>
 </table>
 
-<h2 id="keyprovider">KeyProvider</h2>
+<h2 id="key-provider">Key Provider</h2>
 
 <p>The KeyProvider class is responsible for keeping track of known keys and tokens.</p>
 
@@ -691,30 +737,51 @@ There are 5 configuration properties that affect the construction of the KeyProv
 <li><code>config.alg</code></li>
 </ul>
 
-<p>The <code>KeyProvider</code> will utilize the <code>keyValueStorage</code> property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the redis database. The <code>KeyProvider</code> will utilize and assume that three functions are defined in the referenced <code>KeyValueStore</code> object: <code>save(key, value, ttl)</code>, <code>load(key)</code> and <code>remove(key)</code>.</p>
+<p>The <code>KeyProvider</code> will utilize the <code>keyValueStorage</code> property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the Redis database. The <code>KeyProvider</code> assumes that three functions are defined in the referenced <code>KeyValueStore</code> object:</p>
 
-<p>Values written by the Client to the external/referenced <code>KeyValueStore</code> are base64 encoded.</p>
+<ul>
+<li><code>keyValueStorage.save(key, value, ttl)</code></li>
+<li><code>keyValueStorage.load(key)</code></li>
+<li><code>keyValueStorage.remove(key)</code></li>
+</ul>
 
-<p>The Client signing key(aka. <code>clientKey</code>) is provided through the configuration parameter upon initialization of the <code>Client</code>. This client key is used for all signing done by this Client, however there are ideas to implement different signing keys for different domains/areas and/or key rotation.</p>
+<p>All values written by the KeyProvider to the external/referenced <code>KeyValueStore</code> are base64 encoded.</p>
 
-<h2 id="prefixes-defined-in-client-library">Prefixes defined in Client library</h2>
+<p>The Client signing key(aka. <code>clientKey</code>) is provided through the configuration parameter upon initialization of the <code>Client</code>. This client key is used for all signing done by this Client, however there are future ideas to implement different signing keys for different domains/areas and/or key rotation.</p>
 
-<pre><code>const KEY_PREFIX = 'key|&gt;'
-const WRITE_KEYS_PREFIX = 'permissionId|&gt;'
-const AUTHENTICATION_ID_PREFIX = 'authentication|&gt;'
-</code></pre>
+<h2 id="key-value-store">Key Value Store</h2>
 
-<h2 id="saving-key-to-keyvaluestore">Saving key to keyValueStore</h2>
+<p>In order to utilize the Egendata Client, one must first create a KeyValueStore object to be provided in the configuration to the Client constructor.</p>
 
-<p><code>${KEY_PREFIX}${key.kid}</code>: key</p>
+<h3 id="interface-definition">Interface definition</h3>
 
-<h2 id="saving-write-keys-to-keyvaluestore">Saving write keys to keyValueStore:</h2>
+<p>The following interface is expected to be implemented in the Service&rsquo;s KeyValueStore object.</p>
 
-<p><code>${WRITE_KEYS_PREFIX}${domain}|${area}</code>: jwks</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
 
-<h2 id="saving-authentication-token-to-keyvaluestore">Saving authentication token to keyValueStore</h2>
+<tbody>
+<tr>
+<td><code>save(key, value, ttl)</code></td>
+<td>&bull; <code>key</code>: The lookup key of which this saved record will be identified by in persistent storage.<br>&bull; <code>value</code>: The value to be stored in persistent storage.<br>&bull; <code>ttl</code>: The KeyValueStore must respect the specified TTL(Time to live) of the saved record, as such it must be automatically removed from storage upon TTL expiry.</td>
+</tr>
 
-<p><code>${AUTHENTICATION_ID_PREFIX}${sid}</code>: accessToken</p>
+<tr>
+<td><code>load(key)</code></td>
+<td>&bull; <code>key</code>: The lookup key a record to load and return back to caller.</td>
+</tr>
+
+<tr>
+<td><code>remove(key)</code></td>
+<td>&bull; <code>key</code>: The lookup key of which all associated record(s) shall permanently removed from persistent storage.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1056,19 +1123,19 @@ const AUTHENTICATION_ID_PREFIX = 'authentication|&gt;'
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1595422087"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1595422087"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1595422087"></script>
-    <script src="/docs/js/jquery.sticky.js?1595422087"></script>
-    <script src="/docs/js/featherlight.min.js?1595422087"></script>
-    <script src="/docs/js/highlight.pack.js?1595422087"></script>
+    <script src="/docs/js/clipboard.min.js?1595422100"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1595422100"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1595422100"></script>
+    <script src="/docs/js/jquery.sticky.js?1595422100"></script>
+    <script src="/docs/js/featherlight.min.js?1595422100"></script>
+    <script src="/docs/js/highlight.pack.js?1595422100"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1595422087"></script>
-    <script src="/docs/js/learn.js?1595422087"></script>
-    <script src="/docs/js/hugo-learn.js?1595422087"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1595422100"></script>
+    <script src="/docs/js/learn.js?1595422100"></script>
+    <script src="/docs/js/hugo-learn.js?1595422100"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1595422087" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1595422087"></script>
+    <link href="/docs/mermaid/mermaid.css?1595422100" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1595422100"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
