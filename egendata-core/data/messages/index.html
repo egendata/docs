@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.58.3" />
+    <meta name="description" content="">
+
+
+    <link rel="shortcut icon" href="//egendata.github.io/docs/images/egendata.png" type="image/x-icon" />
+    <title>Messages :: My New Hugo Site</title>
+
+    
+    <link href="/docs/css/nucleus.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/theme.css?1595422107" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1595422107" rel="stylesheet">
+    
+      <link href="/docs/css/theme-mine.css?1595422107" rel="stylesheet">
+    
+
+    <script src="/docs/js/jquery-3.3.1.min.js?1595422107"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/docs/egendata-core/data/messages/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="//egendata.github.io/docs">
+  <img alt="Egendata" src="//egendata.github.io/docs/images/egendata.png" />
+</a>
+    </div>
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/architecture/" title="Architecture" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/architecture/">
+          Architecture
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/cryptography/" title="Cryptography" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/cryptography/">
+          Cryptography
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/egendata-core/" title="Egendata Core" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/docs/egendata-core/">
+          Egendata Core
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/egendata-core/client/" title="Client" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/egendata-core/client/">
+          Client
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/egendata-core/data/" title="Data" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/docs/egendata-core/data/">
+          Data
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/docs/egendata-core/data/messages/" title="Messages" class="dd-item active">
+        <a href="/docs/egendata-core/data/messages/">
+        Messages
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/egendata-core/security/" title="Security" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/egendata-core/security/">
+          Security
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/egendata-core/services/" title="Services" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/egendata-core/services/">
+          Services
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/" title="Infrastructure" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/">
+          Infrastructure
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/cli/" title="cli" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/cli/">
+          cli
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/client/" title="client" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/client/">
+          client
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/example-cv/" title="Example-CV" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/example-cv/">
+          Example-CV
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/example-national-registration/" title="Example-National-Registration" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/example-national-registration/">
+          Example-National-Registration
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/messaging/" title="messaging" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/messaging/">
+          messaging
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/operator/" title="Operator" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/operator/">
+          Operator
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/infrastructure/react-native-simple-crypto/" title="react-native-simple-crypto" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/infrastructure/react-native-simple-crypto/">
+          react-native-simple-crypto
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/phone-app/" title="Mobile App" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/phone-app/">
+          Mobile App
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/docs/operator/" title="Operator" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/docs/operator/">
+          Operator
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="https://getgrav.org">Grav</a> and <a href="https://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/docs/'>Introduction</a> > <a href='/docs/egendata-core/'>Egendata Core</a> > <a href='/docs/egendata-core/data/'>Data</a> > Messages
+          
+         
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#egendata-message-schema-definitions">Egendata message/schema definitions</a>
+<ul>
+<li><a href="#values-present-in-all-messages">Values present in all messages</a>
+<ul>
+<li><a href="#jwt-defaults">JWT_DEFAULTS</a></li>
+</ul></li>
+<li><a href="#messages">Messages</a>
+<ul>
+<li><a href="#service-registration">SERVICE_REGISTRATION</a></li>
+<li><a href="#account-registration">ACCOUNT_REGISTRATION</a></li>
+<li><a href="#authentication-request">AUTHENTICATION_REQUEST</a></li>
+<li><a href="#connection-init">CONNECTION_INIT</a></li>
+<li><a href="#connection-request">CONNECTION_REQUEST</a></li>
+<li><a href="#connection-response">CONNECTION_RESPONSE</a></li>
+<li><a href="#connection-event">CONNECTION_EVENT</a></li>
+<li><a href="#login-event">LOGIN_EVENT</a></li>
+<li><a href="#access-token">ACCESS_TOKEN</a></li>
+</ul></li>
+<li><a href="#fields-values">Fields &amp; values</a>
+<ul>
+<li><a href="#connection">CONNECTION</a></li>
+<li><a href="#login">LOGIN</a></li>
+<li><a href="#permission-base">PERMISSION_BASE</a></li>
+<li><a href="#read-permission-request">READ_PERMISSION_REQUEST</a></li>
+<li><a href="#write-permission-request">WRITE_PERMISSION_REQUEST</a></li>
+<li><a href="#read-permission">READ_PERMISSION</a></li>
+<li><a href="#write-permission">WRITE_PERMISSION</a></li>
+<li><a href="#permission-request-array">PERMISSION_REQUEST_ARRAY</a></li>
+<li><a href="#permission-array">PERMISSION_ARRAY</a></li>
+<li><a href="#permission-denied">PERMISSION_DENIED</a></li>
+<li><a href="#data-read-request">DATA_READ_REQUEST</a></li>
+<li><a href="#data-read-response">DATA_READ_RESPONSE</a></li>
+<li><a href="#data-write">DATA_WRITE</a></li>
+</ul></li>
+<li><a href="#not-yet-implemented">Not yet implemented</a>
+<ul>
+<li><a href="#permission-request">PERMISSION_REQUEST</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Messages
+            </h1>
+          
+
+        
+
+
+
+
+
+<p>All communication between the different Egendata parties is performed through signed messages shaped as JWT:s.</p>
+
+<h2 id="egendata-message-schema-definitions">Egendata message/schema definitions</h2>
+
+<p>All message schemas are defined in and validated through <a href="https://github.com/egendata/messaging/blob/master/lib/schemas.js">./lib/schemas.js</a> in the <code>@egendata/messaging</code> npm package.</p>
+
+<h3 id="values-present-in-all-messages">Values present in all messages</h3>
+
+<p><em>Some values are present in all messages, their value will only be specified where it deviates from the default. These are defined as reserved claims in the JWT spec.</em></p>
+
+<h4 id="jwt-defaults">JWT_DEFAULTS</h4>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>iss</td>
+<td>The issuer of the message. Example: <code>https://myservice.org</code></td>
+</tr>
+
+<tr>
+<td>aud</td>
+<td>The intended audience of the message. Example: <code>https://operator.egendata.se</code></td>
+</tr>
+
+<tr>
+<td>iat</td>
+<td>Unix timestamp for when the message was created.</td>
+</tr>
+
+<tr>
+<td>exp</td>
+<td>Unix timestamp for when the message expires.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="messages">Messages</h3>
+
+<h4 id="service-registration">SERVICE_REGISTRATION</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Service</td>
+<td>Operator</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Message sent when the service registers itself.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>SERVICE_REGISTRATION</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>The service&rsquo;s host URL</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>The URL of the Operator</td>
+</tr>
+
+<tr>
+<td>displayName</td>
+<td>The name the service wants to display to users.</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>The description the service wants to display to the users.</td>
+</tr>
+
+<tr>
+<td>iconURI</td>
+<td>Relative or actual URI of the icon the service wants to display to the users.</td>
+</tr>
+
+<tr>
+<td>jwksURI</td>
+<td>The main URI linked to the service. It will also be used as the service’s id in the database.</td>
+</tr>
+
+<tr>
+<td>eventsURI</td>
+<td>The URI the service will be receiving event responses.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="account-registration">ACCOUNT_REGISTRATION</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User device</td>
+<td>Operator</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Message sent when the user is registering an account.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>ACCOUNT_REGISTRATION</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>egendata://account/[account_id]</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>The URL of the Operator</td>
+</tr>
+
+<tr>
+<td>pds</td>
+<td>Information about the PDS the user has selected for their account.</td>
+</tr>
+
+<tr>
+<td>pds.provider</td>
+<td>The type of PDS used. As of now the options are Dropbox and in memory. In memory means the operators internal memory.</td>
+</tr>
+
+<tr>
+<td>pds.access_token <em>optional</em></td>
+<td>In the case the PDS requires authentication, this is the token to be used for it. As of now this applies to the Dropbox option.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="authentication-request">AUTHENTICATION_REQUEST</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Service</td>
+<td>User device</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Message transmitted from a service to a user prompting the user to authenticate. In the current implementation this is done by putting this information in a QR-code that the user scans.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>AUTHENTICATION_REQUEST</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>The service&rsquo;s host URL</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>egendata://account</td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id associated with the request</td>
+</tr>
+
+<tr>
+<td>eventsURI</td>
+<td>URI where the service listens to responses to this message</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="connection-init">CONNECTION_INIT</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User device</td>
+<td>Service</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Initiates a connection between the user and the service. Is generally triggered from an <a href="#authentication-request"><code>AUTHENTICATION_REQUEST</code></a> when there is no pre-existing connection between these two parties.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>CONNECTION_INIT</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>egendata://account</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>The service&rsquo;s host URL</td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id that should be logged in after establishment</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="connection-request">CONNECTION_REQUEST</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Service</td>
+<td>User device</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Response to a <a href="#connection-init"><code>CONNECTION_INIT</code></a> message.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>CONNECTION_REQUEST</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>egendata://account</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>The service&rsquo;s host URL</td>
+</tr>
+
+<tr>
+<td>permissions <em>optional</em></td>
+<td>A <a href="#permission-request-array"><code>PERMISSION_REQUEST_ARRAY</code></a> list of at least one permission that the service wants from the user</td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id that should be logged in after establishment</td>
+</tr>
+
+<tr>
+<td>displayName</td>
+<td>The display name of the service.</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>The description of the service.</td>
+</tr>
+
+<tr>
+<td>iconURI</td>
+<td>The icon of the service.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="connection-response">CONNECTION_RESPONSE</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User device</td>
+<td>Operator</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Sent by the user&rsquo;s device in response to a <a href="#connection-request"><code>CONNECTION_REQUEST</code></a>. Contains the <a href="#connection"><code>CONNECTION</code></a> the user wants establish with the service.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>CONNECTION_RESPONSE</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the operator</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>egendata://account/[account_id]</td>
+</tr>
+
+<tr>
+<td>payload</td>
+<td>The <a href="#connection"><code>CONNECTION</code></a> as a serialized JWS.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="connection-event">CONNECTION_EVENT</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Operator</td>
+<td>Service</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Sent by the operator to inform the service about a newly established <a href="#connection"><code>CONNECTION</code></a></em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>CONNECTION_EVENT</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>URL of the operator</td>
+</tr>
+
+<tr>
+<td>payload</td>
+<td>The <a href="#connection"><code>CONNECTION</code></a> as a serialized JWS.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="login-event">LOGIN_EVENT</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Operator</td>
+<td>Service</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Sent by the operator to the service containing the <a href="#login"><code>LOGIN</code></a>.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>LOGIN_EVENT</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>URL of the operator</td>
+</tr>
+
+<tr>
+<td>payload</td>
+<td>The <a href="#login"><code>LOGIN</code></a> as a serialized JWS.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="access-token">ACCESS_TOKEN</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Service backend</td>
+<td>Service frontend</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>JWT used to access a resource. Currently used by the service frontend (ie. the user&rsquo;s browser) to store its login session with the service backend; but could in the future be used to control other types of access as well.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>ACCESS_TOKEN</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td>V4 uuid of the <a href="#connection">CONNECTION</a> which is logged in</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h3 id="fields-values">Fields &amp; values</h3>
+
+<h4 id="connection">CONNECTION</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User device</td>
+<td>Operator -&gt; Service</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Message containing information about an established connection between a user and a service. Sent from the user&rsquo;s device to the operator wrapped in a <a href="#connection-response">CONNECTION_RESPONSE</a>. The operator then forwards it to the service in a <a href="#connection-event">CONNECTION_EVENT</a>.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>CONNECTION</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>egendata://account</td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id that should be logged in after establishment</td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td>A v4 uuid that uniquely identifies this connection</td>
+</tr>
+
+<tr>
+<td>permissions <em>optional</em></td>
+<td>Information about any permissions the user has accepted or denied</td>
+</tr>
+
+<tr>
+<td>permissions.approved <em>optional</em></td>
+<td>List of approved permissions</td>
+</tr>
+
+<tr>
+<td>permissions.denied <em>optional</em></td>
+<td>List of denied permissions</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="login">LOGIN</h4>
+
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>User device</td>
+<td>Operator -&gt; Service</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Sent from the user&rsquo;s device to the operator in a <a href="#login-response"><code>LOGIN_RESPONSE</code></a>. The operator then forwards it to the service in a <a href="#login-event"><code>LOGIN_EVENT</code></a> so that the service logs the session id in <code>sid</code> in as the user represented by the connection specified in <code>sub</code>.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>LOGIN</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td>URL of the service</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td>egendata://account</td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id that should be logged in</td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td>V4 uuid of the <a href="#connection"><code>CONNECTION</code></a> that should be logged in.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="permission-base">PERMISSION_BASE</h4>
+
+<p><em>These properties are present in several objects related to permissions.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&hellip;CONTENT_PATH</td>
+<td></td>
+</tr>
+
+<tr>
+<td>id</td>
+<td>A uuid identifying this permission-object.</td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>The type of the permission, right now only &lsquo;READ&rsquo; and &lsquo;WRITE&rsquo; are supported.</td>
+</tr>
+
+<tr>
+<td>lawfulBasis</td>
+<td>The legal basis for processing information, as defined in the GDPR. Currently only &lsquo;CONSENT&rsquo; is supported.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="read-permission-request">READ_PERMISSION_REQUEST</h4>
+
+<p><em>Message sent to request permission to read and process the content.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="#permission-base">&hellip;PERMISSION_BASE</a></td>
+<td></td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>READ</td>
+</tr>
+
+<tr>
+<td>purpose</td>
+<td>The purpose of the permission being requested.</td>
+</tr>
+
+<tr>
+<td>jwk</td>
+<td>The key of the service that will be used when they decrypt the data for read purposes.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="write-permission-request">WRITE_PERMISSION_REQUEST</h4>
+
+<p><em>Message sent to request a write permissions. This can contain more than one <code>WRITE_PERMISSION</code>.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="#permission-base">&hellip;PERMISSION_BASE</a></td>
+<td></td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>WRITE</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>The description of the information that will be written.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="read-permission">READ_PERMISSION</h4>
+
+<p><em>A permission to read and process data. Signed by the approving party.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="#permission-base">&hellip;PERMISSION_BASE</a></td>
+<td></td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>READ</td>
+</tr>
+
+<tr>
+<td>purpose</td>
+<td>The purpose of processing data.</td>
+</tr>
+
+<tr>
+<td>kid</td>
+<td>Id of the key that will be used to read the data in question.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="write-permission">WRITE_PERMISSION</h4>
+
+<p><em>A permission to write data. Signed by the approving party.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="#permission-base">&hellip;PERMISSION_BASE</a></td>
+<td></td>
+</tr>
+
+<tr>
+<td>type</td>
+<td>WRITE</td>
+</tr>
+
+<tr>
+<td>description</td>
+<td>The description of the information that will be written.</td>
+</tr>
+
+<tr>
+<td>jwks</td>
+<td>Key store with the keys required to encrypt the data is stored.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="permission-request-array">PERMISSION_REQUEST_ARRAY</h4>
+
+<p><em>The list of permission requests sent to the user for approval.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>READ_PERMISSION_REQUEST</td>
+<td>The read permissions requested.</td>
+</tr>
+
+<tr>
+<td>WRITE_PERMISSION_REQUEST</td>
+<td>The write permissions requested.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="permission-array">PERMISSION_ARRAY</h4>
+
+<p><em>List of the permissions accepted by the user for this service.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>READ_PERMISSION</td>
+<td>The read permissions requested.</td>
+</tr>
+
+<tr>
+<td>WRITE_PERMISSION</td>
+<td>The write permissions requested.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="permission-denied">PERMISSION_DENIED</h4>
+
+<p><em>A permission that has been denied by the user for this service.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="#permission-base">&hellip;PERMISSION_BASE</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="data-read-request">DATA_READ_REQUEST</h4>
+
+<p><em>Message sent by the service to the operator to request data for read purposes. This can contain more than one requests.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>DATA_READ_REQUEST</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.exp</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iat</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>paths[]</td>
+<td>The paths to the data the service is requesting to read,</td>
+</tr>
+
+<tr>
+<td>paths.domain</td>
+<td>The domain of the data the service requests to read. By default it is its own domain but could also be a different service&rsquo;s domain._</td>
+</tr>
+
+<tr>
+<td>paths.area</td>
+<td>The section of data the service requests to read, for example education, languages soon._</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="data-read-response">DATA_READ_RESPONSE</h4>
+
+<p><em>Response to a <code>DATA_READ_REQUEST</code> sent to the service by the operator. Each read request is handled and responded to individually.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>DATA_READ_RESPONSE</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.exp</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iat</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>paths[]</td>
+<td>The paths to the data the service is requesting to read,</td>
+</tr>
+
+<tr>
+<td>domain</td>
+<td>The URL of the service creating data</td>
+</tr>
+
+<tr>
+<td>area</td>
+<td>The particular data point for that domain. The creator of the data chooses which points to divide the data into.</td>
+</tr>
+
+<tr>
+<td>paths.data</td>
+<td>The data sent back to the service for this particular request.</td>
+</tr>
+
+<tr>
+<td>paths.error</td>
+<td>Error messages that might occur, for example missing data or denied permissions.</td>
+</tr>
+
+<tr>
+<td>paths.error.message</td>
+<td>The message of the error message.</td>
+</tr>
+
+<tr>
+<td>paths.error.status</td>
+<td>The status of the error message.</td>
+</tr>
+
+<tr>
+<td>paths.error.code</td>
+<td>The code of the error message.</td>
+</tr>
+
+<tr>
+<td>paths.error.stack</td>
+<td><INFO></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h4 id="data-write">DATA_WRITE</h4>
+
+<p><em>Message sent containing encrypted data to be written to the users PDS. The message is sent by the service to the operator. All the different domain and area paths that will be written to are handled together by one message of this type.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>DATA_WRITE</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.exp</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iat</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>paths[]</td>
+<td>List of at least one, of domain and area paths that the data will be written to.</td>
+</tr>
+
+<tr>
+<td>domain</td>
+<td>The URL of the service creating data</td>
+</tr>
+
+<tr>
+<td>area</td>
+<td>The particular data point for that domain. The creator of the data chooses which points to divide the data into.</td>
+</tr>
+
+<tr>
+<td>paths.data</td>
+<td>The data to be written in this path.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="not-yet-implemented">Not yet implemented</h3>
+
+<h4 id="permission-request">PERMISSION_REQUEST</h4>
+
+<p><em>Message sent by the service to the operator in order to request permissions.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>type</td>
+<td>PERMISSION_REQUEST</td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.aud</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.exp</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iat</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td><a href="#jwt-defaults">JWT_DEFAULTS</a>.iss</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>permissions</td>
+<td>A <code>PERMISSION_ARRAY</code>containing at least one permission.</td>
+</tr>
+
+<tr>
+<td>sub</td>
+<td><INFO></td>
+</tr>
+
+<tr>
+<td>sid</td>
+<td>The (browser) session id that this message was sent during.</td>
+</tr>
+</tbody>
+</table>
+
+
+<footer class=" footline" >
+	
+</footer>
+
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/docs/egendata-core/data/" title="Data"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/docs/egendata-core/security/" title="Security" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/docs/js/clipboard.min.js?1595422107"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1595422107"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1595422107"></script>
+    <script src="/docs/js/jquery.sticky.js?1595422107"></script>
+    <script src="/docs/js/featherlight.min.js?1595422107"></script>
+    <script src="/docs/js/highlight.pack.js?1595422107"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1595422107"></script>
+    <script src="/docs/js/learn.js?1595422107"></script>
+    <script src="/docs/js/hugo-learn.js?1595422107"></script>
+
+    <link href="/docs/mermaid/mermaid.css?1595422107" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1595422107"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>
+

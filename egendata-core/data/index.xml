@@ -10,5 +10,17 @@
 	<atom:link href="//egendata.github.io/docs/egendata-core/data/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>Messages</title>
+      <link>//egendata.github.io/docs/egendata-core/data/messages/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//egendata.github.io/docs/egendata-core/data/messages/</guid>
+      <description>All communication between the different Egendata parties is performed through signed messages shaped as JWT:s.
+Egendata message/schema definitions All message schemas are defined in and validated through ./lib/schemas.js in the @egendata/messaging npm package.
+Values present in all messages Some values are present in all messages, their value will only be specified where it deviates from the default. These are defined as reserved claims in the JWT spec.
+JWT_DEFAULTS    Property Purpose     iss The issuer of the message.</description>
+    </item>
+    
   </channel>
 </rss>
