@@ -14,7 +14,6 @@ MyData is a movement that strive for individuals to have control over their own 
 
 We believe that having access to people's data creates opportunities for new products and services. It therefore has the potential to create value to the society. However, data can also be used used, for example to monitor or influence opinions for political purposes. Access to individuals' data by few can lead to information monopoly and ultimatelly to a concentration of power. We believe that a way to mitigate this risk would be to give the control of the data back to their owners.
 
-
 ### Community building and innovation
 
 Our second goal is to enable innovation in the society. Companies and authorities should be able to work more efficiently and to develop powerful digital services as startups do. Private and public organizations should be able to collaborate to increase the social benefit and do so by using a common digital infrastructure and standards. By enabling a “digital bureaucracy”, ie traceability and standardized communication, new forms of governance can be established which are more transparent and effective. We do this primarilly to boost competitiveness for Sweden and the EU, but what we do can become a standard to increase societal benefits for all. Open Source is a global movement and has the power to improve the way we do things for both small and large organizations and countries.
