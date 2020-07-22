@@ -2,10 +2,55 @@
 title: Client
 ---
 
+The Client library serves to alleviate the Egendata integration complexity for [Service](#) providers.
+
+For reference, the following example sites utilize the Client library:
+
+- [Example CV](https://github.com/egendata/example-cv)
+- [MySkills API](https://github.com/JobtechSwe/myskills-api)
+
 ## Usage
+
+The Client library is distributed via the NPM software registry and can be installed with:
+
+```bash
+npm install @egendata/client
+```
+
+Import and start using the Client library:
 
 ```js
 const client = require('@egendata/client');
+
+// A key-value based storage module that implements the required interface methods listed below:
+//   * keyValueStore.save(key, value, ttl)
+//   * keyValueStore.load(key)
+//   * keyValueStore.remove(key)
+const keyValueStore = require('../services/keyValueStore')
+
+// An example Client configuration
+const config = {
+  displayName: 'My service',
+  description: 'A service that integrates with Egendata',
+  iconURI: 'http://my-service-domain.com/icon.png',
+  clientId: process.env.CLIENT_ID,
+  operator: process.env.OPERATOR_URL,
+  jwksPath: '/jwks',
+  eventsPath: '/events',
+  clientKey: process.env.PRIVATE_KEY,
+  keyValueStore: keyValueStore,
+  defaultPermissions: [
+    {
+      area: 'baseData',
+      types: ['READ', 'WRITE'],
+      purpose: 'Purpose of requesting permission.',
+      description: 'Short description of requested permission.'
+    }
+  ]
+}
+
+// Create the Client which will be used all communication with Egendata Operator.
+client.create(config)
 ```
 
 ## Client configuration properties
@@ -26,7 +71,7 @@ Configuration property | Data type | Purpose
 `defaultPermissions.#.purpose` | `string` | _A short purpose description of why this service requests this specific read/write permission, e.g. `'In order to create a CV using our website.'`_
 `defaultPermissions.#.description` | `string` | _A short description of the area this permission request relates to, e.g. `'Personal information.'`
 
-## KeyProvider
+## Key Provider
 
 The KeyProvider class is responsible for keeping track of known keys and tokens.
 
@@ -39,28 +84,26 @@ There are 5 configuration properties that affect the construction of the KeyProv
   - `config.jwksURI`
   - `config.alg`
 
-The `KeyProvider` will utilize the `keyValueStorage` property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the redis database. The `KeyProvider` will utilize and assume that three functions are defined in the referenced `KeyValueStore` object: `save(key, value, ttl)`, `load(key)` and `remove(key)`. 
+The `KeyProvider` will utilize the `keyValueStorage` property to read and write from/to an external storage. E.g. The Egendata Example-CV service provides an adapter for a locally hosted the Redis database. The `KeyProvider` assumes that three functions are defined in the referenced `KeyValueStore` object:
 
-Values written by the Client to the external/referenced `KeyValueStore` are base64 encoded.
+- `keyValueStorage.save(key, value, ttl)`
+- `keyValueStorage.load(key)`
+- `keyValueStorage.remove(key)`
 
-The Client signing key(aka. `clientKey`) is provided through the configuration parameter upon initialization of the `Client`. This client key is used for all signing done by this Client, however there are ideas to implement different signing keys for different domains/areas and/or key rotation.
+All values written by the KeyProvider to the external/referenced `KeyValueStore` are base64 encoded.
 
-## Prefixes defined in Client library
+The Client signing key(aka. `clientKey`) is provided through the configuration parameter upon initialization of the `Client`. This client key is used for all signing done by this Client, however there are future ideas to implement different signing keys for different domains/areas and/or key rotation.
 
-```
-const KEY_PREFIX = 'key|>'
-const WRITE_KEYS_PREFIX = 'permissionId|>'
-const AUTHENTICATION_ID_PREFIX = 'authentication|>'
-```
+## Key Value Store
 
-## Saving key to keyValueStore
+In order to utilize the Egendata Client, one must first create a KeyValueStore object to be provided in the configuration to the Client constructor.
 
-`${KEY_PREFIX}${key.kid}`: key
+### Interface definition
 
-## Saving write keys to keyValueStore:
+The following interface is expected to be implemented in the Service's KeyValueStore object.
 
-`${WRITE_KEYS_PREFIX}${domain}|${area}`: jwks
-
-## Saving authentication token to keyValueStore
-
-`${AUTHENTICATION_ID_PREFIX}${sid}`: accessToken
+Function | Description
+--- | ---
+`save(key, value, ttl)` | &bull; `key`: The lookup key of which this saved record will be identified by in persistent storage.<br>&bull; `value`: The value to be stored in persistent storage.<br>&bull; `ttl`: The KeyValueStore must respect the specified TTL(Time to live) of the saved record, as such it must be automatically removed from storage upon TTL expiry.
+`load(key)` | &bull; `key`: The lookup key a record to load and return back to caller.
+`remove(key)` | &bull; `key`: The lookup key of which all associated record(s) shall permanently removed from persistent storage.
