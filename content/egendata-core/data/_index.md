@@ -2,11 +2,13 @@
 title: Data
 ---
 
-Placeholder
+All communication between the different Egendata parties is performed through signed messages shaped as JWT:s.
+
+[Message definitions](./messages)
 
 ## Data structures & storage
 
-- The user’s data is stored in a json “blob” format. 
+- The user’s data is stored in json format.
 - No data structure has been defined for the user’s data. It instead keeps the tags of the form it was generated in as the field names. This means that the service dictates the structure of the data that is generated and consumed by it, as well as stored in the PDS.
 - The only data stored in the operator is the database records of (registered) users, services, their connections and consents given. This database schema is set up by the scripts in the “migrations” folder of the operator. One of those scripts generates a table called “pgmigrations” that holds the information about when and how (successfully or not) the other tables were generated.
 - The account data is stored in the operator in a postgres database.
@@ -24,6 +26,7 @@ The following messages are required to establish a service as registered:
 - `PERMISSION_BASE` contains information about the reason the service will request permission to the different areas of the user’s profile.
 
 ### Registering a user
+
 When a user is registering the following information is being generated and sent to the operator:
 
 - `ACCOUNT_REGISTRATION` the user’s device generates a unique id and sends it, as part of the message, to the operator, who prefixes it to the account.
@@ -34,374 +37,90 @@ In this step we need to consider if the user has an already established connecti
 
 #### With an established connection
 
-In this case, the user’s device recognises that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:
+In this case, the user’s device recognizes that there is an existing connection with this service stored in the App’s internal cache and the following messages are triggered:
 
 1. A `LOGIN_RESPONSE` containing a serialized JWS `LOGIN` as payload is sent to the operator. This `LOGIN_RESPONSE` contains the user’s ID as the subject(iss?), and the service as a string in the body(within the `LOGIN`).
 1. The operator extracts the `LOGIN` from the `LOGIN_RESPONSE` a wraps it in a new  `LOGIN_EVENT` message and forwards the message to the service. This happens so the service doesn’t get access to the user’s ID.
 
 #### Without an established connection
-If this user’s device does not recognise the service then the following messages are triggered:
+
+If this user’s device does not recognize the service then the following messages are triggered:
 
 1. A `CONNECTION_INIT` is sent from the user’s device directly to the service’s `/events` endpoint.
 1. The service responds with a `CONNECTION_REQUEST` to the user’s device.
-1. The `CONNECTION_REQUEST` might optionally contain a `PERMISSION_REQUEST_ARRAY` detailing all the areas it is requesting access from the user’s profile. 
+1. The `CONNECTION_REQUEST` might optionally contain a `PERMISSION_REQUEST_ARRAY` detailing all the areas it is requesting access from the user’s profile.
 1. If the `PERMISSION_REQUEST_ARRAY` is missing, at the moment, there is no way to send this in a later stage in the communication. There is no error handling for this eventuality and it will result in the system not working, because it will find a null string where it is expecting a not null string.
 1. Each `PERMISSION_REQUEST` in the `PERMISSION_REQUEST_ARRAY` contains a `LAWFUL_BASIS`. In the current implementation this is defaulted to consent unless specified otherwise.
-1. For read permissions the read key is sent alongside the permission, in the form of a kid. 
+1. For read permissions the read key is sent alongside the permission, in the form of `kid` (key id).
 1. The description of a write permission could be the schema that needs to be followed. Although, this is not implemented.
 1. The key used in the write permissions is the public key derived by the private key sent through a read permission. Instead the path to the jwks is attached. The jwks contains the public keys of the user and the service, that are needed to read and write stuff.
+    1. For each read permission a set of keys is generated at both the service and the user. 
+    1. These keys are used to encrypt and decrypt Content Encryption Keys (CEKs) that is generated for each of the areas of each domain and used to encrypt the data stored in the PDS.
+    1. Each of the CEKs is encrypted once with the user's public key and once with teh service's public key and stored in the document with the encrypted data.
 1. After receiving the `CONNECTION_REQUEST` the device generates a `CONNECTION` wrapped in a `CONNECTION_RESPONSE` that is sent to the operator.
-1. The operator upon receiving the CONNECTION_RESPONSE extracts from it the `CONNECTION` and rewrapes it in a `CONNECTION_EVENT` that is sent to the service. 
+1. The operator upon receiving the `CONNECTION_RESPONSE` extracts from it the `CONNECTION` and rewraps it in a `CONNECTION_EVENT` that is sent to the service. 
+
+{{% notice tip %}}
+The keys for these connections (not the CEKs, those only exist within each document they encrypt and only in an encrypted state) are stored in the cache memory of the user's device. 
+If the cache is cleaned or the phone lost these connections cannot be recovered, since the keys cannot be recovered or recreated and the data cannot be decrypted. There is a connection entry in the operator for each connection made for each user, but the private keys are only stored in the device and thus irreplaceable.
+{{% /notice %}}
+
+## Revoking consent
+
+There are several ways of revoking consent to an area of the PDS
+
+### Deleting the data
+
+A way of revoking consent is by deleting the data stored for that area in the domain's storage in the user's PDS. 
+This however leads to complete and irreversible data loss.
+
+### "Changing the locks"  * *NOT IMPLEMENTED* * 
+
+The way this is accomplished is by replacing the CEK the data for the specific are has been encrypted with. 
+1. The data is decrypted.
+1. A new CEK is generated.
+1. The data us encrypted with teh new CEK.
+1. The new CEK is encrypted only with the user's public key for this domain+area and stored in the encrypted document.
+1. the connection ID in the operator is destroyed.
+
+- In this case there is no data loss.
+- The user can still decrypt and read their data.
+- In teh eventuality the user decides to re-allow access to the service the process is repeated again and the new CEK is again encrypted and stored in both ends. 
+    - When this happens a new connection ID is generated in the operator for tis new connection.
+    - this means that the service will recognize this user as a new user (with the same data as an old one).
+
+{{% notice tip %}}
+Currently there is no implementation for the application to unpack a JWE. There exists a library for RSA and AES but no full JOSE implementation or native JOSE implementation.
+{{% /notice %}}
 
 ## Reading data from PDS
 
-For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message. 
-The requested data is sent to the service by the operator with a `DATA_READ_RESPONSE`.
+- For this process the operator accesses the user’s pds and reads the data requested by the service, as defined by the domain and area sent in though a `DATA_READ_REQUEST`. 
+    - This means that a service could request data from other services by including another service’s domain in the `DATA_READ_REQUEST` message, this however has not been implemented.
+- In the `DATA_READ_REQUEST` the service includes the connection id that it wants the data to come from.
+    - This happens because the service does not know the ids of the users it has connections with, it only knows the connection ids.
+- Upon receiving the `DATA_READ_REQUEST` the operator will verify that 
+    - The connection exists,
+    - The consent has been given
+- The requested data is sent to the service by the operator with a `DATA_READ_RESPONSE`.
+
+{{% notice tip %}}
+Currently only Dropbox is supported as a PDS. It is, however, called through an abstraction which treats it as `fs`. This means that as long as another PDS can be called through the same abstraction, it is simple to implement.
+{{% /notice %}}
 
 - The domain defined in the request in the services ID, which is the URI of the service.
 - The areas that are defined in the request are the different areas of the CV.
-- The response to the request is sent with a <> message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
+- The response to the request is sent with a `DATA_READ_RESPONSE` message for each path requested. This means that for each domain and area path that has been requested the data stored in that folder is sent to the service separately.
 - These responses are sent encrypted and then decrypted by the client library.
 
 ## Writing data to a PDS
 
-For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator. 
-The data are encrypted before being sent to the operator, and then written to the PDS. 
-If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
-Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.
-
-## Egendata message/schema definitions
-
-### SERVICE_REGISTRATION
-_This is the message sent to the operator by a service, when the later registers itself._
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE_GOES_HERE_
-`type` | _Defines the type of the message sent._
-`displayName` | _The name the service wants to display to users._
-`description` | _The description the service wants to display to the users._
-`iconURI` | _Relative or actual URI of the icon the service wants to display to the users._
-`jwksURI` | _The main URI linked to the service. It will also be used as the service’s id in the database._
-`eventsURI` | _The URI the service will be receiving event responses._
-
----
-
-### ACCOUNT_REGISTRATION
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`pds` | _PURPOSE-GOES-HERE_
-`- pds.provider` | _PURPOSE-GOES-HERE_
-`- access_token` | _PURPOSE-GOES-HERE_
-
----
-
-### AUTHENTICATION_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
-`eventsURI` | _PURPOSE-GOES-HERE_
-
----
-
-### CONNECTION_INIT
-
-_Initiates a connection between the user and the service. Is triggered when there is no pre-existing connection between these two parties._
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
-
----
-
-### LAWFUL_BASIS
-
-_Defines the reasons the service needs to request each piece of data from the user. Is defined when the service is registered. Unless specified otherwise this is allows consent to the areas._
-
----
-
-### CONTENT_PATH
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`domain` | _PURPOSE-GOES-HERE_
-`area` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_BASE
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`id` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._ 
-`lawfulBasis` | _PURPOSE-GOES-HERE_
-
----
-
-### READ_PERMISSION_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`purpose` | _PURPOSE-GOES-HERE_
-`jwk` | _PURPOSE-GOES-HERE_
-
----
-
-### WRITE_PERMISSION_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`description` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_REQUEST_ARRAY
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`READ_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
-`WRITE_PERMISSION_REQUEST` | _PURPOSE-GOES-HERE_
-
----
-
-### READ_PERMISSION
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`purpose` | _PURPOSE-GOES-HERE_
-`kid` | _PURPOSE-GOES-HERE_
-
----
-
-### WRITE_PERMISSION
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`description` | _PURPOSE-GOES-HERE_
-`jwks` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_ARRAY
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`READ_PERMISSION` | _PURPOSE-GOES-HERE_
-`WRITE_PERMISSION` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_DENIED
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...PERMISSION_BASE` | _PURPOSE-GOES-HERE_
-
----
-
-### PERMISSION_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`permissions` | _PURPOSE-GOES-HERE_
-`sub` | _PURPOSE-GOES-HERE_
-`sid` | _PURPOSE-GOES-HERE_
-
----
-
-### CONNECTION_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`permissions` | _PURPOSE-GOES-HERE_
-`sid` | _PURPOSE-GOES-HERE_
-`displayName` | _PURPOSE-GOES-HERE_
-`description` | _PURPOSE-GOES-HERE_
-`iconURI` | _PURPOSE-GOES-HERE_
-
----
-
-### CONNECTION
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
-`sub` | _PURPOSE-GOES-HERE_
-`permissions` | _PURPOSE-GOES-HERE_
-`- approved` | _PURPOSE-GOES-HERE_
-`- denied` | _PURPOSE-GOES-HERE_
-
----
-
-### CONNECTION_RESPONSE
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
-
----
-
-### CONNECTION_EVENT
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
-
----
-
-### LOGIN
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sid` | _PURPOSE-GOES-HERE_
-`sub` | _PURPOSE-GOES-HERE_
-
----
-
-### LOGIN_RESPONSE
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
-
----
-
-### LOGIN_EVENT
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`payload` | _PURPOSE-GOES-HERE_
-
----
-
-### ACCESS_TOKEN
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sub` | _PURPOSE-GOES-HERE_
-
----
-
-### DATA_READ_REQUEST
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
-`- domain` | _PURPOSE-GOES-HERE_
-`- area` | _PURPOSE-GOES-HERE_
-
----
-
-### DATA_READ_RESPONSE
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
-`- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`- data` | _PURPOSE-GOES-HERE_
-`- error` | _PURPOSE-GOES-HERE_
-`- - message` | _PURPOSE-GOES-HERE_
-`- - status` | _PURPOSE-GOES-HERE_
-`- - code` | _PURPOSE-GOES-HERE_
-`- - stack` | _PURPOSE-GOES-HERE_
-
----
-
-### DATA_WRITE
-
-_PURPOSE-GOES-HERE_
-
-Property | Purpose
---- | ---
-`...JWT_DEFAULTS` | _PURPOSE-GOES-HERE_
-`type` | _Defines the type of the message sent._
-`sub` | _PURPOSE-GOES-HERE_
-`paths` | _PURPOSE-GOES-HERE_
-`- ...CONTENT_PATH` | _PURPOSE-GOES-HERE_
-`- data` | _PURPOSE-GOES-HERE_
+- For this process the domain, area and data that needs to be written are sent with a `DATA_WRITE` message, from the service to the operator.
+- The data are encrypted before being sent to the operator, and then written to the PDS.
+- The encryption is performed with a Content Encryption Key (CEK).
+- If there is a permission for writing to the user’s PDS the operator writes the data to the PDS. If there is no such permission.
+- Since all of the data are handled with one message, if even one of the areas is missing a write permission, the operation fails and the data is discarded.
+
+{{% notice tip %}}
+It should be noted here that  is should not be assumed that the user is not the owner of the data stored in their PDS. Ownership implies that the data can be altered, which is not the case for many peaces of data (i.e. tax agency information, police and criminal records). The user is the controller of their own data. This implies that they have control over who has access to their data.
+{{% /notice %}}
