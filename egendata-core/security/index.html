@@ -11,20 +11,20 @@
     <title>Security :: My New Hugo Site</title>
 
     
-    <link href="/docs/css/nucleus.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/fontawesome-all.min.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/hybrid.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/featherlight.min.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/perfect-scrollbar.min.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/auto-complete.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/atom-one-dark-reasonable.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/theme.css?1595422078" rel="stylesheet">
-    <link href="/docs/css/hugo-theme.css?1595422078" rel="stylesheet">
+    <link href="/docs/css/nucleus.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/fontawesome-all.min.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/hybrid.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/featherlight.min.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/perfect-scrollbar.min.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/auto-complete.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/atom-one-dark-reasonable.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/theme.css?1595422087" rel="stylesheet">
+    <link href="/docs/css/hugo-theme.css?1595422087" rel="stylesheet">
     
-      <link href="/docs/css/theme-mine.css?1595422078" rel="stylesheet">
+      <link href="/docs/css/theme-mine.css?1595422087" rel="stylesheet">
     
 
-    <script src="/docs/js/jquery-3.3.1.min.js?1595422078"></script>
+    <script src="/docs/js/jquery-3.3.1.min.js?1595422087"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -558,7 +558,6 @@
 <li><a href="#panva-jose-framework">Panva JOSE framework</a></li>
 </ul></li>
 <li><a href="#future-considerations">Future considerations</a></li>
-<li><a href="#other">Other</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -600,10 +599,15 @@ It is highly recommended that all communication channels with the <a href="/oper
 <p>Thus communication with the <a href="/operator">Operator</a> is considered trusted and secure.</p>
 
 
-<div class="notices warning" ><p>Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.</p>
-
-<p>It is, however, possible for the Operator to assert that an account uses one and only one key for signing
+<div class="notices warning" ><p>Due to the Egendata Application not acting as webserver, it is unable to publish its own public key(s). Therefore, recipients are unable to verify the authenticity of Messages issued by the Application. Instead the Application provide its own public key(s) directly embedded in the transmitted message, however this is not sufficient to prove authenticity of the message.<br />
+<br>
+It is, however, possible for the Operator to assert that an account uses one and only one key for signing
 its communication. This is currently not enforced.</p>
+</div>
+
+
+
+<div class="notices warning" ><p>There is one exceptional case when the App needs to establish a new connection with a Service. The <code>CONNECT_INIT</code> message originating from the App is not transmitted via the Operator, instead it&rsquo;s directly transmitted to the Service&rsquo;s <code>/events</code> endpoint. This outgoing <code>CONNECT_INIT</code> message and response could potentially be tampered with if the Service doesn&rsquo;t utilize the TLS protocol.</p>
 </div>
 
 
@@ -671,6 +675,11 @@ its communication. This is currently not enforced.</p>
 
 <p>Through secure TLS connection the verifier can with high confidence trust that it is in contact with the correct signee service.</p>
 
+
+<div class="notices warning" ><p>The signature verification procedure described in this section is not yet implemented in the Client library, see: <a href="https://github.com/egendata/client/blob/master/lib/data.js#L74">GitHub Client</a>.</p>
+</div>
+
+
 <h2 id="transactions">Transactions</h2>
 
 <p>All messages exchanged between <a href="/services">Services</a>, <a href="/operator">Operator</a> &amp; Applications are signed with the sender party&rsquo;s own signing key and transmitted as <a href="https://tools.ietf.org/html/rfc7519">JWT</a> to the receiving party.</p>
@@ -717,21 +726,7 @@ There are no current plans to migrate to <code>ECDSA</code> for signing.</p>
 
 <p>Eventually signing key rotation is expected to be implemented, so that each message can be validated against the public key announced by sending party. The exception is the App, which is not acting as a Webserver, and therefore can&rsquo;t publically announce its own public key, instead the public key is included in the message.</p>
 
-<p>!!! Is there ANY cases where the App initiates a message directly to the Service? That message could potentially be tampered with. Yes, as far as we identified we can see that the CONNECTION_INIT message is transmitted directly to the Service if the App(device) doesn’t have an (cached) existing record of connection with the Service.</p>
-
-<p>!!! Currently TLS is not enforced by the Egendata solution but it should probably be.</p>
-
-<p>!!! The data producer signature verification is intended to be implemented in the Client library, however it&rsquo;s not yet implemented, see: <a href="https://github.com/egendata/client/blob/master/lib/data.js#L74">GitHub Client</a>.</p>
-
 <p>There are potential optimizations to be done in the Panva JOSE library regarding the contruction and decryption the JWT&rsquo;s JWE content, e.g. the extraction of the correct key from the recipient list and to reuse of the same encryption key(but always with unique IV).</p>
-
-<h2 id="other">Other</h2>
-
-<p>! The Example project uses &ldquo;Client&rdquo; (and indirectly &ldquo;Messaging&rdquo;) library
-! The Operator uses &ldquo;Messaging&rdquo; library
-! The App uses &ldquo;Messaging&rdquo; library
-! Describe the purpose of the &ldquo;Messaging&rdquo; library.
-! Describe the purpose of the &ldquo;Client&rdquo; library, and update the current Readme.</p>
 
 
 
@@ -1076,19 +1071,19 @@ There are no current plans to migrate to <code>ECDSA</code> for signing.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/docs/js/clipboard.min.js?1595422078"></script>
-    <script src="/docs/js/perfect-scrollbar.min.js?1595422078"></script>
-    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1595422078"></script>
-    <script src="/docs/js/jquery.sticky.js?1595422078"></script>
-    <script src="/docs/js/featherlight.min.js?1595422078"></script>
-    <script src="/docs/js/highlight.pack.js?1595422078"></script>
+    <script src="/docs/js/clipboard.min.js?1595422087"></script>
+    <script src="/docs/js/perfect-scrollbar.min.js?1595422087"></script>
+    <script src="/docs/js/perfect-scrollbar.jquery.min.js?1595422087"></script>
+    <script src="/docs/js/jquery.sticky.js?1595422087"></script>
+    <script src="/docs/js/featherlight.min.js?1595422087"></script>
+    <script src="/docs/js/highlight.pack.js?1595422087"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/docs/js/modernizr.custom-3.6.0.js?1595422078"></script>
-    <script src="/docs/js/learn.js?1595422078"></script>
-    <script src="/docs/js/hugo-learn.js?1595422078"></script>
+    <script src="/docs/js/modernizr.custom-3.6.0.js?1595422087"></script>
+    <script src="/docs/js/learn.js?1595422087"></script>
+    <script src="/docs/js/hugo-learn.js?1595422087"></script>
 
-    <link href="/docs/mermaid/mermaid.css?1595422078" rel="stylesheet" />
-    <script src="/docs/mermaid/mermaid.js?1595422078"></script>
+    <link href="/docs/mermaid/mermaid.css?1595422087" rel="stylesheet" />
+    <script src="/docs/mermaid/mermaid.js?1595422087"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
